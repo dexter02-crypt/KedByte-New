@@ -1,0 +1,210 @@
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { Cloud, Code2, BrainCircuit, ArrowUpRight } from "lucide-react";
+import Reveal from "@/components/Reveal";
+import MagneticButton from "@/components/MagneticButton";
+import Counter from "@/components/Counter";
+import TechMarquee from "@/components/TechMarquee";
+import CTASection from "@/components/CTASection";
+import { Link } from "react-router-dom";
+
+const HERO_IMG =
+  "https://images.unsplash.com/photo-1709625862266-014ef072fd93?crop=entropy&cs=srgb&fm=jpg&q=85&w=1920";
+
+const heroWords = ["WE", "BUILD", "DIGITAL", "FUTURES"];
+
+const stats = [
+  { to: 99.9, suffix: "%", decimals: 1, label: "Platform uptime" },
+  { to: 120, suffix: "+", decimals: 0, label: "Products shipped" },
+  { to: 50, suffix: "+", decimals: 0, label: "Enterprise clients" },
+  { to: 14, suffix: "", decimals: 0, label: "Countries served" },
+];
+
+const services = [
+  {
+    icon: Code2,
+    title: "Custom Software & SaaS",
+    desc: "Product engineering from zero to scale — web, mobile and platform builds that ship fast and hold up.",
+    span: "md:col-span-7",
+    img: "https://images.pexels.com/photos/12627677/pexels-photo-12627677.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  },
+  {
+    icon: Cloud,
+    title: "Cloud & DevOps",
+    desc: "Resilient infrastructure, CI/CD and observability on AWS, GCP & Azure.",
+    span: "md:col-span-5",
+    img: "https://images.pexels.com/photos/1148820/pexels-photo-1148820.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  },
+  {
+    icon: BrainCircuit,
+    title: "AI & Data Solutions",
+    desc: "From data pipelines to production LLM features — intelligence built into your product.",
+    span: "md:col-span-12",
+    img: null,
+  },
+];
+
+export default function Home() {
+  const heroRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
+  const imgY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
+  const textY = useTransform(scrollYProgress, [0, 1], ["0%", "-20%"]);
+  const overlayOpacity = useTransform(scrollYProgress, [0, 1], [0.45, 0.85]);
+
+  return (
+    <div data-testid="home-page">
+      {/* HERO */}
+      <section ref={heroRef} className="relative h-screen overflow-hidden" data-testid="home-hero">
+        <motion.div className="absolute inset-0" style={{ y: imgY }}>
+          <img src={HERO_IMG} alt="Abstract technology" className="h-[120%] w-full object-cover" />
+        </motion.div>
+        <motion.div className="absolute inset-0 bg-ink" style={{ opacity: overlayOpacity }} />
+        <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/20 to-transparent" />
+
+        <motion.div
+          style={{ y: textY }}
+          className="relative z-10 h-full max-w-7xl mx-auto px-6 md:px-12 flex flex-col justify-center"
+        >
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            className="font-mono text-xs tracking-[0.25em] uppercase text-cyan-accent mb-6"
+          >
+            Kedbyte Technologies — Software · Cloud · AI
+          </motion.p>
+
+          <h1 className="font-heading font-black uppercase tracking-tighter text-white leading-[0.85] text-6xl sm:text-7xl md:text-8xl lg:text-[8.5rem]">
+            {heroWords.map((w, i) => (
+              <span key={w} className="block overflow-hidden">
+                <motion.span
+                  className="inline-block"
+                  initial={{ y: "110%" }}
+                  animate={{ y: 0 }}
+                  transition={{ delay: 0.1 * i, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  {w === "FUTURES" ? <span className="text-glow text-cyan-accent">{w}</span> : w}
+                </motion.span>
+              </span>
+            ))}
+          </h1>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7, duration: 0.8 }}
+            className="mt-8 flex flex-col sm:flex-row items-start sm:items-center gap-6"
+          >
+            <p className="max-w-md text-zinc-300 text-base md:text-lg leading-relaxed">
+              A full-service technology studio building the software, cloud and AI
+              that powers ambitious companies.
+            </p>
+            <MagneticButton to="/contact" testid="home-hero-cta">
+              Start a project
+            </MagneticButton>
+          </motion.div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.2 }}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 font-mono text-[10px] tracking-[0.3em] uppercase text-zinc-500"
+        >
+          Scroll to explore
+        </motion.div>
+      </section>
+
+      {/* MARQUEE */}
+      <section className="py-12 border-y border-white/10 bg-ink">
+        <div className="max-w-7xl mx-auto px-6 md:px-12 mb-8">
+          <p className="font-mono text-xs tracking-[0.2em] uppercase text-zinc-500 text-center">
+            The stack we engineer with
+          </p>
+        </div>
+        <TechMarquee />
+      </section>
+
+      {/* SERVICES BENTO */}
+      <section className="py-24 md:py-40" data-testid="home-services">
+        <div className="max-w-7xl mx-auto px-6 md:px-12">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
+            <div>
+              <Reveal>
+                <p className="font-mono text-xs tracking-[0.2em] uppercase text-zinc-500">
+                  What we do
+                </p>
+              </Reveal>
+              <Reveal delay={0.1}>
+                <h2 className="mt-4 font-heading font-bold tracking-tighter text-4xl md:text-5xl text-white max-w-2xl">
+                  Capabilities engineered for scale.
+                </h2>
+              </Reveal>
+            </div>
+            <Reveal delay={0.2}>
+              <Link
+                to="/services"
+                className="group inline-flex items-center gap-2 text-zinc-400 hover:text-white transition-colors"
+                data-testid="home-services-link"
+              >
+                All services
+                <ArrowUpRight className="h-4 w-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              </Link>
+            </Reveal>
+          </div>
+
+          <div className="grid md:grid-cols-12 gap-5">
+            {services.map((s, i) => (
+              <Reveal key={s.title} delay={i * 0.1} className={s.span}>
+                <Link
+                  to="/services"
+                  data-testid={`home-service-card-${i}`}
+                  className="group relative block h-full overflow-hidden rounded-2xl border border-white/10 bg-surface p-8 md:p-10 transition-all duration-500 hover:border-cyan-accent/40 hover:-translate-y-1"
+                >
+                  {s.img && (
+                    <div className="absolute inset-0 opacity-15 group-hover:opacity-25 transition-opacity duration-500">
+                      <img src={s.img} alt="" className="h-full w-full object-cover" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-surface via-surface/70 to-surface/30" />
+                    </div>
+                  )}
+                  <div className="relative z-10">
+                    <s.icon className="h-9 w-9 text-cyan-accent mb-20 md:mb-28" />
+                    <h3 className="font-heading text-2xl md:text-3xl tracking-tight text-white">
+                      {s.title}
+                    </h3>
+                    <p className="mt-3 text-zinc-400 max-w-md leading-relaxed">{s.desc}</p>
+                    <span className="mt-6 inline-flex items-center gap-1.5 text-sm text-white">
+                      Explore
+                      <ArrowUpRight className="h-4 w-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                    </span>
+                  </div>
+                </Link>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* STATS */}
+      <section className="py-24 border-y border-white/10 bg-surface/40" data-testid="home-stats">
+        <div className="max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-2 md:grid-cols-4 gap-12">
+          {stats.map((s, i) => (
+            <Reveal key={s.label} delay={i * 0.08}>
+              <div>
+                <div className="font-heading font-black tracking-tighter text-5xl md:text-6xl text-white">
+                  <Counter to={s.to} suffix={s.suffix} decimals={s.decimals} />
+                </div>
+                <p className="mt-3 text-zinc-500 text-sm">{s.label}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
+      <CTASection />
+    </div>
+  );
+}

@@ -7,6 +7,18 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        heading: ['Cabinet Grotesk', 'sans-serif'],
+        body: ['Satoshi', 'sans-serif'],
+        mono: ['JetBrains Mono', 'monospace'],
+      },
+      colors: {
+        ink: '#050505',
+        surface: '#121212',
+        cyan: {
+          accent: '#00F0FF',
+        },
+      },
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
