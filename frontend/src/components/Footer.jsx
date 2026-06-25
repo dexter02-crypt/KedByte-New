@@ -14,10 +14,11 @@ const cols = [
   {
     title: "Services",
     links: [
-      { to: "/services", label: "Custom Software" },
-      { to: "/services", label: "Cloud & DevOps" },
-      { to: "/services", label: "AI & Data" },
-      { to: "/services", label: "Product Design" },
+      { to: "/services", label: "Custom Software & Apps" },
+      { to: "/services", label: "Frontend & Backend" },
+      { to: "/services", label: "AI & Machine Learning" },
+      { to: "/services", label: "DevOps & Automation" },
+      { to: "/services", label: "UI/UX Design" },
     ],
   },
 ];
@@ -32,15 +33,15 @@ export default function Footer() {
               KED<span className="text-cyan-accent">BYTE</span>
             </span>
             <p className="mt-5 text-zinc-400 max-w-sm leading-relaxed">
-              We architect, build and scale digital products — cloud, software and
-              AI engineered for the future.
+              An ultra-minimal, futuristic software studio — building intelligent,
+              high-performance digital products from interface to infrastructure.
             </p>
             <a
-              href="mailto:hello@kedbyte.com"
+              href="mailto:techteam@kedbyte.com"
               className="mt-6 inline-flex items-center gap-1.5 text-white hover:text-cyan-accent transition-colors"
               data-testid="footer-email"
             >
-              hello@kedbyte.com <ArrowUpRight className="h-4 w-4" />
+              techteam@kedbyte.com <ArrowUpRight className="h-4 w-4" />
             </a>
           </div>
 
@@ -69,16 +70,16 @@ export default function Footer() {
               Registered
             </h4>
             <p className="text-zinc-400 text-sm leading-relaxed">
-              Kedbyte Technologies Private Limited
+              Kedbyte Private Limited
               <br />
-              Bengaluru, India
+              Vadodara, Gujarat, India
             </p>
           </div>
         </div>
 
         <div className="mt-16 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between gap-4 text-xs text-zinc-500 font-mono">
-          <span>© {new Date().getFullYear()} Kedbyte Technologies Pvt Ltd. All rights reserved.</span>
-          <span>Engineered with precision in India.</span>
+          <span>© {new Date().getFullYear()} Kedbyte Private Limited. All rights reserved.</span>
+          <span>Incorporated 08 May 2026 · Vadodara, Gujarat.</span>
         </div>
       </div>
     </footer>

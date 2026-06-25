@@ -14,33 +14,33 @@ const HERO_IMG =
 const heroWords = ["WE", "BUILD", "DIGITAL", "FUTURES"];
 
 const stats = [
-  { to: 99.9, suffix: "%", decimals: 1, label: "Platform uptime" },
-  { to: 120, suffix: "+", decimals: 0, label: "Products shipped" },
-  { to: 50, suffix: "+", decimals: 0, label: "Enterprise clients" },
-  { to: 14, suffix: "", decimals: 0, label: "Countries served" },
+  { to: 99.9, suffix: "%", decimals: 1, label: "Deployment reliability" },
+  { to: 5, suffix: "+", decimals: 0, label: "Core capabilities" },
+  { to: 2026, suffix: "", decimals: 0, label: "Founded in Gujarat" },
+  { to: 24, suffix: "/7", decimals: 0, label: "Pipeline monitoring" },
 ];
 
 const services = [
   {
     icon: Code2,
-    title: "Custom Software & SaaS",
-    desc: "Product engineering from zero to scale — web, mobile and platform builds that ship fast and hold up.",
+    title: "Custom Software & Apps",
+    desc: "Web platforms, mobile apps and bespoke enterprise software — engineered to be fast, scalable and effortless to use.",
     span: "md:col-span-7",
     img: "https://images.pexels.com/photos/12627677/pexels-photo-12627677.jpeg?auto=compress&cs=tinysrgb&w=1200",
   },
   {
-    icon: Cloud,
-    title: "Cloud & DevOps",
-    desc: "Resilient infrastructure, CI/CD and observability on AWS, GCP & Azure.",
+    icon: BrainCircuit,
+    title: "AI & Machine Learning",
+    desc: "Custom models, fine-tuning and seamless AI integration built into your product.",
     span: "md:col-span-5",
-    img: "https://images.pexels.com/photos/1148820/pexels-photo-1148820.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    img: "https://images.unsplash.com/photo-1709625862266-014ef072fd93?crop=entropy&cs=srgb&fm=jpg&q=85&w=1200",
   },
   {
-    icon: BrainCircuit,
-    title: "AI & Data Solutions",
-    desc: "From data pipelines to production LLM features — intelligence built into your product.",
+    icon: Cloud,
+    title: "Infrastructure, Pipelines & Automation",
+    desc: "CI/CD pipelines, DevOps and workflow automation — secure, monitored and highly available by default.",
     span: "md:col-span-12",
-    img: null,
+    img: "https://images.pexels.com/photos/1148820/pexels-photo-1148820.jpeg?auto=compress&cs=tinysrgb&w=1200",
   },
 ];
 
@@ -74,7 +74,7 @@ export default function Home() {
             transition={{ delay: 0.2 }}
             className="font-mono text-xs tracking-[0.25em] uppercase text-cyan-accent mb-6"
           >
-            Kedbyte Technologies — Software · Cloud · AI
+            Kedbyte Private Limited — Software · AI · Automation
           </motion.p>
 
           <h1 className="font-heading font-black uppercase tracking-tighter text-white leading-[0.85] text-6xl sm:text-7xl md:text-8xl lg:text-[8.5rem]">
@@ -99,8 +99,8 @@ export default function Home() {
             className="mt-8 flex flex-col sm:flex-row items-start sm:items-center gap-6"
           >
             <p className="max-w-md text-zinc-300 text-base md:text-lg leading-relaxed">
-              A full-service technology studio building the software, cloud and AI
-              that powers ambitious companies.
+              An ultra-minimal software studio engineering intelligent, high-performance
+              products — from interface to AI to infrastructure.
             </p>
             <MagneticButton to="/contact" testid="home-hero-cta">
               Start a project

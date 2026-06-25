@@ -60,23 +60,25 @@ export default function About() {
           <div className="md:col-span-8 space-y-8">
             <Reveal>
               <p className="font-heading text-2xl md:text-3xl text-white leading-snug tracking-tight">
-                Kedbyte Technologies began with a simple belief: great software is
-                equal parts engineering rigor and design intuition.
+                Kedbyte Private Limited began with a simple belief: ultimate
+                sophistication lies in simplicity.
               </p>
             </Reveal>
             <Reveal delay={0.1}>
               <p className="text-zinc-400 text-lg leading-relaxed">
-                We're a full-service technology company partnering with startups and
-                enterprises to build products that scale. From cloud-native platforms
-                and DevOps automation to AI features and pixel-perfect interfaces, our
-                cross-functional teams move as one — fast, focused and accountable.
+                Founded in 2026 and headquartered in Vadodara, Gujarat, we're a
+                full-spectrum technology studio operating at the intersection of
+                advanced engineering and ultra-minimal design. From web and mobile
+                apps to backend systems, AI models and automated pipelines, we turn
+                complex requirements into fast, reliable and visually striking software.
               </p>
             </Reveal>
             <Reveal delay={0.2}>
               <p className="text-zinc-400 text-lg leading-relaxed">
-                Today we operate across continents, but the ethos hasn't changed: do
-                fewer things, do them exceptionally, and treat every product as if our
-                name is on the door — because it is.
+                We strip away the noise. Every product we ship — whether a frontend
+                interface or a fine-tuned machine learning model — is built to feel
+                fast, focused and effortless. The result is a single port of call,
+                taking businesses from ideation to production-grade technology.
               </p>
             </Reveal>
           </div>
@@ -87,10 +89,10 @@ export default function About() {
       <section className="py-20 border-y border-white/10 bg-surface/40">
         <div className="max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-2 md:grid-cols-4 gap-12">
           {[
-            { to: 2018, suffix: "", label: "Founded" },
-            { to: 80, suffix: "+", label: "Engineers & designers" },
-            { to: 120, suffix: "+", label: "Products delivered" },
-            { to: 14, suffix: "", label: "Countries" },
+            { to: 2026, suffix: "", label: "Founded" },
+            { to: 5, suffix: "+", label: "Core capabilities" },
+            { to: 100, suffix: "%", label: "In-house delivery" },
+            { to: 1, suffix: "", label: "Single partner" },
           ].map((s, i) => (
             <Reveal key={s.label} delay={i * 0.08}>
               <div className="font-heading font-black tracking-tighter text-4xl md:text-5xl text-white">

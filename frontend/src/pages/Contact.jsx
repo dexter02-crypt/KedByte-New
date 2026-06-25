@@ -60,14 +60,14 @@ export default function Contact() {
             <Reveal delay={0.3}>
               <div className="mt-12 space-y-5">
                 <a
-                  href="mailto:hello@kedbyte.com"
+                  href="mailto:techteam@kedbyte.com"
                   className="flex items-center gap-3 text-zinc-300 hover:text-white transition-colors"
                   data-testid="contact-email-link"
                 >
-                  <Mail className="h-5 w-5 text-cyan-accent" /> hello@kedbyte.com
+                  <Mail className="h-5 w-5 text-cyan-accent" /> techteam@kedbyte.com
                 </a>
                 <div className="flex items-center gap-3 text-zinc-300">
-                  <MapPin className="h-5 w-5 text-cyan-accent" /> Bengaluru, India
+                  <MapPin className="h-5 w-5 text-cyan-accent" /> Vadodara, Gujarat, India
                 </div>
               </div>
             </Reveal>

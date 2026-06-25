@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Code2, Cloud, BrainCircuit, Palette, Check } from "lucide-react";
+import { Code2, Cloud, BrainCircuit, Palette, Layers, Workflow, Check } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import CTASection from "@/components/CTASection";
 
@@ -7,33 +7,41 @@ const services = [
   {
     icon: Code2,
     tag: "01 — Build",
-    title: "Custom Software & SaaS",
-    desc: "We design and engineer products end-to-end. From validating an idea to launching a multi-tenant SaaS platform, our teams ship maintainable, well-tested code on modern stacks.",
-    points: ["Web & mobile apps", "Multi-tenant SaaS platforms", "API & systems design", "Legacy modernization"],
+    title: "Custom Software & Application Development",
+    desc: "We design and engineer products end-to-end — high-performance web apps, polished native and cross-platform mobile apps, and bespoke enterprise software that automates operations and removes manual bottlenecks.",
+    points: ["Responsive web applications", "Native & cross-platform mobile", "Bespoke enterprise software", "Workflow-driven platforms"],
     img: "https://images.pexels.com/photos/12627677/pexels-photo-12627677.jpeg?auto=compress&cs=tinysrgb&w=1200",
   },
   {
-    icon: Cloud,
-    tag: "02 — Scale",
-    title: "Cloud & DevOps",
-    desc: "Infrastructure that's resilient, observable and cost-aware. We automate delivery pipelines and harden production across AWS, GCP and Azure so your team ships with confidence.",
-    points: ["Infrastructure as Code", "CI/CD automation", "Kubernetes & containers", "Monitoring & SRE"],
-    img: "https://images.pexels.com/photos/1148820/pexels-photo-1148820.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    icon: Layers,
+    tag: "02 — Engineer",
+    title: "Frontend & Backend Engineering",
+    desc: "Production-ready interfaces built to an ultra-minimal, futuristic design system, backed by secure, high-performance APIs and scalable server-side infrastructure capable of heavy, real-time workloads.",
+    points: ["Pixel-perfect frontend", "Secure high-performance APIs", "Scalable backend architecture", "Real-time systems"],
+    img: "https://images.unsplash.com/photo-1518773553398-650c184e0bb3?crop=entropy&cs=srgb&fm=jpg&q=85&w=1200",
   },
   {
     icon: BrainCircuit,
     tag: "03 — Intelligence",
-    title: "AI & Data Solutions",
-    desc: "Turn data into a competitive edge. We build pipelines, analytics and production-grade AI — including LLM features, RAG systems and ML models embedded in your product.",
-    points: ["LLM & RAG features", "Data engineering", "ML model deployment", "Analytics dashboards"],
-    img: "https://images.unsplash.com/photo-1709625862266-014ef072fd93?crop=entropy&cs=srgb&fm=jpg&q=85&w=1200",
+    title: "Artificial Intelligence & Machine Learning",
+    desc: "From custom AI architectures to rigorous training and fine-tuning for accuracy and low latency, we embed intelligent systems seamlessly into your software and workflows.",
+    points: ["Custom AI models", "Training & fine-tuning", "Low-latency inference", "Seamless AI integration"],
+    img: "https://images.pexels.com/photos/14314636/pexels-photo-14314636.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  },
+  {
+    icon: Workflow,
+    tag: "04 — Scale",
+    title: "Infrastructure, Pipelines & Automation",
+    desc: "Robust CI/CD pipelines for rapid, error-free releases, workflow automation that removes repetitive toil, and scalable, monitored, highly available cloud architectures.",
+    points: ["Automated CI/CD pipelines", "Workflow automation", "DevOps & cloud infrastructure", "Monitoring & high availability"],
+    img: "https://images.pexels.com/photos/1148820/pexels-photo-1148820.jpeg?auto=compress&cs=tinysrgb&w=1200",
   },
   {
     icon: Palette,
-    tag: "04 — Craft",
-    title: "Product Design",
-    desc: "Interfaces people love. Our designers partner with engineers to deliver research-led, accessible and beautiful experiences across every screen.",
-    points: ["UX research", "Design systems", "Interaction & motion", "Prototyping"],
+    tag: "05 — Craft",
+    title: "UI/UX Design",
+    desc: "End-to-end user journey mapping, wireframing and prototyping paired with dark-themed, futuristic, ultra-minimal interfaces that prioritise focus and aesthetic precision.",
+    points: ["Product design & journeys", "Wireframing & prototyping", "Ultra-minimal UI systems", "Dark, futuristic aesthetics"],
     img: "https://images.pexels.com/photos/6804068/pexels-photo-6804068.jpeg?auto=compress&cs=tinysrgb&w=1200",
   },
 ];
@@ -54,8 +62,9 @@ export default function Services() {
           </Reveal>
           <Reveal delay={0.2}>
             <p className="mt-8 max-w-2xl text-zinc-400 text-lg leading-relaxed">
-              We cover the full lifecycle of building modern software — strategy,
-              design, engineering, cloud and AI — so you move faster with less overhead.
+              We cover the full lifecycle of building modern software — from custom
+              apps and AI to backend engineering, automation and ultra-minimal
+              design — so you ship faster with a single partner.
             </p>
           </Reveal>
         </div>

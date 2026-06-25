@@ -9,7 +9,7 @@ const roles = [
   {
     title: "Senior Full-Stack Engineer",
     team: "Engineering",
-    location: "Remote / Bengaluru",
+    location: "Remote / Vadodara",
     type: "Full-time",
     desc: "Lead the build of multi-tenant SaaS platforms across React, Node and Python. You'll own features end-to-end and mentor a small pod of engineers.",
   },
@@ -23,7 +23,7 @@ const roles = [
   {
     title: "AI / ML Engineer",
     team: "Intelligence",
-    location: "Remote / Bengaluru",
+    location: "Remote / Vadodara",
     type: "Full-time",
     desc: "Ship production LLM and ML features — RAG systems, data pipelines and model deployment for real products.",
   },
@@ -37,7 +37,7 @@ const roles = [
   {
     title: "Engineering Internship",
     team: "Engineering",
-    location: "Bengaluru",
+    location: "Vadodara",
     type: "Internship",
     desc: "A 6-month immersive program working alongside senior engineers on real client products.",
   },
