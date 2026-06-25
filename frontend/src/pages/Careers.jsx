@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Plus, MapPin, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
 import Reveal from "@/components/Reveal";
+import SectionKicker from "@/components/SectionKicker";
 import CTASection from "@/components/CTASection";
 
 const roles = [
@@ -48,10 +49,12 @@ export default function Careers() {
 
   return (
     <div data-testid="careers-page">
-      <section className="pt-40 pb-20 md:pt-52 md:pb-28">
-        <div className="max-w-7xl mx-auto px-6 md:px-12">
+      <section className="relative pt-40 pb-20 md:pt-52 md:pb-28 overflow-hidden">
+        <div className="tech-grid grid-fade absolute inset-0 opacity-40" />
+        <div className="glow-orb animate-pulse-glow absolute -top-10 right-[18%] h-[400px] w-[400px]" />
+        <div className="relative max-w-7xl mx-auto px-6 md:px-12">
           <Reveal>
-            <p className="font-mono text-xs tracking-[0.2em] uppercase text-cyan-accent">Careers</p>
+            <SectionKicker index="[ 04 ]">Careers</SectionKicker>
           </Reveal>
           <Reveal delay={0.1}>
             <h1 className="mt-6 font-heading font-black uppercase tracking-tighter text-5xl md:text-7xl lg:text-8xl text-white leading-[0.9] max-w-5xl">

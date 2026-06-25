@@ -27,7 +27,7 @@ export const MagneticButton = ({
   const reset = () => setPos({ x: 0, y: 0 });
 
   const base =
-    "group relative inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-sm font-medium tracking-tight transition-colors duration-300 disabled:opacity-50";
+    "shine group relative inline-flex items-center gap-2 overflow-hidden rounded-full px-7 py-3.5 text-sm font-medium tracking-tight transition-colors duration-300 disabled:opacity-50";
   const styles =
     variant === "primary"
       ? "bg-white text-[#050505] hover:bg-zinc-200"

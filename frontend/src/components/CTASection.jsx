@@ -6,8 +6,10 @@ export default function CTASection({
   title = "Let's build something that lasts.",
 }) {
   return (
-    <section className="relative py-24 md:py-40 border-t border-white/10" data-testid="cta-section">
-      <div className="max-w-7xl mx-auto px-6 md:px-12 text-center">
+    <section className="relative py-24 md:py-40 border-t border-white/10 overflow-hidden" data-testid="cta-section">
+      <div className="tech-grid grid-fade absolute inset-0 opacity-30" />
+      <div className="glow-orb animate-pulse-glow absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2" />
+      <div className="relative max-w-7xl mx-auto px-6 md:px-12 text-center">
         <Reveal>
           <p className="font-mono text-xs tracking-[0.2em] uppercase text-zinc-500">{eyebrow}</p>
         </Reveal>

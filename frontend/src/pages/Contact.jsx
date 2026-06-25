@@ -3,6 +3,7 @@ import axios from "axios";
 import { toast } from "sonner";
 import { Loader2, ArrowUpRight, Mail, MapPin } from "lucide-react";
 import Reveal from "@/components/Reveal";
+import SectionKicker from "@/components/SectionKicker";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
@@ -37,12 +38,14 @@ export default function Contact() {
 
   return (
     <div data-testid="contact-page">
-      <section className="pt-40 pb-24 md:pt-52 md:pb-40">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 grid md:grid-cols-2 gap-16 md:gap-24">
+      <section className="relative pt-40 pb-24 md:pt-52 md:pb-40 overflow-hidden">
+        <div className="tech-grid grid-fade absolute inset-0 opacity-40" />
+        <div className="glow-orb animate-pulse-glow absolute top-1/4 left-[10%] h-[450px] w-[450px]" />
+        <div className="relative max-w-7xl mx-auto px-6 md:px-12 grid md:grid-cols-2 gap-16 md:gap-24">
           {/* Left */}
           <div>
             <Reveal>
-              <p className="font-mono text-xs tracking-[0.2em] uppercase text-cyan-accent">Contact</p>
+              <SectionKicker index="[ 05 ]">Contact</SectionKicker>
             </Reveal>
             <Reveal delay={0.1}>
               <h1 className="mt-6 font-heading font-black uppercase tracking-tighter text-6xl md:text-8xl text-white leading-[0.85]">

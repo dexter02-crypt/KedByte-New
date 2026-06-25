@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import Lenis from "lenis";
 import { AnimatePresence } from "framer-motion";
 import { Toaster } from "@/components/ui/sonner";
+import Cursor from "@/components/Cursor";
 import Layout from "@/components/Layout";
 import Home from "@/pages/Home";
 import Services from "@/pages/Services";
@@ -53,6 +54,7 @@ function App() {
   return (
     <div className="App font-body">
       <div className="grain" />
+      <Cursor />
       <Toaster position="bottom-right" />
       <BrowserRouter>
         <ScrollToTop />

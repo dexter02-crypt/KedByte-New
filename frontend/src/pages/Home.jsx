@@ -6,6 +6,9 @@ import MagneticButton from "@/components/MagneticButton";
 import Counter from "@/components/Counter";
 import TechMarquee from "@/components/TechMarquee";
 import CTASection from "@/components/CTASection";
+import TerminalCard from "@/components/TerminalCard";
+import SectionKicker from "@/components/SectionKicker";
+import Corners from "@/components/Corners";
 import { Link } from "react-router-dom";
 
 const HERO_IMG =
@@ -62,7 +65,24 @@ export default function Home() {
           <img src={HERO_IMG} alt="Abstract technology" className="h-[120%] w-full object-cover" />
         </motion.div>
         <motion.div className="absolute inset-0 bg-ink" style={{ opacity: overlayOpacity }} />
-        <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/20 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-ink/10" />
+        <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/30 to-transparent" />
+        <div className="tech-grid grid-fade absolute inset-0 opacity-60" />
+        <div className="glow-orb animate-pulse-glow absolute -top-20 right-[10%] h-[420px] w-[420px]" />
+
+        {/* HUD corner readouts */}
+        <div className="absolute top-28 left-6 md:left-12 z-10 hidden sm:flex items-center gap-3 font-mono text-[10px] tracking-[0.2em] uppercase text-zinc-500">
+          <span className="h-1.5 w-1.5 rounded-full bg-cyan-accent animate-pulse-glow" />
+          Systems operational
+        </div>
+        <div className="absolute top-28 right-6 md:right-12 z-10 hidden sm:block font-mono text-[10px] tracking-[0.2em] uppercase text-zinc-500">
+          22.31°N · 73.18°E — Vadodara
+        </div>
+
+        {/* Floating terminal */}
+        <div className="absolute bottom-12 right-6 md:right-12 z-20 hidden lg:block">
+          <TerminalCard />
+        </div>
 
         <motion.div
           style={{ y: textY }}
@@ -129,14 +149,13 @@ export default function Home() {
       </section>
 
       {/* SERVICES BENTO */}
-      <section className="py-24 md:py-40" data-testid="home-services">
-        <div className="max-w-7xl mx-auto px-6 md:px-12">
+      <section className="relative py-24 md:py-40 overflow-hidden" data-testid="home-services">
+        <div className="tech-grid grid-fade absolute inset-0 opacity-30" />
+        <div className="relative max-w-7xl mx-auto px-6 md:px-12">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
             <div>
               <Reveal>
-                <p className="font-mono text-xs tracking-[0.2em] uppercase text-zinc-500">
-                  What we do
-                </p>
+                <SectionKicker index="[01]">What we do</SectionKicker>
               </Reveal>
               <Reveal delay={0.1}>
                 <h2 className="mt-4 font-heading font-bold tracking-tighter text-4xl md:text-5xl text-white max-w-2xl">
@@ -162,8 +181,9 @@ export default function Home() {
                 <Link
                   to="/services"
                   data-testid={`home-service-card-${i}`}
-                  className="group relative block h-full overflow-hidden rounded-2xl border border-white/10 bg-surface p-8 md:p-10 transition-all duration-500 hover:border-cyan-accent/40 hover:-translate-y-1"
+                  className="glow-card group block h-full overflow-hidden rounded-2xl border border-white/10 bg-surface p-8 md:p-10 hover:-translate-y-1"
                 >
+                  <Corners className="opacity-0 group-hover:opacity-100" />
                   {s.img && (
                     <div className="absolute inset-0 opacity-15 group-hover:opacity-25 transition-opacity duration-500">
                       <img src={s.img} alt="" className="h-full w-full object-cover" />
@@ -171,7 +191,11 @@ export default function Home() {
                     </div>
                   )}
                   <div className="relative z-10">
-                    <s.icon className="h-9 w-9 text-cyan-accent mb-20 md:mb-28" />
+                    <div className="flex items-center justify-between">
+                      <s.icon className="h-9 w-9 text-cyan-accent" />
+                      <span className="font-mono text-xs text-zinc-600">0{i + 1}</span>
+                    </div>
+                    <div className="mb-20 md:mb-28" />
                     <h3 className="font-heading text-2xl md:text-3xl tracking-tight text-white">
                       {s.title}
                     </h3>
@@ -189,15 +213,16 @@ export default function Home() {
       </section>
 
       {/* STATS */}
-      <section className="py-24 border-y border-white/10 bg-surface/40" data-testid="home-stats">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-2 md:grid-cols-4 gap-12">
+      <section className="relative py-24 border-y border-white/10 bg-surface/40 overflow-hidden" data-testid="home-stats">
+        <div className="tech-grid grid-fade absolute inset-0 opacity-20" />
+        <div className="relative max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-2 md:grid-cols-4 gap-12">
           {stats.map((s, i) => (
             <Reveal key={s.label} delay={i * 0.08}>
-              <div>
+              <div className="border-l border-white/10 pl-5">
                 <div className="font-heading font-black tracking-tighter text-5xl md:text-6xl text-white">
                   <Counter to={s.to} suffix={s.suffix} decimals={s.decimals} />
                 </div>
-                <p className="mt-3 text-zinc-500 text-sm">{s.label}</p>
+                <p className="mt-3 font-mono text-xs tracking-wider uppercase text-zinc-500">{s.label}</p>
               </div>
             </Reveal>
           ))}
