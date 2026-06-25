@@ -5,12 +5,14 @@ import Lenis from "lenis";
 import { AnimatePresence } from "framer-motion";
 import { Toaster } from "@/components/ui/sonner";
 import Cursor from "@/components/Cursor";
+import RouteCurtain from "@/components/RouteCurtain";
 import Layout from "@/components/Layout";
 import Home from "@/pages/Home";
 import Services from "@/pages/Services";
 import About from "@/pages/About";
 import Careers from "@/pages/Careers";
 import Contact from "@/pages/Contact";
+import NotFound from "@/pages/NotFound";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -31,6 +33,7 @@ function AnimatedRoutes() {
           <Route path="/about" element={<About />} />
           <Route path="/careers" element={<Careers />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
     </AnimatePresence>
@@ -58,6 +61,7 @@ function App() {
       <Toaster position="bottom-right" />
       <BrowserRouter>
         <ScrollToTop />
+        <RouteCurtain />
         <AnimatedRoutes />
       </BrowserRouter>
     </div>
