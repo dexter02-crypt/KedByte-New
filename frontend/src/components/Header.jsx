@@ -3,6 +3,7 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import MagneticButton from "@/components/MagneticButton";
+import Logo from "@/components/Logo";
 
 const links = [
   { to: "/", label: "Home" },
@@ -32,11 +33,7 @@ export default function Header() {
       data-testid="site-header"
     >
       <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between h-20">
-        <Link to="/" className="flex items-center gap-2 group" data-testid="logo-link">
-          <span className="font-heading font-black text-xl tracking-tighter text-white">
-            KED<span className="text-cyan-accent">BYTE</span>
-          </span>
-        </Link>
+        <Logo testid="logo-link" />
 
         <nav className="hidden md:flex items-center gap-9">
           {links.map((l) => (

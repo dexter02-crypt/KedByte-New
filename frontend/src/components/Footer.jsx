@@ -29,8 +29,11 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-6 md:px-12 py-20">
         <div className="grid md:grid-cols-12 gap-12">
           <div className="md:col-span-5">
-            <span className="font-heading font-black text-3xl tracking-tighter text-white">
-              KED<span className="text-cyan-accent">BYTE</span>
+            <span className="flex items-center gap-3">
+              <img src="/logo-mark.png" alt="Kedbyte" className="h-10 w-auto" />
+              <span className="font-heading font-black text-3xl tracking-tighter text-white">
+                KED<span className="text-cyan-accent">BYTE</span>
+              </span>
             </span>
             <p className="mt-5 text-zinc-400 max-w-sm leading-relaxed">
               An ultra-minimal, futuristic software studio — building intelligent,
