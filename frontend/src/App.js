@@ -5,6 +5,7 @@ import Lenis from "lenis";
 import { AnimatePresence } from "framer-motion";
 import { Toaster } from "@/components/ui/sonner";
 import Cursor from "@/components/Cursor";
+import ScrollProgress from "@/components/ScrollProgress";
 import RouteCurtain from "@/components/RouteCurtain";
 import Layout from "@/components/Layout";
 import Home from "@/pages/Home";
@@ -58,6 +59,7 @@ function App() {
     <div className="App font-body">
       <div className="grain" />
       <Cursor />
+      <ScrollProgress />
       <Toaster position="bottom-right" />
       <BrowserRouter>
         <ScrollToTop />
