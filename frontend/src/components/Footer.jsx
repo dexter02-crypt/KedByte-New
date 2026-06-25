@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
+import KLogo from "@/components/KLogo";
 
 const cols = [
   {
@@ -30,7 +31,7 @@ export default function Footer() {
         <div className="grid md:grid-cols-12 gap-12">
           <div className="md:col-span-5">
             <span className="flex items-center gap-3">
-              <img src="/logo-mark.png" alt="Kedbyte" className="h-10 w-auto" />
+              <KLogo className="h-10 w-10" />
               <span className="font-heading font-black text-3xl tracking-tighter text-white">
                 KED<span className="text-cyan-accent">BYTE</span>
               </span>

@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useLocation } from "react-router-dom";
+import KLogo from "@/components/KLogo";
 
 const ease = [0.76, 0, 0.24, 1];
 
@@ -22,9 +23,12 @@ export default function RouteCurtain() {
             initial={{ opacity: 1 }}
             animate={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="font-heading font-black tracking-tighter text-2xl text-white"
+            className="flex items-center gap-3"
           >
-            KED<span className="text-cyan-accent">BYTE</span>
+            <KLogo className="h-9 w-9" />
+            <span className="font-heading font-black tracking-tighter text-2xl text-white">
+              KED<span className="text-cyan-accent">BYTE</span>
+            </span>
           </motion.span>
         </motion.div>
       </motion.div>
