@@ -3,6 +3,9 @@ import { Code2, Cloud, BrainCircuit, Palette, Layers, Workflow, Check } from "lu
 import Reveal from "@/components/Reveal";
 import SectionKicker from "@/components/SectionKicker";
 import CTASection from "@/components/CTASection";
+import TextScramble from "@/components/TextScramble";
+import WaveText from "@/components/WaveText";
+import ScrollConnectedPath from "@/components/ScrollConnectedPath";
 
 const services = [
   {
@@ -60,7 +63,7 @@ export default function Services() {
           </Reveal>
           <Reveal delay={0.1}>
             <h1 className="mt-6 font-heading font-black uppercase tracking-tighter text-5xl md:text-7xl lg:text-8xl text-white leading-[0.9] max-w-5xl">
-              End-to-end engineering, one partner.
+              <WaveText text="End-to-end engineering, one partner." />
             </h1>
           </Reveal>
           <Reveal delay={0.2}>
@@ -102,18 +105,30 @@ export default function Services() {
               <Reveal delay={0.15} className="md:[direction:ltr]">
                 <p className="font-mono text-xs tracking-[0.2em] uppercase text-zinc-500">{s.tag}</p>
                 <div className="mt-5 flex items-center gap-4">
-                  <s.icon className="h-9 w-9 text-cyan-accent" />
+                  <motion.div
+                    whileHover={{ rotate: [0, -10, 10, 0], scale: 1.1 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <s.icon className="h-9 w-9 text-cyan-accent" />
+                  </motion.div>
                   <h2 className="font-heading font-bold tracking-tight text-3xl md:text-4xl text-white">
-                    {s.title}
+                    <TextScramble text={s.title} trigger="view" speed={30} />
                   </h2>
                 </div>
                 <p className="mt-5 text-zinc-400 text-lg leading-relaxed">{s.desc}</p>
                 <ul className="mt-7 grid sm:grid-cols-2 gap-3">
-                  {s.points.map((p) => (
-                    <li key={p} className="flex items-center gap-3 text-zinc-300">
+                  {s.points.map((p, idx) => (
+                    <motion.li 
+                      key={p} 
+                      className="flex items-center gap-3 text-zinc-300"
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: idx * 0.1, duration: 0.5 }}
+                    >
                       <Check className="h-4 w-4 text-cyan-accent shrink-0" />
                       <span className="text-sm">{p}</span>
-                    </li>
+                    </motion.li>
                   ))}
                 </ul>
               </Reveal>

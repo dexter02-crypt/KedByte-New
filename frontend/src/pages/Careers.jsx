@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import Reveal from "@/components/Reveal";
 import SectionKicker from "@/components/SectionKicker";
 import CTASection from "@/components/CTASection";
+import WaveText from "@/components/WaveText";
+import MouseTilt3D from "@/components/MouseTilt3D";
 
 const roles = [
   {
@@ -84,16 +86,32 @@ export default function Careers() {
                   >
                     <div className="flex-1">
                       <h3 className="font-heading text-2xl md:text-4xl tracking-tight text-white group-hover:text-cyan-accent transition-colors">
-                        {r.title}
+                        <WaveText text={r.title} />
                       </h3>
                       <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2 font-mono text-xs text-zinc-500 uppercase tracking-wider">
-                        <span>{r.team}</span>
-                        <span className="flex items-center gap-1.5">
+                        <motion.span
+                          initial={{ opacity: 0, x: -10 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.1 }}
+                        >
+                          {r.team}
+                        </motion.span>
+                        <motion.span 
+                          className="flex items-center gap-1.5"
+                          initial={{ opacity: 0, x: -10 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.2 }}
+                        >
                           <MapPin className="h-3.5 w-3.5" /> {r.location}
-                        </span>
-                        <span className="flex items-center gap-1.5">
+                        </motion.span>
+                        <motion.span 
+                          className="flex items-center gap-1.5"
+                          initial={{ opacity: 0, x: -10 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.3 }}
+                        >
                           <Clock className="h-3.5 w-3.5" /> {r.type}
-                        </span>
+                        </motion.span>
                       </div>
                     </div>
                     <motion.div animate={{ rotate: isOpen ? 45 : 0 }} className="shrink-0 mt-2 md:mt-0">

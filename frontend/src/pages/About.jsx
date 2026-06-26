@@ -3,6 +3,9 @@ import Reveal from "@/components/Reveal";
 import SectionKicker from "@/components/SectionKicker";
 import Counter from "@/components/Counter";
 import CTASection from "@/components/CTASection";
+import MorphingText from "@/components/MorphingText";
+import GlitchText from "@/components/GlitchText";
+import MouseTilt3D from "@/components/MouseTilt3D";
 
 const values = [
   { title: "Craft over haste", desc: "We ship fast — but never at the cost of code we'd be embarrassed to maintain." },
@@ -10,6 +13,8 @@ const values = [
   { title: "Clarity", desc: "Plain language, honest timelines, no jargon walls. You always know where things stand." },
   { title: "Long horizons", desc: "We build systems meant to last years, not demos meant to impress for a week." },
 ];
+
+const morphingValues = ["Innovation", "Excellence", "Integrity", "Impact"];
 
 const OFFICE_IMG =
   "https://images.pexels.com/photos/6804068/pexels-photo-6804068.jpeg?auto=compress&cs=tinysrgb&w=1600";
@@ -26,7 +31,7 @@ export default function About() {
           </Reveal>
           <Reveal delay={0.1}>
             <h1 className="mt-6 font-heading font-black uppercase tracking-tighter text-5xl md:text-7xl lg:text-[7rem] text-white leading-[0.88] max-w-5xl">
-              A studio for the <span className="text-cyan-accent text-glow">curious</span> & the bold.
+              A studio for the <GlitchText className="text-cyan-accent text-glow" glitchOnHover>curious</GlitchText> & the bold.
             </h1>
           </Reveal>
         </div>
@@ -111,18 +116,30 @@ export default function About() {
       <section className="py-24 md:py-40">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <Reveal>
-            <h2 className="font-heading font-bold tracking-tighter text-4xl md:text-5xl text-white mb-16">
+            <h2 className="font-heading font-bold tracking-tighter text-4xl md:text-5xl text-white mb-4">
               What we stand for.
             </h2>
+            <p className="text-cyan-accent text-xl mb-16">
+              <MorphingText words={morphingValues} interval={2500} />
+            </p>
           </Reveal>
           <div className="grid md:grid-cols-2 gap-5">
             {values.map((v, i) => (
               <Reveal key={v.title} delay={i * 0.08}>
-                <div className="rounded-2xl border border-white/10 bg-surface p-8 md:p-10 h-full transition-colors duration-500 hover:border-cyan-accent/40">
-                  <span className="font-mono text-cyan-accent text-sm">0{i + 1}</span>
-                  <h3 className="mt-4 font-heading text-2xl text-white tracking-tight">{v.title}</h3>
-                  <p className="mt-3 text-zinc-400 leading-relaxed">{v.desc}</p>
-                </div>
+                <MouseTilt3D strength={0.3}>
+                  <div className="rounded-2xl border border-white/10 bg-surface p-8 md:p-10 h-full transition-colors duration-500 hover:border-cyan-accent/40">
+                    <motion.span 
+                      className="font-mono text-cyan-accent text-sm"
+                      initial={{ opacity: 0.5 }}
+                      whileInView={{ opacity: 1 }}
+                      viewport={{ once: true }}
+                    >
+                      0{i + 1}
+                    </motion.span>
+                    <h3 className="mt-4 font-heading text-2xl text-white tracking-tight">{v.title}</h3>
+                    <p className="mt-3 text-zinc-400 leading-relaxed">{v.desc}</p>
+                  </div>
+                </MouseTilt3D>
               </Reveal>
             ))}
           </div>

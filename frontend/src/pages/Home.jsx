@@ -12,12 +12,16 @@ import Corners from "@/components/Corners";
 import MouseTilt3D from "@/components/MouseTilt3D";
 import ParallaxLayer from "@/components/ParallaxLayer";
 import FloatingParticles from "@/components/FloatingParticles";
+import WordScramble from "@/components/WordScramble";
+import MorphingText from "@/components/MorphingText";
+import WaveText from "@/components/WaveText";
 import { Link } from "react-router-dom";
 
 const HERO_IMG =
   "https://images.unsplash.com/photo-1709625862266-014ef072fd93?crop=entropy&cs=srgb&fm=jpg&q=85&w=1920";
 
-const heroWords = ["WE", "BUILD", "DIGITAL", "FUTURES"];
+const heroWords = ["WE", "BUILD"];
+const morphingWords = ["DIGITAL", "INTELLIGENT", "SCALABLE", "INNOVATIVE"];
 
 const stats = [
   { to: 99.9, suffix: "%", decimals: 1, label: "Deployment reliability" },
@@ -199,28 +203,42 @@ export default function Home() {
                   animate={{ y: 0, rotateX: 0 }}
                   transition={{ delay: 0.1 * i, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
                 >
-                  {w === "FUTURES" ? (
-                    <motion.span 
-                      className="text-glow text-cyan-accent"
-                      animate={{
-                        textShadow: [
-                          "0 0 20px rgba(0, 240, 255, 0.3)",
-                          "0 0 40px rgba(0, 240, 255, 0.6)",
-                          "0 0 20px rgba(0, 240, 255, 0.3)",
-                        ],
-                      }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        ease: "easeInOut"
-                      }}
-                    >
-                      {w}
-                    </motion.span>
-                  ) : w}
+                  {w}
                 </motion.span>
               </span>
             ))}
+            <span className="block overflow-hidden">
+              <motion.span
+                className="inline-block text-glow text-cyan-accent"
+                initial={{ y: "110%", rotateX: -90 }}
+                animate={{ 
+                  y: 0, 
+                  rotateX: 0,
+                  textShadow: [
+                    "0 0 20px rgba(0, 240, 255, 0.3)",
+                    "0 0 40px rgba(0, 240, 255, 0.6)",
+                    "0 0 20px rgba(0, 240, 255, 0.3)",
+                  ],
+                }}
+                transition={{
+                  y: { delay: 0.2, duration: 0.9, ease: [0.22, 1, 0.36, 1] },
+                  rotateX: { delay: 0.2, duration: 0.9, ease: [0.22, 1, 0.36, 1] },
+                  textShadow: { duration: 2, repeat: Infinity, ease: "easeInOut" }
+                }}
+              >
+                <MorphingText words={morphingWords} />
+              </motion.span>
+            </span>
+            <span className="block overflow-hidden">
+              <motion.span
+                className="inline-block"
+                initial={{ y: "110%", rotateX: -90 }}
+                animate={{ y: 0, rotateX: 0 }}
+                transition={{ delay: 0.3, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+              >
+                FUTURES
+              </motion.span>
+            </span>
           </h1>
 
           <motion.div
@@ -447,6 +465,14 @@ export default function Home() {
               </div>
             </motion.div>
           ))}
+        </div>
+      </section>
+
+      {/* WORD SCRAMBLE - Interactive Service Discovery */}
+      <section className="relative py-24 md:py-32 bg-ink border-y border-white/10 overflow-hidden">
+        <div className="tech-grid grid-fade absolute inset-0 opacity-20" />
+        <div className="relative max-w-7xl mx-auto px-6 md:px-12">
+          <WordScramble />
         </div>
       </section>
 
