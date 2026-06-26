@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Cloud, Code2, BrainCircuit, ArrowUpRight } from "lucide-react";
 import Reveal from "@/components/Reveal";
+import { StaggerGroup, StaggerItem } from "@/components/Stagger";
 import MagneticButton from "@/components/MagneticButton";
 import Counter from "@/components/Counter";
 import TechMarquee from "@/components/TechMarquee";
@@ -279,17 +280,11 @@ export default function Home() {
 
       {/* MARQUEE */}
       <section className="py-12 border-y border-white/10 bg-ink overflow-hidden">
-        <motion.div 
-          className="max-w-7xl mx-auto px-6 md:px-12 mb-8"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
+        <Reveal className="max-w-7xl mx-auto px-6 md:px-12 mb-8">
           <p className="font-mono text-xs tracking-[0.2em] uppercase text-zinc-500 text-center">
             The stack we engineer with
           </p>
-        </motion.div>
+        </Reveal>
         <TechMarquee />
       </section>
 
@@ -344,19 +339,11 @@ export default function Home() {
             </Reveal>
           </div>
 
-          <div className="grid md:grid-cols-12 gap-5">
+          <StaggerGroup className="grid md:grid-cols-12 gap-5">
             {services.map((s, i) => (
-              <motion.div
+              <StaggerItem
                 key={s.title}
                 className={s.span}
-                initial={{ opacity: 0, y: 60 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ 
-                  delay: i * 0.15, 
-                  duration: 0.8,
-                  ease: [0.22, 1, 0.36, 1]
-                }}
               >
                 <MouseTilt3D strength={0.3} className="h-full">
                   <Link
@@ -383,14 +370,9 @@ export default function Home() {
                         >
                           <s.icon className="h-9 w-9 text-cyan-accent" />
                         </motion.div>
-                        <motion.span 
-                          className="font-mono text-xs text-zinc-600"
-                          initial={{ opacity: 0 }}
-                          whileInView={{ opacity: 1 }}
-                          transition={{ delay: i * 0.15 + 0.3 }}
-                        >
+                        <span className="font-mono text-xs text-zinc-600">
                           0{i + 1}
-                        </motion.span>
+                        </span>
                       </div>
                       <div className="mb-20 md:mb-28" />
                       <h3 className="font-heading text-2xl md:text-3xl tracking-tight text-white">
@@ -413,9 +395,9 @@ export default function Home() {
                     </div>
                   </Link>
                 </MouseTilt3D>
-              </motion.div>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerGroup>
         </div>
       </section>
 
@@ -436,44 +418,37 @@ export default function Home() {
           }}
         />
         
-        <div className="relative max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-2 md:grid-cols-4 gap-12">
-          {stats.map((s, i) => (
-            <motion.div
-              key={s.label}
-              initial={{ opacity: 0, y: 40, scale: 0.9 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ 
-                delay: i * 0.1, 
-                duration: 0.7,
-                ease: [0.22, 1, 0.36, 1]
-              }}
-              whileHover={{ 
-                scale: 1.05,
-                transition: { type: "spring", stiffness: 400, damping: 20 }
-              }}
-            >
-              <div className="border-l border-white/10 pl-5 group cursor-default">
-                <div className="font-heading font-black tracking-tighter text-5xl md:text-6xl text-white">
-                  <Counter to={s.to} suffix={s.suffix} decimals={s.decimals} />
+        <StaggerGroup className="relative max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-2 md:grid-cols-4 gap-12">
+          {stats.map((s) => (
+            <StaggerItem key={s.label}>
+              <motion.div
+                whileHover={{ 
+                  scale: 1.05,
+                  transition: { type: "spring", stiffness: 400, damping: 20 }
+                }}
+              >
+                <div className="border-l border-white/10 pl-5 group cursor-default">
+                  <div className="font-heading font-black tracking-tighter text-5xl md:text-6xl text-white">
+                    <Counter to={s.to} suffix={s.suffix} decimals={s.decimals} />
+                  </div>
+                  <motion.p 
+                    className="mt-3 font-mono text-xs tracking-wider uppercase text-zinc-500 group-hover:text-cyan-accent transition-colors"
+                  >
+                    {s.label}
+                  </motion.p>
                 </div>
-                <motion.p 
-                  className="mt-3 font-mono text-xs tracking-wider uppercase text-zinc-500 group-hover:text-cyan-accent transition-colors"
-                >
-                  {s.label}
-                </motion.p>
-              </div>
-            </motion.div>
+              </motion.div>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerGroup>
       </section>
 
       {/* WORD SCRAMBLE - Interactive Service Discovery */}
       <section className="relative py-24 md:py-32 bg-ink border-y border-white/10 overflow-hidden">
         <div className="tech-grid grid-fade absolute inset-0 opacity-20" />
-        <div className="relative max-w-7xl mx-auto px-6 md:px-12">
+        <Reveal className="relative max-w-7xl mx-auto px-6 md:px-12">
           <WordScramble />
-        </div>
+        </Reveal>
       </section>
 
       <CTASection />

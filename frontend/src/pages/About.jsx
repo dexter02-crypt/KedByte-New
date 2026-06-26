@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import Reveal from "@/components/Reveal";
+import { StaggerGroup, StaggerItem } from "@/components/Stagger";
 import SectionKicker from "@/components/SectionKicker";
 import Counter from "@/components/Counter";
 import CTASection from "@/components/CTASection";
@@ -123,23 +124,29 @@ export default function About() {
               <MorphingText words={morphingValues} interval={2500} />
             </p>
           </Reveal>
-          <div className="grid md:grid-cols-2 gap-5">
+          <StaggerGroup className="grid md:grid-cols-2 gap-5">
             {values.map((v, i) => (
-              <Reveal key={v.title} delay={i * 0.08}>
+              <StaggerItem key={v.title}>
                 <MouseTilt3D strength={0.3}>
                   <div className="rounded-2xl border border-white/10 bg-surface p-8 md:p-10 h-full transition-colors duration-500 hover:border-cyan-accent/40">
-                    <motion.span 
-                      className="font-mono text-cyan-accent text-sm"
-                      initial={{ opacity: 0.5 }}
-                      whileInView={{ opacity: 1 }}
-                      viewport={{ once: true }}
-                    >
+                    <span className="font-mono text-cyan-accent text-sm">
                       0{i + 1}
-                    </motion.span>
+                    </span>
                     <h3 className="mt-4 font-heading text-2xl text-white tracking-tight">{v.title}</h3>
                     <p className="mt-3 text-zinc-400 leading-relaxed">{v.desc}</p>
                   </div>
                 </MouseTilt3D>
+              </StaggerItem>
+            ))}
+          </StaggerGroup>
+        </div>
+      </section>
+
+      <CTASection eyebrow="Want to work with us?" title="Let's make something remarkable." />
+    </div>
+  );
+}
+
               </Reveal>
             ))}
           </div>
