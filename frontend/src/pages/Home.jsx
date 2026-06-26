@@ -9,11 +9,9 @@ import CTASection from "@/components/CTASection";
 import TerminalCard from "@/components/TerminalCard";
 import SectionKicker from "@/components/SectionKicker";
 import Corners from "@/components/Corners";
-import SplitText from "@/components/SplitText";
 import MouseTilt3D from "@/components/MouseTilt3D";
 import ParallaxLayer from "@/components/ParallaxLayer";
 import FloatingParticles from "@/components/FloatingParticles";
-import SectionIndicator from "@/components/SectionIndicator";
 import { Link } from "react-router-dom";
 
 const HERO_IMG =
@@ -65,8 +63,6 @@ export default function Home() {
 
   return (
     <div data-testid="home-page">
-      <SectionIndicator />
-      
       {/* HERO */}
       <section ref={heroRef} className="relative h-screen overflow-hidden" data-testid="home-hero">
         {/* Background layers with enhanced parallax */}
@@ -97,7 +93,7 @@ export default function Home() {
         />
         
         {/* Floating particles */}
-        <FloatingParticles count={30} />
+        <FloatingParticles count={15} />
         
         {/* Animated glow orbs */}
         <motion.div 
@@ -181,79 +177,72 @@ export default function Home() {
           </motion.div>
         </motion.div>
 
-        <ParallaxLayer speed={-0.2}>
-          <motion.div
-            style={{ y: textY }}
-            className="relative z-10 h-full max-w-7xl mx-auto px-6 md:px-12 flex flex-col justify-center"
+        <motion.div
+          style={{ y: textY }}
+          className="relative z-10 h-full max-w-7xl mx-auto px-6 md:px-12 flex flex-col justify-center"
+        >
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.8 }}
+            className="font-mono text-xs tracking-[0.25em] uppercase text-cyan-accent mb-6"
           >
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.8 }}
-              className="font-mono text-xs tracking-[0.25em] uppercase text-cyan-accent mb-6"
+            Kedbyte Private Limited — Software · AI · Automation
+          </motion.p>
+
+          <h1 className="font-heading font-black uppercase tracking-tighter text-white leading-[0.85] text-6xl sm:text-7xl md:text-8xl lg:text-[8.5rem]">
+            {heroWords.map((w, i) => (
+              <span key={w} className="block overflow-hidden">
+                <motion.span
+                  className="inline-block"
+                  initial={{ y: "110%", rotateX: -90 }}
+                  animate={{ y: 0, rotateX: 0 }}
+                  transition={{ delay: 0.1 * i, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  {w === "FUTURES" ? (
+                    <motion.span 
+                      className="text-glow text-cyan-accent"
+                      animate={{
+                        textShadow: [
+                          "0 0 20px rgba(0, 240, 255, 0.3)",
+                          "0 0 40px rgba(0, 240, 255, 0.6)",
+                          "0 0 20px rgba(0, 240, 255, 0.3)",
+                        ],
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                      }}
+                    >
+                      {w}
+                    </motion.span>
+                  ) : w}
+                </motion.span>
+              </span>
+            ))}
+          </h1>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7, duration: 0.8 }}
+            className="mt-8 flex flex-col sm:flex-row items-start sm:items-center gap-6"
+          >
+            <motion.p 
+              className="max-w-md text-zinc-300 text-base md:text-lg leading-relaxed"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.9 }}
             >
-              <SplitText text="Kedbyte Private Limited — Software · AI · Automation" delay={0.3} charDelay={0.02} />
+              An ultra-minimal software studio engineering intelligent, high-performance
+              products — from interface to AI to infrastructure.
             </motion.p>
-
-            <h1 className="font-heading font-black uppercase tracking-tighter text-white leading-[0.85] text-6xl sm:text-7xl md:text-8xl lg:text-[8.5rem]">
-              {heroWords.map((w, i) => (
-                <span key={w} className="block overflow-hidden">
-                  <motion.span
-                    className="inline-block"
-                    initial={{ y: "110%", rotateX: -90 }}
-                    animate={{ y: 0, rotateX: 0 }}
-                    transition={{ delay: 0.1 * i, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-                  >
-                    {w === "FUTURES" ? (
-                      <motion.span 
-                        className="text-glow text-cyan-accent"
-                        animate={{
-                          textShadow: [
-                            "0 0 20px rgba(0, 240, 255, 0.3)",
-                            "0 0 40px rgba(0, 240, 255, 0.6)",
-                            "0 0 20px rgba(0, 240, 255, 0.3)",
-                          ],
-                        }}
-                        transition={{
-                          duration: 2,
-                          repeat: Infinity,
-                          ease: "easeInOut"
-                        }}
-                      >
-                        {w}
-                      </motion.span>
-                    ) : w}
-                  </motion.span>
-                </span>
-              ))}
-            </h1>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7, duration: 0.8 }}
-              className="mt-8 flex flex-col sm:flex-row items-start sm:items-center gap-6"
-            >
-              <motion.p 
-                className="max-w-md text-zinc-300 text-base md:text-lg leading-relaxed"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.9 }}
-              >
-                An ultra-minimal software studio engineering intelligent, high-performance
-                products — from interface to AI to infrastructure.
-              </motion.p>
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                transition={{ type: "spring", stiffness: 400, damping: 20 }}
-              >
-                <MagneticButton to="/contact" testid="home-hero-cta">
-                  Start a project
-                </MagneticButton>
-              </motion.div>
-            </motion.div>
+            <MagneticButton to="/contact" testid="home-hero-cta">
+              Start a project
+            </MagneticButton>
           </motion.div>
-        </ParallaxLayer>
+        </motion.div>
 
         <motion.div
           initial={{ opacity: 0 }}
@@ -280,7 +269,7 @@ export default function Home() {
           transition={{ duration: 0.6 }}
         >
           <p className="font-mono text-xs tracking-[0.2em] uppercase text-zinc-500 text-center">
-            <SplitText text="The stack we engineer with" delay={0} charDelay={0.02} />
+            The stack we engineer with
           </p>
         </motion.div>
         <TechMarquee />
@@ -314,7 +303,7 @@ export default function Home() {
               </Reveal>
               <Reveal delay={0.1}>
                 <h2 className="mt-4 font-heading font-bold tracking-tighter text-4xl md:text-5xl text-white max-w-2xl">
-                  <SplitText text="Capabilities engineered for scale." type="words" delay={0.2} charDelay={0.05} />
+                  Capabilities engineered for scale.
                 </h2>
               </Reveal>
             </div>

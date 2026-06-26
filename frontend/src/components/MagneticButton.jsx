@@ -94,7 +94,6 @@ export const MagneticButton = ({
     ref,
     onMouseMove: handleMove,
     onMouseLeave: reset,
-    onClick: handleClick,
     animate: { x: pos.x, y: pos.y },
     whileHover: { scale: 1.05 },
     whileTap: { scale: 0.95 },
@@ -105,15 +104,15 @@ export const MagneticButton = ({
 
   if (to)
     return (
-      <motion.div {...motionProps} style={{ display: "inline-flex" }}>
-        <Link to={to} className="inline-flex items-center gap-2" data-testid={testid ? `${testid}-link` : undefined}>
+      <Link to={to} data-testid={testid ? `${testid}-link` : undefined}>
+        <motion.div {...motionProps} style={{ display: "inline-flex" }} onClick={handleClick}>
           {inner}
-        </Link>
-      </motion.div>
+        </motion.div>
+      </Link>
     );
   if (href)
     return (
-      <motion.a {...motionProps} href={href}>
+      <motion.a {...motionProps} href={href} onClick={handleClick}>
         {inner}
       </motion.a>
     );

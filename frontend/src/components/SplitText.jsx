@@ -67,6 +67,7 @@ export default function SplitText({
           style={{ display: "inline-block" }}
         >
           {element.content === " " ? "\u00A0" : element.content}
+          {type === "words" && i < elements.length - 1 ? " " : ""}
         </motion.span>
       ))}
     </motion.span>
