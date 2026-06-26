@@ -15,7 +15,6 @@ import FloatingParticles from "@/components/FloatingParticles";
 import WordScramble from "@/components/WordScramble";
 import MorphingText from "@/components/MorphingText";
 import WaveText from "@/components/WaveText";
-import SystemDeployHero from "@/components/SystemDeployHero";
 import { Link } from "react-router-dom";
 
 const HERO_IMG =
@@ -56,10 +55,227 @@ const services = [
 ];
 
 export default function Home() {
+  const heroRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
+  const imgY = useTransform(scrollYProgress, [0, 1], ["0%", "40%"]);
+  const textY = useTransform(scrollYProgress, [0, 1], ["0%", "-25%"]);
+  const overlayOpacity = useTransform(scrollYProgress, [0, 1], [0.45, 0.9]);
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.1]);
+
   return (
     <div data-testid="home-page">
-      {/* SYSTEM DEPLOY HERO - Premium scroll-driven animation */}
-      <SystemDeployHero />
+      {/* HERO */}
+      <section ref={heroRef} className="relative h-screen overflow-hidden" data-testid="home-hero">
+        {/* Background layers with enhanced parallax */}
+        <motion.div className="absolute inset-0" style={{ y: imgY, scale }}>
+          <img src={HERO_IMG} alt="Abstract technology" className="h-[130%] w-full object-cover" />
+        </motion.div>
+        <motion.div className="absolute inset-0 bg-ink" style={{ opacity: overlayOpacity }} />
+        
+        {/* Multiple parallax gradient layers */}
+        <ParallaxLayer speed={0.3} className="absolute inset-0">
+          <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-ink/10" />
+        </ParallaxLayer>
+        <ParallaxLayer speed={0.5} className="absolute inset-0">
+          <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/30 to-transparent" />
+        </ParallaxLayer>
+        
+        {/* Animated tech grid */}
+        <motion.div 
+          className="tech-grid grid-fade absolute inset-0 opacity-60"
+          animate={{
+            backgroundPosition: ["0% 0%", "100% 100%"],
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+        />
+        
+        {/* Floating particles */}
+        <FloatingParticles count={15} />
+        
+        {/* Animated glow orbs */}
+        <motion.div 
+          className="glow-orb absolute -top-20 right-[10%] h-[420px] w-[420px]"
+          animate={{
+            opacity: [0.35, 0.7, 0.35],
+            scale: [1, 1.1, 1],
+          }}
+          transition={{
+            duration: 4,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+        <motion.div 
+          className="glow-orb absolute bottom-20 left-[15%] h-[320px] w-[320px]"
+          animate={{
+            opacity: [0.25, 0.5, 0.25],
+            scale: [1, 1.15, 1],
+          }}
+          transition={{
+            duration: 5,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 1
+          }}
+        />
+
+        {/* HUD corner readouts with enhanced animation */}
+        <motion.div 
+          className="absolute top-28 left-6 md:left-12 z-10 hidden sm:flex items-center gap-3 font-mono text-[10px] tracking-[0.2em] uppercase text-zinc-500"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.5, duration: 0.8 }}
+        >
+          <motion.span 
+            className="h-1.5 w-1.5 rounded-full bg-cyan-accent"
+            animate={{
+              opacity: [0.5, 1, 0.5],
+              scale: [1, 1.2, 1],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
+          Systems operational
+        </motion.div>
+        <motion.div 
+          className="absolute top-28 right-6 md:right-12 z-10 hidden sm:block font-mono text-[10px] tracking-[0.2em] uppercase text-zinc-500"
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.6, duration: 0.8 }}
+        >
+          22.31°N · 73.18°E — Vadodara
+        </motion.div>
+
+        {/* Floating terminal with enhanced animation */}
+        <motion.div 
+          className="absolute bottom-12 right-6 md:right-12 z-20 hidden lg:block"
+          initial={{ opacity: 0, y: 20, scale: 0.9 }}
+          animate={{ 
+            opacity: 1, 
+            y: 0,
+            scale: 1,
+          }}
+          transition={{ delay: 1.2, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <motion.div
+            animate={{
+              y: [0, -10, 0],
+            }}
+            transition={{
+              duration: 4,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          >
+            <TerminalCard />
+          </motion.div>
+        </motion.div>
+
+        <motion.div
+          style={{ y: textY }}
+          className="relative z-10 h-full max-w-7xl mx-auto px-6 md:px-12 flex flex-col justify-center"
+        >
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.8 }}
+            className="font-mono text-xs tracking-[0.25em] uppercase text-cyan-accent mb-6"
+          >
+            Kedbyte Private Limited — Software · AI · Automation
+          </motion.p>
+
+          <h1 className="font-heading font-black uppercase tracking-tighter text-white leading-[0.85] text-6xl sm:text-7xl md:text-8xl lg:text-[8.5rem]">
+            {heroWords.map((w, i) => (
+              <span key={w} className="block overflow-hidden">
+                <motion.span
+                  className="inline-block"
+                  initial={{ y: "110%", rotateX: -90 }}
+                  animate={{ y: 0, rotateX: 0 }}
+                  transition={{ delay: 0.1 * i, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  {w}
+                </motion.span>
+              </span>
+            ))}
+            <span className="block overflow-hidden">
+              <motion.span
+                className="inline-block text-glow text-cyan-accent"
+                initial={{ y: "110%", rotateX: -90 }}
+                animate={{ 
+                  y: 0, 
+                  rotateX: 0,
+                  textShadow: [
+                    "0 0 30px rgba(0, 240, 255, 0.5)",
+                    "0 0 60px rgba(0, 240, 255, 0.8)",
+                    "0 0 30px rgba(0, 240, 255, 0.5)",
+                  ],
+                }}
+                transition={{
+                  y: { delay: 0.2, duration: 0.9, ease: [0.22, 1, 0.36, 1] },
+                  rotateX: { delay: 0.2, duration: 0.9, ease: [0.22, 1, 0.36, 1] },
+                  textShadow: { duration: 2, repeat: Infinity, ease: "easeInOut" }
+                }}
+              >
+                <MorphingText words={morphingWords} interval={2000} />
+              </motion.span>
+            </span>
+            <span className="block overflow-hidden">
+              <motion.span
+                className="inline-block"
+                initial={{ y: "110%", rotateX: -90 }}
+                animate={{ y: 0, rotateX: 0 }}
+                transition={{ delay: 0.3, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+              >
+                FUTURES
+              </motion.span>
+            </span>
+          </h1>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7, duration: 0.8 }}
+            className="mt-8 flex flex-col sm:flex-row items-start sm:items-center gap-6"
+          >
+            <motion.p 
+              className="max-w-md text-zinc-300 text-base md:text-lg leading-relaxed"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.9 }}
+            >
+              An ultra-minimal software studio engineering intelligent, high-performance
+              products — from interface to AI to infrastructure.
+            </motion.p>
+            <MagneticButton to="/contact" testid="home-hero-cta">
+              Start a project
+            </MagneticButton>
+          </motion.div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.2 }}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 font-mono text-[10px] tracking-[0.3em] uppercase text-zinc-500"
+        >
+          <motion.div
+            animate={{ y: [0, 5, 0] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          >
+            Scroll to explore
+          </motion.div>
+        </motion.div>
+      </section>
 
       {/* MARQUEE */}
       <section className="py-12 border-y border-white/10 bg-ink overflow-hidden">
