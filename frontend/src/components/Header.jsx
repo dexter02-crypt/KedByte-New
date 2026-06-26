@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import MagneticButton from "@/components/MagneticButton";
 import KLogo from "@/components/KLogo";
@@ -16,6 +16,15 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const location = useLocation();
+  const logoRef = useRef(null);
+
+  // Mouse position for 3D logo tilt
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const smoothMouseX = useSpring(mouseX, { stiffness: 100, damping: 20 });
+  const smoothMouseY = useSpring(mouseY, { stiffness: 100, damping: 20 });
+  const rotateY = useTransform(smoothMouseX, [-200, 200], [-15, 15]);
+  const rotateX = useTransform(smoothMouseY, [-200, 200], [15, -15]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30);
@@ -25,21 +34,59 @@ export default function Header() {
 
   useEffect(() => setOpen(false), [location.pathname]);
 
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      if (!logoRef.current) return;
+      const rect = logoRef.current.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      mouseX.set(e.clientX - centerX);
+      mouseY.set(e.clientY - centerY);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [mouseX, mouseY]);
+
   return (
     <header
       className={`fixed top-0 z-50 w-full transition-all duration-500 ${
-        scrolled ? "bg-black/60 backdrop-blur-2xl border-b border-white/10" : "bg-transparent"
+        scrolled ? "bg-black/70 backdrop-blur-3xl border-b border-white/10 shadow-[0_0_30px_rgba(0,240,255,0.1)]" : "bg-transparent"
       }`}
       data-testid="site-header"
     >
       <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between h-20">
         <Link to="/" data-testid="logo-link" className="flex items-center group">
           <motion.div
-            animate={{ rotate: scrolled ? -8 : 0, scale: scrolled ? 1.05 : 1 }}
+            ref={logoRef}
+            style={{
+              rotateY,
+              rotateX,
+              transformStyle: "preserve-3d",
+            }}
+            animate={{ 
+              rotate: scrolled ? -8 : 0, 
+              scale: scrolled ? 1.05 : 1,
+            }}
+            whileHover={{ 
+              scale: 1.15,
+              filter: "drop-shadow(0 0 8px rgba(0,240,255,0.6))"
+            }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            className="shrink-0"
+            className="shrink-0 cursor-pointer"
           >
-            <KLogo className="h-8 w-8" animate />
+            <motion.div
+              animate={{
+                y: [0, -3, 0],
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            >
+              <KLogo className="h-8 w-8" animate />
+            </motion.div>
           </motion.div>
           <motion.span
             animate={{
@@ -61,18 +108,39 @@ export default function Header() {
               to={l.to}
               data-testid={`nav-${l.label.toLowerCase()}`}
               className={({ isActive }) =>
-                `relative text-sm tracking-tight transition-colors duration-300 ${
+                `relative text-sm tracking-tight transition-colors duration-300 group ${
                   isActive ? "text-white" : "text-zinc-400 hover:text-white"
                 }`
               }
             >
               {({ isActive }) => (
                 <>
-                  {l.label}
+                  <motion.span
+                    className="relative z-10"
+                    whileHover={{ 
+                      textShadow: "0 0 8px rgba(0,240,255,0.8)",
+                      y: -2
+                    }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    {l.label}
+                  </motion.span>
                   {isActive && (
                     <motion.span
                       layoutId="nav-underline"
-                      className="absolute -bottom-1.5 left-0 h-px w-full bg-cyan-accent"
+                      className="absolute -bottom-1.5 left-0 h-px w-full bg-gradient-to-r from-transparent via-cyan-accent to-transparent"
+                      initial={{ scaleX: 0 }}
+                      animate={{ scaleX: 1 }}
+                      exit={{ scaleX: 0 }}
+                      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                    />
+                  )}
+                  {!isActive && (
+                    <motion.span
+                      className="absolute -bottom-1.5 left-0 h-px w-full bg-cyan-accent origin-left"
+                      initial={{ scaleX: 0 }}
+                      whileHover={{ scaleX: 1 }}
+                      transition={{ duration: 0.3 }}
                     />
                   )}
                 </>
