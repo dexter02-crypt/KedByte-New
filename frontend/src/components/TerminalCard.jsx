@@ -10,17 +10,25 @@ const lines = [
   { t: "✓ pipeline shipped to production", c: "text-cyan-accent" },
 ];
 
-export default function TerminalCard() {
+export default function TerminalCard({ progress }) {
   const [count, setCount] = useState(0);
 
+  // Use progress if provided, otherwise use time-based animation
   useEffect(() => {
-    if (count >= lines.length) {
-      const reset = setTimeout(() => setCount(0), 3200);
-      return () => clearTimeout(reset);
+    if (!progress) {
+      if (count >= lines.length) {
+        const reset = setTimeout(() => setCount(0), 3200);
+        return () => clearTimeout(reset);
+      }
+      const t = setTimeout(() => setCount((c) => c + 1), 700);
+      return () => clearTimeout(t);
     }
-    const t = setTimeout(() => setCount((c) => c + 1), 700);
-    return () => clearTimeout(t);
-  }, [count]);
+  }, [count, progress]);
+
+  // If progress is provided, calculate lines to show based on progress
+  const displayCount = progress 
+    ? Math.floor((progress.get?.() || progress) / 100 * lines.length)
+    : count;
 
   return (
     <motion.div
@@ -39,7 +47,7 @@ export default function TerminalCard() {
         </span>
       </div>
       <div className="p-5 font-mono text-[12px] leading-6 min-h-[180px]">
-        {lines.slice(0, count).map((l, i) => (
+        {lines.slice(0, displayCount).map((l, i) => (
           <motion.div
             key={i}
             initial={{ opacity: 0, x: -6 }}
