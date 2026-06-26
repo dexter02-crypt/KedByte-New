@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion, useMotionValue, useSpring } from "framer-motion";
 
 /**
  * CursorGlow - Ambient glow effect that follows the mouse cursor
