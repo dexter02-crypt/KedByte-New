@@ -13,11 +13,12 @@
 
 html {
   scroll-behavior: auto;
+  background: #000000;
 }
 
 body {
   margin: 0;
-  background: var(--bg);
+  background: transparent;
   color: #fff;
   font-family: 'Satoshi', sans-serif;
   -webkit-font-smoothing: antialiased;

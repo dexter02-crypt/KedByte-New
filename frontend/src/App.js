@@ -5,6 +5,7 @@ import Lenis from "lenis";
 import { AnimatePresence } from "framer-motion";
 import { Toaster } from "@/components/ui/sonner";
 import Cursor from "@/components/Cursor";
+import CursorGlow from "@/components/CursorGlow";
 import ScrollProgress from "@/components/ScrollProgress";
 import PageScrollIndicator from "@/components/PageScrollIndicator";
 import RouteCurtain from "@/components/RouteCurtain";
@@ -58,6 +59,7 @@ function App() {
 
   return (
     <div className="App font-body">
+      <CursorGlow />
       <div className="grain" />
       <Cursor />
       <ScrollProgress />

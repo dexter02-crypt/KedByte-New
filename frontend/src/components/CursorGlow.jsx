@@ -52,14 +52,14 @@ export default function CursorGlow() {
         }}
       >
         <motion.div
-          className="absolute w-[1200px] h-[1200px] rounded-full"
+          className="absolute w-[1400px] h-[1400px] rounded-full"
           style={{
             left: smoothX,
             top: smoothY,
             x: "-50%",
             y: "-50%",
-            background: "radial-gradient(circle, rgba(20, 20, 40, 0.4) 0%, rgba(15, 15, 30, 0.3) 25%, rgba(10, 10, 25, 0.2) 50%, rgba(5, 5, 20, 0.1) 75%, transparent 100%)",
-            filter: "blur(60px)",
+            background: "radial-gradient(circle, rgba(15, 20, 35, 0.6) 0%, rgba(12, 16, 30, 0.45) 20%, rgba(10, 14, 26, 0.3) 40%, rgba(8, 11, 22, 0.18) 60%, rgba(5, 8, 18, 0.08) 80%, transparent 100%)",
+            filter: "blur(180px)",
           }}
         />
       </motion.div>
