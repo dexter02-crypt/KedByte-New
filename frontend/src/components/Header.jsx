@@ -50,27 +50,44 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed top-0 z-50 w-full transition-all duration-500 ${
+      className={`fixed top-0 z-50 w-full transition-all duration-700 ${
         scrolled 
-          ? "bg-gradient-to-b from-black/95 via-black/90 to-black/80 backdrop-blur-2xl border-b border-cyan-accent/20 shadow-[0_0_50px_rgba(0,240,255,0.15)]" 
+          ? "bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-black/95 backdrop-blur-3xl border-b border-gradient shadow-[0_4px_30px_rgba(0,240,255,0.12)]" 
           : "bg-transparent"
       }`}
       data-testid="site-header"
+      style={{
+        borderImage: scrolled ? "linear-gradient(90deg, transparent, rgba(0,240,255,0.3), transparent) 1" : "none"
+      }}
     >
-      {/* Animated gradient overlay on scroll */}
+      {/* Animated gradient overlay on scroll - more visible */}
       <motion.div
-        className="absolute inset-0 bg-gradient-to-r from-cyan-accent/5 via-transparent to-cyan-accent/5 pointer-events-none"
+        className="absolute inset-0 bg-gradient-to-r from-cyan-accent/8 via-cyan-accent/4 to-cyan-accent/8 pointer-events-none"
         initial={{ opacity: 0 }}
         animate={{ opacity: scrolled ? 1 : 0 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.6 }}
       />
       
-      {/* Animated top border line */}
+      {/* Animated top border line - thicker and more visible */}
       <motion.div
-        className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-accent to-transparent"
-        initial={{ scaleX: 0 }}
-        animate={{ scaleX: scrolled ? 1 : 0 }}
-        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-cyan-accent to-transparent"
+        initial={{ scaleX: 0, opacity: 0 }}
+        animate={{ 
+          scaleX: scrolled ? 1 : 0,
+          opacity: scrolled ? 1 : 0
+        }}
+        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        style={{
+          boxShadow: "0 0 10px rgba(0,240,255,0.5), 0 0 20px rgba(0,240,255,0.3)"
+        }}
+      />
+
+      {/* Animated bottom glow */}
+      <motion.div
+        className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-accent/50 to-transparent blur-sm"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: scrolled ? 0.6 : 0 }}
+        transition={{ duration: 0.6 }}
       />
 
       <div className="relative max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between h-20">

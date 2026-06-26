@@ -51,6 +51,13 @@ const services = [
 ];
 
 export default function Services() {
+  const scrollToService = (index) => {
+    const element = document.getElementById(`service-${index + 1}`);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  };
+
   return (
     <div data-testid="services-page">
       {/* HERO */}
@@ -73,6 +80,23 @@ export default function Services() {
               design — so you ship faster with a single partner.
             </p>
           </Reveal>
+          
+          {/* Quick Navigation */}
+          <Reveal delay={0.3}>
+            <div className="mt-12 flex flex-wrap gap-3">
+              {services.map((s, i) => (
+                <motion.button
+                  key={i}
+                  onClick={() => scrollToService(i)}
+                  className="px-4 py-2 rounded-full border border-white/10 bg-surface/50 backdrop-blur-sm text-sm text-zinc-300 hover:border-cyan-accent/50 hover:text-cyan-accent transition-all duration-300"
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  {s.tag.split('—')[1].trim()}
+                </motion.button>
+              ))}
+            </div>
+          </Reveal>
         </div>
       </section>
 
@@ -82,7 +106,8 @@ export default function Services() {
           {services.map((s, i) => (
             <div
               key={s.title}
-              className={`grid md:grid-cols-2 gap-10 md:gap-16 items-center ${
+              id={`service-${i + 1}`}
+              className={`grid md:grid-cols-2 gap-10 md:gap-16 items-center scroll-mt-32 ${
                 i % 2 === 1 ? "md:[direction:rtl]" : ""
               }`}
               data-testid={`service-block-${i}`}
