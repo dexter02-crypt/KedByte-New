@@ -166,6 +166,24 @@ frontend:
         agent: "main"
         comment: "Fixed by updating REACT_APP_BACKEND_URL from localhost:8001 to external preview URL. Frontend recompiled successfully."
   
+  - task: "Custom Cursor Hover Behavior"
+    implemented: true
+    working: true
+    file: "frontend/src/components/Cursor.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: false
+        agent: "user"
+        comment: "User reported: cursor circle moves away from dot when hovering over clickable elements (buttons, links), leaving only dot visible. Screenshot shows ring offset from correct position."
+      - working: "NA"
+        agent: "main"
+        comment: "Fixed by updating scale implementation. Changed from CSS 'scale' property to including scale in transform string: translate() scale(). This ensures the ring stays centered at the cursor position when scaled up to 1.7x on hover. Used dataset.scale to track state between animation frames."
+      - working: true
+        agent: "testing"
+        comment: "✅ BUG FIX VERIFIED: Comprehensive testing across all pages confirms the cursor ring now stays perfectly centered on the dot at all times. Transform structure confirmed: non-clickable areas use 'translate(...) scale(1)' and clickable elements use 'translate(...) scale(1.7)' - both in same transform string. Tested successfully on: Let's Talk button (scales to 1.7x with cyan background), navigation links (Services, etc.), Start a project button, form inputs on Contact page, and Services page elements. Ring remains centered during all hover interactions with no offset or 'jumping away' behavior. Screenshots confirm visual alignment is perfect."
+  
   - task: "Home Page"
     implemented: true
     working: "NA"
@@ -234,9 +252,8 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Preview URL Access"
-    - "API Health Check"
-    - "Contact Form Submission API"
+    - "Contact Page with Form"
+    - "Home Page"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
@@ -244,5 +261,9 @@ test_plan:
 agent_communication:
   - agent: "main"
     message: "Fixed preview URL issue by updating frontend/.env with external URL. Backend API confirmed accessible at /api/ endpoint. Ready for comprehensive testing of all pages and contact form functionality. According to PRD, app was previously 100% tested (6/6 backend, 11/11 frontend), requesting verification that everything still works after deployment setup."
+  - agent: "main"
+    message: "Fixed custom cursor bug. Issue: ring cursor was moving away from dot when hovering over clickable elements. Root cause: using CSS 'scale' property separately from transform caused positioning offset. Fix: integrated scale into transform string so translate and scale work together, keeping ring centered. Ready for UI testing to verify cursor behavior on all interactive elements."
   - agent: "testing"
     message: "✅ BACKEND TESTING COMPLETE - All 3 backend APIs tested and working correctly. Created comprehensive backend_test.py with 5 test cases. Results: API Health Check (✅), Contact Form Submission (✅), List Contacts (✅), Invalid Email Handling (✅), Missing Fields Handling (✅). MongoDB data persistence verified. Email sending correctly disabled (no RESEND_API_KEY). External preview URL working perfectly. All backend tasks marked as working=true and needs_retesting=false."
+  - agent: "testing"
+    message: "✅ CUSTOM CURSOR BUG FIX VERIFIED - Tested cursor hover behavior across all pages and interactive elements. The reported bug (ring moving away from dot on hover) is completely resolved. Transform implementation confirmed correct: scale is now part of transform string alongside translate, ensuring ring stays centered at all times. Tested on buttons (Let's Talk, Start a project), navigation links (Services, About, etc.), and form inputs. All hover interactions work perfectly with ring scaling to 1.7x while remaining centered on dot. Cyan background effect also working correctly. Task marked as working=true."

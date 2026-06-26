@@ -23,17 +23,24 @@ export default function Cursor() {
     const loop = () => {
       rx += (mx - rx) * 0.18;
       ry += (my - ry) * 0.18;
-      if (ring.current) ring.current.style.transform = `translate(${rx - 17}px, ${ry - 17}px)`;
+      if (ring.current) {
+        const currentScale = ring.current.dataset.scale || 1;
+        ring.current.style.transform = `translate(${rx - 17}px, ${ry - 17}px) scale(${currentScale})`;
+      }
       raf = requestAnimationFrame(loop);
     };
 
     const over = (e) => {
       if (e.target.closest("a, button, [role='button'], input, textarea, select")) {
-        ring.current?.style.setProperty("scale", "1.7");
-        ring.current?.style.setProperty("background", "rgba(0,240,255,0.12)");
+        if (ring.current) {
+          ring.current.dataset.scale = "1.7";
+          ring.current.style.setProperty("background", "rgba(0,240,255,0.12)");
+        }
       } else {
-        ring.current?.style.setProperty("scale", "1");
-        ring.current?.style.setProperty("background", "transparent");
+        if (ring.current) {
+          ring.current.dataset.scale = "1";
+          ring.current.style.setProperty("background", "transparent");
+        }
       }
     };
 
@@ -50,7 +57,7 @@ export default function Cursor() {
 
   return (
     <>
-      <div ref={ring} className="cursor-ring hidden md:block" style={{ transition: "scale 0.25s, background 0.25s" }} />
+      <div ref={ring} className="cursor-ring hidden md:block" style={{ transition: "transform 0.25s, background 0.25s" }} />
       <div ref={dot} className="cursor-dot hidden md:block" />
     </>
   );
