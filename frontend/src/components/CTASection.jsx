@@ -1,5 +1,6 @@
 import Reveal from "@/components/Reveal";
 import MagneticButton from "@/components/MagneticButton";
+import { motion } from "framer-motion";
 
 export default function CTASection({
   eyebrow = "Ready when you are",
@@ -14,8 +15,20 @@ export default function CTASection({
           <p className="font-mono text-xs tracking-[0.2em] uppercase text-zinc-500">{eyebrow}</p>
         </Reveal>
         <Reveal delay={0.1}>
-          <h2 className="mt-6 font-heading font-black uppercase tracking-tighter text-4xl md:text-6xl text-white max-w-4xl mx-auto leading-[0.95]">
-            {title}
+          <h2 className="mt-6 font-heading font-black uppercase text-4xl md:text-6xl lg:text-7xl text-white max-w-4xl mx-auto leading-[0.95]" style={{ letterSpacing: '0.02em', wordSpacing: '0.15em' }}>
+            {title.split(' ').map((word, i) => (
+              <motion.span
+                key={i}
+                className="inline-block mr-3 md:mr-5"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1, duration: 0.6 }}
+                whileHover={{ y: -5, color: "#00F0FF" }}
+              >
+                {word}
+              </motion.span>
+            ))}
           </h2>
         </Reveal>
         <Reveal delay={0.2}>

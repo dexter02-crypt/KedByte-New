@@ -51,11 +51,29 @@ export default function Header() {
   return (
     <header
       className={`fixed top-0 z-50 w-full transition-all duration-500 ${
-        scrolled ? "bg-black/70 backdrop-blur-3xl border-b border-white/10 shadow-[0_0_30px_rgba(0,240,255,0.1)]" : "bg-transparent"
+        scrolled 
+          ? "bg-gradient-to-b from-black/95 via-black/90 to-black/80 backdrop-blur-2xl border-b border-cyan-accent/20 shadow-[0_0_50px_rgba(0,240,255,0.15)]" 
+          : "bg-transparent"
       }`}
       data-testid="site-header"
     >
-      <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between h-20">
+      {/* Animated gradient overlay on scroll */}
+      <motion.div
+        className="absolute inset-0 bg-gradient-to-r from-cyan-accent/5 via-transparent to-cyan-accent/5 pointer-events-none"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: scrolled ? 1 : 0 }}
+        transition={{ duration: 0.5 }}
+      />
+      
+      {/* Animated top border line */}
+      <motion.div
+        className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-accent to-transparent"
+        initial={{ scaleX: 0 }}
+        animate={{ scaleX: scrolled ? 1 : 0 }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      />
+
+      <div className="relative max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between h-20">
         <Link to="/" data-testid="logo-link" className="flex items-center group">
           <motion.div
             ref={logoRef}

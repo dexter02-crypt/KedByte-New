@@ -6,6 +6,7 @@ import { AnimatePresence } from "framer-motion";
 import { Toaster } from "@/components/ui/sonner";
 import Cursor from "@/components/Cursor";
 import ScrollProgress from "@/components/ScrollProgress";
+import PageScrollIndicator from "@/components/PageScrollIndicator";
 import RouteCurtain from "@/components/RouteCurtain";
 import Layout from "@/components/Layout";
 import Home from "@/pages/Home";
@@ -60,6 +61,7 @@ function App() {
       <div className="grain" />
       <Cursor />
       <ScrollProgress />
+      <PageScrollIndicator />
       <Toaster position="bottom-right" />
       <BrowserRouter>
         <ScrollToTop />

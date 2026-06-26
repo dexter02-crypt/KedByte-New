@@ -21,7 +21,7 @@ const HERO_IMG =
   "https://images.unsplash.com/photo-1709625862266-014ef072fd93?crop=entropy&cs=srgb&fm=jpg&q=85&w=1920";
 
 const heroWords = ["WE", "BUILD"];
-const morphingWords = ["DIGITAL", "INTELLIGENT", "SCALABLE", "INNOVATIVE"];
+const morphingWords = ["DIGITAL", "INTELLIGENT", "SCALABLE", "INNOVATIVE", "POWERFUL"];
 
 const stats = [
   { to: 99.9, suffix: "%", decimals: 1, label: "Deployment reliability" },
@@ -215,9 +215,9 @@ export default function Home() {
                   y: 0, 
                   rotateX: 0,
                   textShadow: [
-                    "0 0 20px rgba(0, 240, 255, 0.3)",
-                    "0 0 40px rgba(0, 240, 255, 0.6)",
-                    "0 0 20px rgba(0, 240, 255, 0.3)",
+                    "0 0 30px rgba(0, 240, 255, 0.5)",
+                    "0 0 60px rgba(0, 240, 255, 0.8)",
+                    "0 0 30px rgba(0, 240, 255, 0.5)",
                   ],
                 }}
                 transition={{
@@ -226,7 +226,7 @@ export default function Home() {
                   textShadow: { duration: 2, repeat: Infinity, ease: "easeInOut" }
                 }}
               >
-                <MorphingText words={morphingWords} />
+                <MorphingText words={morphingWords} interval={2000} />
               </motion.span>
             </span>
             <span className="block overflow-hidden">
