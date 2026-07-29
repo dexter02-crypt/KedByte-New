@@ -17,7 +17,7 @@ from bson import ObjectId
 from pydantic import BeforeValidator
 import resend
 
-from emails import build_confirmation_email
+from emails import build_confirmation_email, build_lead_notification_email
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -103,35 +103,25 @@ class Contact(BaseDocument):
 
 
 # ----- Email helper -----
-def _build_email_html(c: ContactCreate) -> str:
-    return f"""
-    <div style="font-family:Arial,sans-serif;background:#050505;padding:32px;color:#ffffff;">
-      <table width="100%" style="max-width:600px;margin:0 auto;background:#121212;border-radius:12px;padding:32px;">
-        <tr><td>
-          <h2 style="color:#00F0FF;margin:0 0 16px;">New Kedbyte Enquiry</h2>
-          <p style="color:#A1A1AA;margin:0 0 24px;">You received a new message from the website contact form.</p>
-          <p style="margin:6px 0;"><strong>Name:</strong> {c.name}</p>
-          <p style="margin:6px 0;"><strong>Email:</strong> {c.email}</p>
-          <p style="margin:6px 0;"><strong>Company:</strong> {c.company or '-'}</p>
-          <p style="margin:6px 0;"><strong>Budget:</strong> {c.budget or '-'}</p>
-          <p style="margin:16px 0 6px;"><strong>Message:</strong></p>
-          <p style="margin:0;color:#A1A1AA;line-height:1.6;">{c.message}</p>
-        </td></tr>
-      </table>
-    </div>
-    """
-
-
 async def _send_contact_email(c: ContactCreate):
     if not RESEND_API_KEY or not CONTACT_RECIPIENT_EMAIL:
         logger.info("Resend not configured; skipping email send.")
         return None
+    tpl = build_lead_notification_email(
+        name=c.name,
+        email=c.email,
+        company=c.company or "",
+        budget=c.budget or "",
+        message=c.message,
+        source=c.source or "",
+    )
     params = {
         "from": SENDER_HEADER,
         "to": [CONTACT_RECIPIENT_EMAIL],
         "reply_to": c.email,
-        "subject": f"New enquiry from {c.name} — Kedbyte",
-        "html": _build_email_html(c),
+        "subject": tpl["subject"],
+        "html": tpl["html"],
+        "text": tpl["text"],
     }
     try:
         result = await asyncio.to_thread(resend.Emails.send, params)
