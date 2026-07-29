@@ -93,7 +93,7 @@ export default function Footer() {
         initial={fixedMode ? "hidden" : false}
         animate={!fixedMode || revealed ? "visible" : "hidden"}
       >
-        <motion.div variants={colItem} className="md:col-span-5">
+        <motion.div variants={colItem} className="md:col-span-4">
           <span className="flex items-center gap-3">
             <KLogo className="h-10 w-10" />
             <span className="font-heading font-black text-3xl tracking-tighter text-white">
@@ -133,7 +133,24 @@ export default function Footer() {
           </motion.div>
         ))}
 
-        <motion.div variants={colItem} className="md:col-span-3">
+        <motion.div variants={colItem} className="md:col-span-2">
+          <h4 className="font-mono text-xs tracking-[0.2em] uppercase text-zinc-500 mb-5">
+            Product
+          </h4>
+          <ul className="space-y-3">
+            <li>
+              <Link
+                to="/payroll"
+                className="text-zinc-400 hover:text-white transition-colors text-sm"
+                data-testid="footer-payroll-link"
+              >
+                Kedbyte Payroll
+              </Link>
+            </li>
+          </ul>
+        </motion.div>
+
+        <motion.div variants={colItem} className="md:col-span-2">
           <h4 className="font-mono text-xs tracking-[0.2em] uppercase text-zinc-500 mb-5">
             Registered
           </h4>

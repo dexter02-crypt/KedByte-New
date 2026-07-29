@@ -18,6 +18,7 @@ import { useCtaPanel } from "@/components/StartProjectPanel";
 const links = [
   { to: "/", label: "Home" },
   { to: "/services", label: "Services" },
+  { to: "/payroll", label: "Payroll" },
   { to: "/about", label: "About" },
   { to: "/careers", label: "Careers" },
 ];

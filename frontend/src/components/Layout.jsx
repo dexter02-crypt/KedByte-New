@@ -16,6 +16,10 @@ const META = {
     title: "Kedbyte — Services",
     desc: "Custom software, frontend & backend engineering, applied AI & machine learning, infrastructure automation and UI/UX design — one connected pipeline, one partner.",
   },
+  "/payroll": {
+    title: "Kedbyte Payroll — UK payroll software for bureaux & accountants",
+    desc: "In development for tax year 2026/27: a penny-exact UK payroll engine that passes every row of HMRC's published test data. HMRC PAYE recognition in progress — join the early-access list.",
+  },
   "/about": {
     title: "Kedbyte — About",
     desc: "A studio for the curious and the bold. Founded 2026 in Vadodara, Gujarat — full-spectrum engineering at the intersection of advanced technology and ultra-minimal design.",

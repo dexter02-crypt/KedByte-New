@@ -63,6 +63,8 @@ class ContactCreate(BaseModel):
     company: Optional[str] = ""
     budget: Optional[str] = ""
     message: str
+    # Optional lead tag, e.g. "payroll-early-access"; "" = general contact
+    source: Optional[str] = ""
 
 
 class Contact(BaseDocument):
@@ -71,6 +73,7 @@ class Contact(BaseDocument):
     company: Optional[str] = ""
     budget: Optional[str] = ""
     message: str
+    source: Optional[str] = ""
     created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
 

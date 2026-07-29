@@ -8,6 +8,7 @@ const EASE = [0.76, 0, 0.24, 1];
 const PAGE_NAMES = {
   "/": "HOME",
   "/services": "SERVICES",
+  "/payroll": "PAYROLL",
   "/about": "ABOUT",
   "/careers": "CAREERS",
   "/contact": "CONTACT",

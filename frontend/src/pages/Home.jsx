@@ -565,6 +565,31 @@ export default function Home() {
         </StaggerGroup>
       </section>
 
+      {/* PAYROLL TEASER — minimal, honest product strip */}
+      <section className="border-b border-white/10" data-testid="home-payroll-teaser">
+        <Reveal className="max-w-7xl mx-auto px-6 md:px-12">
+          <Link
+            to="/payroll"
+            className="group flex flex-col md:flex-row md:items-center justify-between gap-3 py-7"
+            data-testid="home-payroll-link"
+          >
+            <div className="flex flex-wrap items-center gap-4">
+              <span className="rounded-full border border-cyan-accent/40 bg-cyan-accent/5 px-3 py-1 font-mono text-[10px] tracking-[0.25em] uppercase text-cyan-accent">
+                New
+              </span>
+              <span className="text-zinc-300">
+                <span className="font-heading font-bold text-white">Kedbyte Payroll</span>
+                {" "}— UK payroll software for bureaux, in development.
+              </span>
+            </div>
+            <span className="inline-flex items-center gap-2 text-sm text-zinc-400 group-hover:text-cyan-accent transition-colors">
+              Early access
+              <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </span>
+          </Link>
+        </Reveal>
+      </section>
+
       {/* WORD SCRAMBLE - Interactive Service Discovery */}
       <section className="relative py-24 md:py-32 bg-ink border-y border-white/10 overflow-hidden">
         <div className="tech-grid grid-fade absolute inset-0 opacity-20" />

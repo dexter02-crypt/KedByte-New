@@ -26,12 +26,25 @@ export const useCtaPanel = () => useContext(CtaPanelContext);
  * the opener on close. Posts the 3-field quick form to /api/contact so a
  * prospect can reach out in seconds without navigating to Contact.
  */
+const DEFAULT_CONTEXT = {
+  source: "",
+  eyebrow: "Start a project",
+  title: "Tell us the one-liner.",
+  subtitle: "Three fields, fifteen seconds. We reply within one business day.",
+  messageLabel: "What are you building?",
+  messagePlaceholder: "One line is enough…",
+};
+
 export function CtaPanelProvider({ children }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [context, setContext] = useState(DEFAULT_CONTEXT);
   const openerRef = useRef(null);
 
-  const open = useCallback(() => {
+  // open() keeps existing behavior; open({source, title, ...}) customises
+  // the panel and tags the lead (e.g. "payroll-early-access").
+  const open = useCallback((ctx) => {
     openerRef.current = document.activeElement;
+    setContext({ ...DEFAULT_CONTEXT, ...(ctx || {}) });
     setIsOpen(true);
   }, []);
   const close = useCallback(() => {
@@ -42,12 +55,12 @@ export function CtaPanelProvider({ children }) {
   return (
     <CtaPanelContext.Provider value={{ open, close }}>
       {children}
-      <Panel isOpen={isOpen} onClose={close} />
+      <Panel isOpen={isOpen} onClose={close} context={context} />
     </CtaPanelContext.Provider>
   );
 }
 
-function Panel({ isOpen, onClose }) {
+function Panel({ isOpen, onClose, context }) {
   const reduced = useReducedMotion();
   const panelRef = useRef(null);
   const [form, setForm] = useState({ name: "", email: "", message: "" });
@@ -103,7 +116,12 @@ function Panel({ isOpen, onClose }) {
     }
     setStatus("sending");
     try {
-      await axios.post(`${API}/contact`, { ...form, company: "", budget: "" });
+      await axios.post(`${API}/contact`, {
+        ...form,
+        company: "",
+        budget: "",
+        source: context.source,
+      });
       setStatus("success");
       setForm({ name: "", email: "", message: "" });
       setTimeout(() => {
@@ -137,7 +155,7 @@ function Panel({ isOpen, onClose }) {
             ref={panelRef}
             role="dialog"
             aria-modal="true"
-            aria-label="Start a project"
+            aria-label={context.eyebrow}
             className="absolute right-0 top-0 h-full w-full max-w-md border-l border-white/10 bg-[#0a0a0b] p-8 md:p-10 overflow-y-auto"
             initial={reduced ? { opacity: 0 } : { x: "100%" }}
             animate={reduced ? { opacity: 1 } : { x: 0 }}
@@ -151,10 +169,10 @@ function Panel({ isOpen, onClose }) {
             <div className="flex items-start justify-between">
               <div>
                 <p className="font-mono text-xs tracking-[0.25em] uppercase text-cyan-accent">
-                  Start a project
+                  {context.eyebrow}
                 </p>
                 <h2 className="mt-3 font-heading font-bold tracking-tight text-3xl text-white">
-                  Tell us the one-liner.
+                  {context.title}
                 </h2>
               </div>
               <button
@@ -167,9 +185,7 @@ function Panel({ isOpen, onClose }) {
               </button>
             </div>
 
-            <p className="mt-4 text-zinc-400 leading-relaxed text-sm">
-              Three fields, fifteen seconds. We reply within one business day.
-            </p>
+            <p className="mt-4 text-zinc-400 leading-relaxed text-sm">{context.subtitle}</p>
 
             <form onSubmit={submit} className="mt-8 space-y-6" data-testid="cta-panel-form">
               <div>
@@ -199,13 +215,13 @@ function Panel({ isOpen, onClose }) {
               </div>
               <div>
                 <label className="font-mono text-[10px] tracking-[0.25em] uppercase text-zinc-500">
-                  What are you building?
+                  {context.messageLabel}
                 </label>
                 <input
                   className={inputCls}
                   value={form.message}
                   onChange={update("message")}
-                  placeholder="One line is enough…"
+                  placeholder={context.messagePlaceholder}
                   data-testid="cta-panel-message"
                 />
               </div>

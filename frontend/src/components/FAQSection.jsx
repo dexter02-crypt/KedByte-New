@@ -13,24 +13,29 @@ const rowSpring = { type: "spring", stiffness: 300, damping: 30 };
  * one open at a time, aria-expanded/aria-controls.
  * Content: src/data/faq.js (CONFIRM notes inside).
  */
-export default function FAQSection() {
+export default function FAQSection({
+  items = faq,
+  kicker = "Before you ask",
+  heading = "The questions every project starts with.",
+  testid = "contact-faq",
+}) {
   const [open, setOpen] = useState(-1);
   const reduced = useReducedMotion();
 
   return (
-    <section className="relative pb-24 md:pb-32" data-testid="contact-faq">
+    <section className="relative pb-24 md:pb-32" data-testid={testid}>
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         <Reveal>
-          <SectionKicker index="[FAQ]">Before you ask</SectionKicker>
+          <SectionKicker index="[FAQ]">{kicker}</SectionKicker>
         </Reveal>
         <Reveal delay={0.1} variant="mask">
           <h2 className="mt-4 mb-12 font-heading font-bold tracking-tighter text-4xl md:text-5xl text-white max-w-2xl">
-            The questions every project starts with.
+            {heading}
           </h2>
         </Reveal>
 
         <div className="border-t border-white/10">
-          {faq.map((item, i) => {
+          {items.map((item, i) => {
             const isOpen = open === i;
             return (
               <div
