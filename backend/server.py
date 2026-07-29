@@ -1,5 +1,9 @@
-from fastapi import FastAPI, APIRouter, HTTPException
+from fastapi import FastAPI, APIRouter, HTTPException, Request
+from fastapi.responses import JSONResponse
 from dotenv import load_dotenv
+import time
+from collections import defaultdict, deque
+from pydantic import field_validator
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
@@ -57,14 +61,32 @@ class BaseDocument(BaseModel):
 
 
 # ----- Models -----
+KNOWN_BUDGETS = {"", "< $10k", "$10k \u2013 $50k", "$50k \u2013 $150k", "$150k+", "Not sure yet"}
+
+
 class ContactCreate(BaseModel):
-    name: str
-    email: EmailStr
-    company: Optional[str] = ""
+    name: str = Field(min_length=1, max_length=200)
+    email: EmailStr = Field(max_length=320)
+    company: Optional[str] = Field(default="", max_length=200)
     budget: Optional[str] = ""
-    message: str
+    message: str = Field(min_length=1, max_length=5000)
     # Optional lead tag, e.g. "payroll-early-access"; "" = general contact
-    source: Optional[str] = ""
+    source: Optional[str] = Field(default="", max_length=100)
+    # Honeypot: real users never see or fill this field
+    website: Optional[str] = Field(default="", max_length=500)
+
+    @field_validator("name", "company", "message", "source", mode="before")
+    @classmethod
+    def _strip(cls, v):
+        return v.strip() if isinstance(v, str) else v
+
+    @field_validator("budget")
+    @classmethod
+    def _known_budget(cls, v):
+        v = (v or "").strip()
+        if v not in KNOWN_BUDGETS:
+            raise ValueError("unknown budget range")
+        return v
 
 
 class Contact(BaseDocument):
@@ -122,9 +144,49 @@ async def root():
     return {"message": "Kedbyte API is live"}
 
 
+# ---- Per-IP rate limiting (in-memory sliding windows) ----
+RATE_MINUTE, RATE_HOUR = 5, 20
+_hits: dict = defaultdict(deque)
+E2E_BYPASS_TOKEN = os.environ.get("E2E_BYPASS_TOKEN", "")
+
+
+def _rate_limited(ip: str) -> bool:
+    now = time.time()
+    dq = _hits[ip]
+    while dq and now - dq[0] > 3600:
+        dq.popleft()
+    last_minute = sum(1 for t in dq if now - t <= 60)
+    if last_minute >= RATE_MINUTE or len(dq) >= RATE_HOUR:
+        return True
+    dq.append(now)
+    return False
+
+
 @api_router.post("/contact")
-async def create_contact(payload: ContactCreate):
-    contact = Contact(**payload.model_dump())
+async def create_contact(payload: ContactCreate, request: Request):
+    ip = request.client.host if request.client else "unknown"
+    bypass = bool(E2E_BYPASS_TOKEN) and request.headers.get("x-e2e-bypass") == E2E_BYPASS_TOKEN
+    if not bypass and _rate_limited(ip):
+        return JSONResponse(
+            status_code=429,
+            content={
+                "status": "rate_limited",
+                "message": "Too many requests. Please try again in a minute.",
+            },
+        )
+
+    # Honeypot: pretend success, store nothing
+    if payload.website:
+        logger.warning("honeypot tripped from %s (name=%r)", ip, payload.name[:40])
+        return {
+            "status": "success",
+            "message": "Thanks for reaching out. Our team will get back to you shortly.",
+            "email_sent": False,
+        }
+
+    data = payload.model_dump()
+    data.pop("website", None)
+    contact = Contact(**data)
     await db.contacts.insert_one(contact.to_mongo())
     email_id = await _send_contact_email(payload)
     return {
