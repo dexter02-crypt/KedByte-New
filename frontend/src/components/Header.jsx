@@ -1,6 +1,15 @@
 import { useEffect, useState, useRef } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
-import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  useMotionValue,
+  useSpring,
+  useTransform,
+  useScroll,
+  useMotionValueEvent,
+  useReducedMotion,
+} from "framer-motion";
 import { Menu, X } from "lucide-react";
 import MagneticButton from "@/components/MagneticButton";
 import KLogo from "@/components/KLogo";
@@ -14,9 +23,11 @@ const links = [
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
   const location = useLocation();
   const logoRef = useRef(null);
+  const reducedMotion = useReducedMotion();
 
   // Mouse position for 3D logo tilt
   const mouseX = useMotionValue(0);
@@ -26,11 +37,17 @@ export default function Header() {
   const rotateY = useTransform(smoothMouseX, [-200, 200], [-15, 15]);
   const rotateX = useTransform(smoothMouseY, [-200, 200], [15, -15]);
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 30);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  // Backdrop appears after 80px; header hides on scroll down, reveals on scroll up
+  const { scrollY } = useScroll();
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    setScrolled(latest > 80);
+    const prev = scrollY.getPrevious() ?? 0;
+    if (latest < 120) {
+      setHidden(false);
+    } else if (Math.abs(latest - prev) > 4) {
+      setHidden(latest > prev);
+    }
+  });
 
   useEffect(() => setOpen(false), [location.pathname]);
 
@@ -49,16 +66,19 @@ export default function Header() {
   }, [mouseX, mouseY]);
 
   return (
-    <header
-      className={`fixed top-0 z-50 w-full transition-all duration-700 ${
-        scrolled 
-          ? "bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-black/95 backdrop-blur-3xl border-b border-gradient shadow-[0_4px_30px_rgba(0,240,255,0.12)]" 
+    <motion.header
+      className={`fixed top-0 z-50 w-full transition-colors duration-500 ${
+        scrolled
+          ? "bg-black/60 backdrop-blur-xl border-b border-white/10 shadow-[0_4px_30px_rgba(0,240,255,0.12)]"
           : "bg-transparent"
       }`}
+      animate={{ y: hidden && !open ? "-110%" : "0%" }}
+      transition={
+        reducedMotion
+          ? { duration: 0 }
+          : { type: "spring", stiffness: 320, damping: 34 }
+      }
       data-testid="site-header"
-      style={{
-        borderImage: scrolled ? "linear-gradient(90deg, transparent, rgba(0,240,255,0.3), transparent) 1" : "none"
-      }}
     >
       {/* Animated gradient overlay on scroll - more visible */}
       <motion.div
@@ -151,8 +171,8 @@ export default function Header() {
               {({ isActive }) => (
                 <>
                   <motion.span
-                    className="relative z-10"
-                    whileHover={{ 
+                    className="relative z-10 inline-block transition-[letter-spacing] duration-300 group-hover:tracking-[0.06em]"
+                    whileHover={{
                       textShadow: "0 0 8px rgba(0,240,255,0.8)",
                       y: -2
                     }}
@@ -160,23 +180,14 @@ export default function Header() {
                   >
                     {l.label}
                   </motion.span>
-                  {isActive && (
+                  {isActive ? (
                     <motion.span
                       layoutId="nav-underline"
-                      className="absolute -bottom-1.5 left-0 h-px w-full bg-gradient-to-r from-transparent via-cyan-accent to-transparent"
-                      initial={{ scaleX: 0 }}
-                      animate={{ scaleX: 1 }}
-                      exit={{ scaleX: 0 }}
+                      className="absolute -bottom-1.5 left-0 h-px w-full origin-left bg-cyan-accent shadow-[0_0_8px_rgba(0,240,255,0.6)]"
                       transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                     />
-                  )}
-                  {!isActive && (
-                    <motion.span
-                      className="absolute -bottom-1.5 left-0 h-px w-full bg-cyan-accent origin-left"
-                      initial={{ scaleX: 0 }}
-                      whileHover={{ scaleX: 1 }}
-                      transition={{ duration: 0.3 }}
-                    />
+                  ) : (
+                    <span className="absolute -bottom-1.5 left-0 h-px w-full origin-left scale-x-0 bg-cyan-accent transition-transform duration-300 ease-out group-hover:scale-x-100" />
                   )}
                 </>
               )}
@@ -224,6 +235,6 @@ export default function Header() {
           </motion.div>
         )}
       </AnimatePresence>
-    </header>
+    </motion.header>
   );
 }

@@ -132,21 +132,13 @@ html.lenis, html.lenis body { height: auto; }
   box-shadow: 0 0 0 1px rgba(0, 240, 255, 0.15), 0 20px 60px -20px rgba(0, 240, 255, 0.25);
 }
 
-/* Custom cursor */
+/* Custom cursor. Interactive elements deliberately keep their native cursor
+   (accessibility fallback) — only non-interactive areas hide it. */
 @media (hover: hover) and (pointer: fine) {
   body.has-cursor { cursor: none; }
-  body.has-cursor a, body.has-cursor button, body.has-cursor [role="button"], body.has-cursor input, body.has-cursor textarea, body.has-cursor select { cursor: none; }
+  body.has-cursor a, body.has-cursor button, body.has-cursor [role="button"], body.has-cursor input, body.has-cursor textarea, body.has-cursor select { cursor: auto; }
+  body.has-cursor a, body.has-cursor button, body.has-cursor [role="button"] { cursor: pointer; }
 }
-.cursor-dot, .cursor-ring {
-  position: fixed;
-  top: 0; left: 0;
-  pointer-events: none;
-  z-index: 9999;
-  border-radius: 9999px;
-  mix-blend-mode: difference;
-}
-.cursor-dot { width: 6px; height: 6px; background: #fff; }
-.cursor-ring { width: 34px; height: 34px; border: 1px solid rgba(255,255,255,0.6); }
 
 /* Button shine */
 .shine {
@@ -218,4 +210,18 @@ html.lenis, html.lenis body { height: auto; }
 /* 3D perspective helper */
 .perspective-1000 {
   perspective: 1000px;
+}
+
+/* Reduced motion: collapse CSS keyframe animations and transitions to
+   near-instant. JS-driven framer-motion animations are handled separately
+   via MotionConfig reducedMotion="user" and useReducedMotion(). */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

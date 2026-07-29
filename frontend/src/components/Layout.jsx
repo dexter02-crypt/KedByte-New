@@ -12,7 +12,7 @@ export default function Layout() {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.4 }}
-        className="min-h-screen bg-ink"
+        className="relative z-10 min-h-screen bg-ink"
       >
         <Outlet />
       </motion.main>

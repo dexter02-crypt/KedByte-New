@@ -100,6 +100,7 @@ export const MagneticButton = ({
     transition: { type: "spring", stiffness: 200, damping: 15 },
     className: `${base} ${styles} ${className}`,
     "data-testid": testid,
+    "data-magnetic": true,
   };
 
   if (to)

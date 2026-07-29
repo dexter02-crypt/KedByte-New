@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 
 /**
@@ -8,21 +8,24 @@ import { motion } from "framer-motion";
 
 const chars = "!<>-_\\/[]{}—=+*^?#________";
 
-export default function TextScramble({ 
-  text, 
+export default function TextScramble({
+  text,
   className = "",
   speed = 50,
   trigger = "view" // "view", "hover", "always"
 }) {
   const [displayText, setDisplayText] = useState(text);
-  const [isScrambling, setIsScrambling] = useState(false);
+  // Refs (not state) so `scramble` stays referentially stable and the
+  // "always" effect doesn't retrigger itself every time a run finishes.
+  const scramblingRef = useRef(false);
+  const intervalRef = useRef(null);
 
-  const scramble = () => {
-    if (isScrambling) return;
-    setIsScrambling(true);
-    
+  const scramble = useCallback(() => {
+    if (scramblingRef.current) return;
+    scramblingRef.current = true;
+
     let iteration = 0;
-    const interval = setInterval(() => {
+    intervalRef.current = setInterval(() => {
       setDisplayText(
         text
           .split("")
@@ -36,19 +39,20 @@ export default function TextScramble({
       );
 
       if (iteration >= text.length) {
-        clearInterval(interval);
-        setIsScrambling(false);
+        clearInterval(intervalRef.current);
+        scramblingRef.current = false;
       }
 
       iteration += 1 / 3;
     }, speed);
-  };
+  }, [text, speed]);
 
   useEffect(() => {
     if (trigger === "always") {
       scramble();
     }
-  }, [trigger]);
+    return () => clearInterval(intervalRef.current);
+  }, [trigger, scramble]);
 
   const handleViewport = () => {
     if (trigger === "view") {
@@ -61,7 +65,7 @@ export default function TextScramble({
       className={className}
       onViewportEnter={trigger === "view" ? handleViewport : undefined}
       onMouseEnter={trigger === "hover" ? scramble : undefined}
-      viewport={{ once: true, margin: "-100px" }}
+      viewport={{ once: true, margin: "-40px" }}
     >
       {displayText}
     </motion.span>

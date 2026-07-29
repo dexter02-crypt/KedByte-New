@@ -1,80 +1,88 @@
-import { useRef, useEffect, useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
+import { motion, useScroll, useReducedMotion } from "framer-motion";
 
 /**
- * ScrollConnectedPath - SVG path that draws/animates based on scroll position
- * Perfect for timeline visualizations, process flows, etc.
+ * ScrollConnectedPath — vertical cyan pipeline drawn down the left side of a
+ * list as the user scrolls (desktop only; children handle their own mobile
+ * fallback). The line is an SVG path whose pathLength is scroll-linked via
+ * useScroll — transform/paint only, no layout.
+ *
+ * Use with the exported PathNode inside each list item: a mono-numbered node
+ * on the rail that lights up (cyan fill + glow pulse) when its item is in view.
+ *
+ * Reduced motion: the path renders fully drawn, nodes appear lit.
  */
-export default function ScrollConnectedPath({ 
-  children,
-  pathColor = "#00F0FF",
-  dotColor = "#00F0FF",
-  lineWidth = 2,
-  className = ""
-}) {
+export default function ScrollConnectedPath({ children, className = "" }) {
   const containerRef = useRef(null);
-  const pathRef = useRef(null);
-  const [pathLength, setPathLength] = useState(0);
+  const reduced = useReducedMotion();
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start center", "end center"]
+    offset: ["start center", "end center"],
   });
-
-  const pathProgress = useTransform(scrollYProgress, [0, 1], [0, pathLength]);
-
-  useEffect(() => {
-    if (pathRef.current) {
-      const length = pathRef.current.getTotalLength();
-      setPathLength(length);
-    }
-  }, []);
 
   return (
     <div ref={containerRef} className={`relative ${className}`}>
-      {/* SVG Path */}
-      <svg
-        className="absolute left-8 md:left-16 top-0 h-full w-1"
-        style={{ zIndex: 0 }}
+      {/* Rail — desktop only. Progress via scaleY (transform-only). */}
+      <div
+        className="pointer-events-none absolute left-8 top-0 hidden h-full w-px -translate-x-1/2 bg-white/10 md:block"
+        aria-hidden
       >
-        {/* Background path */}
-        <motion.path
-          ref={pathRef}
-          d="M 0 0 L 0 100%"
-          stroke={pathColor}
-          strokeWidth={lineWidth}
-          fill="none"
-          opacity={0.2}
+        <motion.div
+          className="h-full w-full origin-top bg-cyan-accent shadow-[0_0_6px_rgba(0,240,255,0.7)]"
+          style={{ scaleY: reduced ? 1 : scrollYProgress, willChange: "transform" }}
         />
-        {/* Animated path */}
-        <motion.path
-          d="M 0 0 L 0 100%"
-          stroke={pathColor}
-          strokeWidth={lineWidth}
-          fill="none"
-          strokeDasharray={pathLength}
-          strokeDashoffset={useTransform(pathProgress, (v) => pathLength - v)}
-          strokeLinecap="round"
-          style={{
-            filter: `drop-shadow(0 0 4px ${pathColor})`
-          }}
-        />
-        {/* Animated dot at the end */}
-        <motion.circle
-          cx="0"
-          cy={useTransform(scrollYProgress, [0, 1], ["0%", "100%"])}
-          r="4"
-          fill={dotColor}
-          style={{
-            filter: `drop-shadow(0 0 6px ${dotColor})`
-          }}
-        />
-      </svg>
-
-      {/* Content */}
-      <div className="relative z-10 pl-20 md:pl-32">
-        {children}
       </div>
+
+      {/* Content — reserved left column the blocks cannot enter (rail center
+          sits at x=32px; content starts at 112px) */}
+      <div className="md:pl-28">{children}</div>
+    </div>
+  );
+}
+
+/**
+ * PathNode — node circle sitting on the ScrollConnectedPath rail. Render
+ * inside a `relative` list item; it positions itself onto the rail
+ * (content is inset md:pl-24 = 96px; rail center x = 32px → left: -64px).
+ * `active` lights it up: cyan ring/fill, glow pulse, mono index turns cyan.
+ * (content inset is md:pl-28 = 112px; rail center x = 32px → left: -80px)
+ */
+export function PathNode({ index, active }) {
+  const reduced = useReducedMotion();
+  const lit = active || reduced;
+
+  return (
+    <div className="absolute -left-20 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 md:block">
+      <motion.div
+        className="flex h-8 w-8 items-center justify-center rounded-full border bg-[#050505]"
+        animate={
+          lit
+            ? {
+                borderColor: "rgba(0,240,255,0.8)",
+                backgroundColor: "rgba(0,240,255,0.12)",
+                boxShadow: [
+                  "0 0 0px rgba(0,240,255,0)",
+                  "0 0 18px rgba(0,240,255,0.7)",
+                  "0 0 8px rgba(0,240,255,0.35)",
+                ],
+              }
+            : {
+                borderColor: "rgba(255,255,255,0.15)",
+                backgroundColor: "rgba(5,5,5,1)",
+                boxShadow: "0 0 0px rgba(0,240,255,0)",
+              }
+        }
+        transition={{ duration: reduced ? 0 : 0.6, ease: "easeOut" }}
+      >
+        <span
+          className={`font-mono text-[10px] transition-colors duration-500 ${
+            lit ? "text-cyan-accent" : "text-zinc-500"
+          }`}
+        >
+          {String(index).padStart(2, "0")}
+        </span>
+      </motion.div>
     </div>
   );
 }

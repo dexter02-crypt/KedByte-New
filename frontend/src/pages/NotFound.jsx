@@ -2,6 +2,8 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import MagneticButton from "@/components/MagneticButton";
+import TextScramble from "@/components/TextScramble";
+import GlitchText from "@/components/GlitchText";
 
 export default function NotFound() {
   return (
@@ -9,7 +11,12 @@ export default function NotFound() {
       className="relative min-h-screen flex items-center justify-center overflow-hidden bg-ink"
       data-testid="notfound-page"
     >
-      <div className="tech-grid grid-fade absolute inset-0 opacity-40" />
+      {/* Slowly drifting tech grid */}
+      <motion.div
+        className="tech-grid grid-fade absolute inset-0 opacity-40"
+        animate={{ backgroundPosition: ["0% 0%", "100% 100%"] }}
+        transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+      />
       <div className="glow-orb animate-pulse-glow absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2" />
 
       <div className="relative z-10 text-center px-6">
@@ -18,7 +25,7 @@ export default function NotFound() {
           animate={{ opacity: 1 }}
           className="font-mono text-xs tracking-[0.3em] uppercase text-cyan-accent mb-6"
         >
-          Error · Signal lost
+          <TextScramble text="Error · Signal lost" trigger="always" speed={40} />
         </motion.p>
 
         <motion.h1
@@ -27,7 +34,9 @@ export default function NotFound() {
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           className="font-heading font-black tracking-tighter text-white leading-none text-[28vw] md:text-[18rem]"
         >
-          4<span className="text-cyan-accent text-glow">0</span>4
+          <GlitchText glitchOnHover>
+            4<span className="text-cyan-accent text-glow">0</span>4
+          </GlitchText>
         </motion.h1>
 
         <motion.p

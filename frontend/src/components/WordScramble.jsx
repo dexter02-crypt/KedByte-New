@@ -18,6 +18,20 @@ const WORDS_TO_FIND = [
 const GRID_ROWS = 12;
 const GRID_COLS = 16;
 
+// Every cell that belongs to a hidden service word, for hover-trace hinting
+const cellsOfWord = ({ word, row, col, direction }) => {
+  const cells = [];
+  for (let i = 0; i < word.length; i++) {
+    let r = row, c = col;
+    if (direction === "horizontal") c += i;
+    else if (direction === "vertical") r += i;
+    else if (direction === "diagonal") { r += i; c += i; }
+    cells.push(`${r}-${c}`);
+  }
+  return cells;
+};
+const WORD_CELLS = new Set(WORDS_TO_FIND.flatMap(cellsOfWord));
+
 function generateRandomLetter() {
   const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   return letters[Math.floor(Math.random() * letters.length)];
@@ -51,6 +65,8 @@ export default function WordScramble({ className = "" }) {
   const [grid] = useState(() => generateGrid(WORDS_TO_FIND));
   const [hoveredCells, setHoveredCells] = useState(new Set());
   const [foundWords, setFoundWords] = useState(new Set());
+  // Cells of already-found words stay lit cyan permanently
+  const [foundCells, setFoundCells] = useState(new Set());
   const [currentWord, setCurrentWord] = useState(null);
   const gridRef = useRef(null);
 
@@ -58,20 +74,11 @@ export default function WordScramble({ className = "" }) {
 
   const checkWord = useCallback((cells) => {
     for (const wordData of WORDS_TO_FIND) {
-      const wordCells = [];
-      const { word, row, col, direction } = wordData;
-      
-      for (let i = 0; i < word.length; i++) {
-        let r = row, c = col;
-        if (direction === "horizontal") c += i;
-        else if (direction === "vertical") r += i;
-        else if (direction === "diagonal") { r += i; c += i; }
-        wordCells.push(getCellKey(r, c));
-      }
-
+      const wordCells = cellsOfWord(wordData);
       const allCellsHovered = wordCells.every(cell => cells.has(cell));
-      if (allCellsHovered && !foundWords.has(word)) {
-        setFoundWords(prev => new Set([...prev, word]));
+      if (allCellsHovered && !foundWords.has(wordData.word)) {
+        setFoundWords(prev => new Set([...prev, wordData.word]));
+        setFoundCells(prev => new Set([...prev, ...wordCells]));
         setCurrentWord(wordData);
         return wordData;
       }
@@ -134,7 +141,9 @@ export default function WordScramble({ className = "" }) {
         )}
       </motion.div>
 
-      {/* Grid */}
+      {/* Grid — flex justify-center actually centers the inline-flex block
+          (mx-auto alone never centered it: inline-level boxes ignore auto
+          margins, which left the grid hugging the left half) */}
       <motion.div
         ref={gridRef}
         initial={{ opacity: 0 }}
@@ -142,16 +151,17 @@ export default function WordScramble({ className = "" }) {
         viewport={{ once: true }}
         transition={{ delay: 0.2 }}
         onMouseLeave={handleMouseLeave}
-        className="relative overflow-x-auto pb-4"
+        className="relative flex overflow-x-auto pb-4 [justify-content:safe_center]"
       >
-        <div className="inline-flex flex-col gap-1 min-w-max mx-auto">
+        <div className="inline-flex flex-col gap-1 min-w-max">
           {grid.map((row, rowIndex) => (
             <div key={rowIndex} className="flex gap-1">
               {row.map((letter, colIndex) => {
                 const key = getCellKey(rowIndex, colIndex);
                 const isHovered = hoveredCells.has(key);
                 const isInCurrentWord = currentWord && isCellInWord(rowIndex, colIndex, currentWord);
-                const isFound = foundWords.has(letter);
+                const isFoundCell = foundCells.has(key);
+                const isWordCell = WORD_CELLS.has(key);
 
                 return (
                   <motion.div
@@ -159,14 +169,18 @@ export default function WordScramble({ className = "" }) {
                     onMouseEnter={() => handleCellHover(rowIndex, colIndex)}
                     whileHover={{ scale: 1.1, y: -2 }}
                     className={`
-                      relative w-8 h-8 md:w-10 md:h-10 flex items-center justify-center
-                      font-mono text-xs md:text-sm font-bold cursor-crosshair
+                      relative w-8 h-8 md:w-9 md:h-9 flex items-center justify-center
+                      font-mono text-xs font-bold cursor-crosshair
                       transition-all duration-300 rounded
-                      ${isInCurrentWord 
-                        ? 'bg-cyan-accent/20 text-cyan-accent border border-cyan-accent shadow-[0_0_10px_rgba(0,240,255,0.5)]' 
+                      ${isInCurrentWord
+                        ? 'bg-cyan-accent/20 text-cyan-accent border border-cyan-accent shadow-[0_0_10px_rgba(0,240,255,0.5)]'
+                        : isFoundCell
+                        ? 'bg-cyan-accent/10 text-cyan-accent border border-cyan-accent/50 shadow-[0_0_6px_rgba(0,240,255,0.25)]'
+                        : isHovered && isWordCell
+                        ? 'bg-cyan-accent/10 text-cyan-accent/90 border border-cyan-accent/40'
                         : isHovered
-                        ? 'bg-white/10 text-white border border-white/20'
-                        : 'bg-white/5 text-zinc-500 border border-white/5'
+                        ? 'bg-white/10 text-white border-white/20 border'
+                        : 'bg-white/[0.03] text-zinc-600 border border-white/5'
                       }
                     `}
                   >
@@ -193,22 +207,27 @@ export default function WordScramble({ className = "" }) {
         viewport={{ once: true }}
         className="mt-8 flex flex-wrap gap-2 justify-center"
       >
-        {WORDS_TO_FIND.map(({ word, label }) => (
-          <motion.div
-            key={word}
-            initial={{ opacity: 0.3, scale: 0.95 }}
-            animate={foundWords.has(word) ? { opacity: 1, scale: 1 } : {}}
-            className={`
-              px-3 py-1.5 rounded-full text-xs font-medium border
-              ${foundWords.has(word)
-                ? 'bg-cyan-accent/10 text-cyan-accent border-cyan-accent/30'
-                : 'bg-white/5 text-zinc-600 border-white/10'
-              }
-            `}
-          >
-            {label}
-          </motion.div>
-        ))}
+        {WORDS_TO_FIND.map(({ word, label }) => {
+          const found = foundWords.has(word);
+          return (
+            <motion.div
+              key={`${word}-${found}`}
+              // Remount on found so the pop spring replays
+              initial={found ? { scale: 0.7 } : false}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", stiffness: 420, damping: 14 }}
+              className={`
+                px-3 py-1.5 rounded-full text-xs font-medium border
+                ${found
+                  ? 'bg-cyan-accent/10 text-cyan-accent border-cyan-accent/50 shadow-[0_0_14px_rgba(0,240,255,0.25)]'
+                  : 'bg-white/5 text-zinc-500 border-white/15'
+                }
+              `}
+            >
+              {label}
+            </motion.div>
+          );
+        })}
       </motion.div>
     </div>
   );

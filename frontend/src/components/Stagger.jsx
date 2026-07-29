@@ -9,16 +9,6 @@ import { motion } from "framer-motion";
  *
  * Spec per item: opacity 0 → 1, translateY 30px → 0, duration 0.6s, ease-out.
  */
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0,
-    },
-  },
-};
-
 const itemVariants = {
   hidden: { opacity: 0, y: 30 },
   visible: {
@@ -28,9 +18,18 @@ const itemVariants = {
   },
 };
 
-export const StaggerGroup = ({ children, className = "", margin = "-80px", ...rest }) => (
+export const StaggerGroup = ({
+  children,
+  className = "",
+  margin = "-40px",
+  stagger = 0.1,
+  ...rest
+}) => (
   <motion.div
-    variants={containerVariants}
+    variants={{
+      hidden: {},
+      visible: { transition: { staggerChildren: stagger, delayChildren: 0 } },
+    }}
     initial="hidden"
     whileInView="visible"
     viewport={{ once: true, margin }}

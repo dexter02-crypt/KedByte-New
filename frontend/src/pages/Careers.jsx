@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Plus, MapPin, Clock } from "lucide-react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { ArrowUpRight, MapPin, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
 import Reveal from "@/components/Reveal";
 import SectionKicker from "@/components/SectionKicker";
@@ -46,8 +46,11 @@ const roles = [
   },
 ];
 
+const rowSpring = { type: "spring", stiffness: 300, damping: 30 };
+
 export default function Careers() {
-  const [open, setOpen] = useState(0);
+  const [open, setOpen] = useState(-1);
+  const reduced = useReducedMotion();
 
   return (
     <div data-testid="careers-page">
@@ -58,7 +61,7 @@ export default function Careers() {
           <Reveal>
             <SectionKicker index="[ 04 ]">Careers</SectionKicker>
           </Reveal>
-          <Reveal delay={0.1}>
+          <Reveal delay={0.1} variant="mask">
             <h1 className="mt-6 font-heading font-black uppercase tracking-tighter text-5xl md:text-7xl lg:text-8xl text-white leading-[0.9] max-w-5xl">
               Build the future, with us.
             </h1>
@@ -69,6 +72,15 @@ export default function Careers() {
               and obsessed with shipping things that matter.
             </p>
           </Reveal>
+
+          {/* Page-intro hairline draws beneath the header */}
+          <motion.div
+            className="mt-14 h-px w-full origin-left bg-white/10"
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.5 }}
+          />
         </div>
       </section>
 
@@ -78,13 +90,27 @@ export default function Careers() {
             {roles.map((r, i) => {
               const isOpen = open === i;
               return (
-                <div key={r.title} className="border-b border-white/10" data-testid={`role-row-${i}`}>
-                  <button
+                <div
+                  key={r.title}
+                  className="group relative border-b border-white/10 transition-colors duration-500 hover:bg-white/[0.03]"
+                  data-testid={`role-row-${i}`}
+                >
+                  {/* Cyan hairline sweeping the top border on hover */}
+                  <span className="absolute left-0 top-0 h-px w-full origin-left scale-x-0 bg-cyan-accent transition-transform duration-500 ease-out group-hover:scale-x-100" />
+                  <motion.button
                     onClick={() => setOpen(isOpen ? -1 : i)}
-                    className="w-full flex items-start md:items-center justify-between gap-6 py-8 text-left group"
+                    className="w-full flex items-start md:items-center justify-between gap-6 py-8 text-left"
                     data-testid={`role-toggle-${i}`}
+                    data-cursor-text={isOpen ? "CLOSE" : "OPEN"}
+                    initial="rest"
+                    animate="rest"
+                    whileHover="hover"
                   >
-                    <div className="flex-1">
+                    <motion.div
+                      className="flex-1"
+                      variants={{ rest: { x: 0 }, hover: { x: 8 } }}
+                      transition={rowSpring}
+                    >
                       <h3 className="font-heading text-2xl md:text-4xl tracking-tight text-white group-hover:text-cyan-accent transition-colors">
                         <WaveText text={r.title} />
                       </h3>
@@ -96,7 +122,7 @@ export default function Careers() {
                         >
                           {r.team}
                         </motion.span>
-                        <motion.span 
+                        <motion.span
                           className="flex items-center gap-1.5"
                           initial={{ opacity: 0, x: -10 }}
                           whileInView={{ opacity: 1, x: 0 }}
@@ -104,7 +130,7 @@ export default function Careers() {
                         >
                           <MapPin className="h-3.5 w-3.5" /> {r.location}
                         </motion.span>
-                        <motion.span 
+                        <motion.span
                           className="flex items-center gap-1.5"
                           initial={{ opacity: 0, x: -10 }}
                           whileInView={{ opacity: 1, x: 0 }}
@@ -113,11 +139,18 @@ export default function Careers() {
                           <Clock className="h-3.5 w-3.5" /> {r.type}
                         </motion.span>
                       </div>
-                    </div>
-                    <motion.div animate={{ rotate: isOpen ? 45 : 0 }} className="shrink-0 mt-2 md:mt-0">
-                      <Plus className="h-6 w-6 text-white" />
                     </motion.div>
-                  </button>
+                    <motion.div
+                      className="shrink-0 mt-2 md:mt-0"
+                      variants={{
+                        rest: { rotate: isOpen ? 45 : 0, x: 0 },
+                        hover: { rotate: 45, x: 4 },
+                      }}
+                      transition={rowSpring}
+                    >
+                      <ArrowUpRight className="h-6 w-6 text-white" />
+                    </motion.div>
+                  </motion.button>
 
                   <AnimatePresence initial={false}>
                     {isOpen && (
@@ -125,7 +158,14 @@ export default function Careers() {
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: "auto", opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                        transition={
+                          reduced
+                            ? { duration: 0 }
+                            : {
+                                height: { type: "spring", stiffness: 240, damping: 32 },
+                                opacity: { duration: 0.25 },
+                              }
+                        }
                         className="overflow-hidden"
                       >
                         <div className="pb-10 max-w-2xl">

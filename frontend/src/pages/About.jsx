@@ -7,6 +7,10 @@ import CTASection from "@/components/CTASection";
 import MorphingText from "@/components/MorphingText";
 import GlitchText from "@/components/GlitchText";
 import MouseTilt3D from "@/components/MouseTilt3D";
+import TracingBeam from "@/components/TracingBeam";
+import Spotlight from "@/components/Spotlight";
+
+const EASE = [0.22, 1, 0.36, 1];
 
 const values = [
   { title: "Craft over haste", desc: "We ship fast — but never at the cost of code we'd be embarrassed to maintain." },
@@ -30,11 +34,20 @@ export default function About() {
           <Reveal>
             <SectionKicker index="[ 03 ]">About Kedbyte</SectionKicker>
           </Reveal>
-          <Reveal delay={0.1}>
+          <Reveal delay={0.1} variant="mask">
             <h1 className="mt-6 font-heading font-black uppercase tracking-tighter text-5xl md:text-7xl lg:text-[7rem] text-white leading-[0.88] max-w-5xl">
               A studio for the <GlitchText className="text-cyan-accent text-glow" glitchOnHover>curious</GlitchText> & the bold.
             </h1>
           </Reveal>
+
+          {/* Page-intro hairline draws beneath the header */}
+          <motion.div
+            className="mt-14 h-px w-full origin-left bg-white/10"
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.9, ease: EASE, delay: 0.5 }}
+          />
         </div>
       </section>
 
@@ -58,9 +71,11 @@ export default function About() {
         </div>
       </section>
 
-      {/* Editorial story */}
+      {/* Editorial story — tracing beam reading indicator on the left edge */}
       <section className="pb-24 md:pb-32">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 grid md:grid-cols-12 gap-12">
+        <div className="max-w-7xl mx-auto px-6 md:px-12">
+          <TracingBeam>
+            <div className="grid md:grid-cols-12 gap-12">
           <div className="md:col-span-4">
             <Reveal>
               <p className="font-mono text-xs tracking-[0.2em] uppercase text-zinc-500">Our story</p>
@@ -91,6 +106,8 @@ export default function About() {
               </p>
             </Reveal>
           </div>
+            </div>
+          </TracingBeam>
         </div>
       </section>
 
@@ -116,10 +133,12 @@ export default function About() {
       {/* Values */}
       <section className="py-24 md:py-40">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
-          <Reveal>
+          <Reveal variant="mask">
             <h2 className="font-heading font-bold tracking-tighter text-4xl md:text-5xl text-white mb-4">
               What we stand for.
             </h2>
+          </Reveal>
+          <Reveal delay={0.1}>
             <p className="text-cyan-accent text-xl mb-16">
               <MorphingText words={morphingValues} interval={2500} />
             </p>
@@ -128,7 +147,8 @@ export default function About() {
             {values.map((v, i) => (
               <StaggerItem key={v.title}>
                 <MouseTilt3D strength={0.3}>
-                  <div className="rounded-2xl border border-white/10 bg-surface p-8 md:p-10 h-full transition-colors duration-500 hover:border-cyan-accent/40">
+                  <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-surface p-8 md:p-10 h-full transition-colors duration-500 hover:border-cyan-accent/40">
+                    <Spotlight />
                     <span className="font-mono text-cyan-accent text-sm">
                       0{i + 1}
                     </span>
@@ -139,17 +159,6 @@ export default function About() {
               </StaggerItem>
             ))}
           </StaggerGroup>
-        </div>
-      </section>
-
-      <CTASection eyebrow="Want to work with us?" title="Let's make something remarkable." />
-    </div>
-  );
-}
-
-              </Reveal>
-            ))}
-          </div>
         </div>
       </section>
 

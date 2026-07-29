@@ -5,20 +5,29 @@ import { motion, AnimatePresence } from "framer-motion";
  * MorphingText - Text that morphs between different phrases
  * Perfect for hero sections and attention-grabbing headlines
  */
-export default function MorphingText({ 
+export default function MorphingText({
   words = [],
   className = "",
-  interval = 3000
+  interval = 3000,
+  startDelay = 0
 }) {
   const [index, setIndex] = useState(0);
+  const [started, setStarted] = useState(startDelay === 0);
 
   useEffect(() => {
+    if (started) return undefined;
+    const t = setTimeout(() => setStarted(true), startDelay);
+    return () => clearTimeout(t);
+  }, [started, startDelay]);
+
+  useEffect(() => {
+    if (!started) return undefined;
     const timer = setInterval(() => {
       setIndex((prev) => (prev + 1) % words.length);
     }, interval);
 
     return () => clearInterval(timer);
-  }, [words.length, interval]);
+  }, [started, words.length, interval]);
 
   return (
     <span className={`inline-block ${className}`}>
