@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-13.5 -13.5 127 127">
+  <!-- Kedbyte K — transparent bg, ~12% padding. The white strokes flip to
+       near-black on light tab themes via the embedded media query. -->
+  <style>
+    .k { stroke: #FFFFFF; }
+    @media (prefers-color-scheme: light) {
+      .k { stroke: #0A0A0A; }
+    }
+  </style>
+  <g fill="none" stroke-width="13" stroke-linecap="round" stroke-linejoin="round">
+    <path class="k" d="M30 10 V90"/>
+    <path class="k" d="M30 52 L74 10"/>
+    <path d="M30 52 L78 90" stroke="#00F0FF"/>
+  </g>
+</svg>
