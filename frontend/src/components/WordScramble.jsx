@@ -248,7 +248,7 @@ export default function WordScramble({ className = "" }) {
                 px-3 py-1.5 rounded-full text-xs font-medium border
                 ${found
                   ? 'bg-cyan-accent/10 text-cyan-accent border-cyan-accent/50 shadow-[0_0_14px_rgba(0,240,255,0.25)]'
-                  : 'bg-white/5 text-zinc-500 border-white/15'
+                  : 'bg-white/5 text-zinc-400 border-white/15'
                 }
               `}
             >

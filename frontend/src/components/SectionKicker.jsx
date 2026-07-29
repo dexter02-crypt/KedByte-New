@@ -24,7 +24,7 @@ export default function SectionKicker({ index, children, className = "" }) {
           <span className="font-mono text-xs text-cyan-accent">{index}</span>
         )}
         <span className="h-px w-8 bg-cyan-accent/50" />
-        <span className="font-mono text-xs tracking-[0.2em] uppercase text-zinc-500">
+        <span className="font-mono text-xs tracking-[0.2em] uppercase text-zinc-400">
           {children}
         </span>
       </motion.div>
@@ -57,13 +57,13 @@ export default function SectionKicker({ index, children, className = "" }) {
         }}
       />
       <motion.span
-        className="font-mono text-xs tracking-[0.2em] uppercase text-zinc-500"
+        className="font-mono text-xs tracking-[0.2em] uppercase text-zinc-400"
         variants={{
           hidden: {},
           visible: { transition: { delayChildren: 0.25, staggerChildren: 0.02 } },
         }}
-        aria-label={label}
       >
+        <span className="sr-only">{label}</span>
         {label.split("").map((char, i) => (
           <motion.span
             key={i}

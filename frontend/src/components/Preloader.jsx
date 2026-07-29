@@ -111,7 +111,7 @@ export default function Preloader({ onReveal, onComplete }) {
       </motion.div>
 
       <motion.div
-        className="absolute bottom-8 left-6 md:left-12 font-mono text-sm tracking-[0.2em] text-zinc-500"
+        className="absolute bottom-8 left-6 md:left-12 font-mono text-sm tracking-[0.2em] text-zinc-400"
         animate={{ opacity: exiting ? 0 : 1 }}
         transition={{ duration: 0.25 }}
       >

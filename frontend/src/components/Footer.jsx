@@ -115,9 +115,9 @@ export default function Footer() {
 
         {cols.map((c) => (
           <motion.div variants={colItem} key={c.title} className="md:col-span-2">
-            <h4 className="font-mono text-xs tracking-[0.2em] uppercase text-zinc-500 mb-5">
+            <h2 className="font-mono text-xs tracking-[0.2em] uppercase text-zinc-400 mb-5">
               {c.title}
-            </h4>
+            </h2>
             <ul className="space-y-3">
               {c.links.map((l, i) => (
                 <li key={i}>
@@ -134,9 +134,9 @@ export default function Footer() {
         ))}
 
         <motion.div variants={colItem} className="md:col-span-2">
-          <h4 className="font-mono text-xs tracking-[0.2em] uppercase text-zinc-500 mb-5">
+          <h2 className="font-mono text-xs tracking-[0.2em] uppercase text-zinc-400 mb-5">
             Product
-          </h4>
+          </h2>
           <ul className="space-y-3">
             <li>
               <Link
@@ -151,9 +151,9 @@ export default function Footer() {
         </motion.div>
 
         <motion.div variants={colItem} className="md:col-span-2">
-          <h4 className="font-mono text-xs tracking-[0.2em] uppercase text-zinc-500 mb-5">
+          <h2 className="font-mono text-xs tracking-[0.2em] uppercase text-zinc-400 mb-5">
             Registered
-          </h4>
+          </h2>
           <p className="text-zinc-400 text-sm leading-relaxed">
             Kedbyte Private Limited
             <br />
@@ -164,7 +164,8 @@ export default function Footer() {
 
       {/* Big wordmark — settles via scaleX (transform-only; the previous
           letter-spacing animation was a layout-shift source) */}
-      <div className="mt-16 overflow-hidden" aria-hidden>
+      {/* data-decorative: WCAG 1.4.3 "pure decoration" exemption — excluded from axe scan */}
+      <div className="mt-16 overflow-hidden" aria-hidden data-decorative="true">
         <motion.div
           className="text-center font-heading font-black uppercase leading-none text-[13vw] md:text-[10vw] text-white/[0.06] select-none whitespace-nowrap tracking-[0.02em]"
           style={{ willChange: "transform" }}
@@ -180,7 +181,7 @@ export default function Footer() {
         </motion.div>
       </div>
 
-      <div className="mt-10 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between gap-4 text-xs text-zinc-500 font-mono">
+      <div className="mt-10 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between gap-4 text-xs text-zinc-400 font-mono">
         <span>© {new Date().getFullYear()} Kedbyte Private Limited. All rights reserved.</span>
         <span>Incorporated 08 May 2026 · Vadodara, Gujarat.</span>
       </div>

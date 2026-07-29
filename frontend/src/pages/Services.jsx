@@ -133,7 +133,7 @@ function ServiceBlock({ s, i }) {
       </Reveal>
 
       <Reveal delay={0.08} className="md:[direction:ltr]">
-        <p ref={kickerRef} className="font-mono text-xs tracking-[0.2em] uppercase text-zinc-500">{s.tag}</p>
+        <p ref={kickerRef} className="font-mono text-xs tracking-[0.2em] uppercase text-zinc-400">{s.tag}</p>
         <div className="mt-5 flex items-center gap-4">
           <motion.div
             whileHover={{ rotate: [0, -10, 10, 0], scale: 1.1 }}

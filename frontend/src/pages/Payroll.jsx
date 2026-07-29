@@ -44,7 +44,7 @@ function FeatureBlock({ feature, i }) {
               <span className="font-heading font-black tracking-tighter text-6xl md:text-7xl text-white">
                 <Counter to={feature.stat.to} />
               </span>
-              <span className="max-w-sm font-mono text-xs uppercase tracking-wider text-zinc-500">
+              <span className="max-w-sm font-mono text-xs uppercase tracking-wider text-zinc-400">
                 {feature.stat.label}
               </span>
             </div>
@@ -174,7 +174,7 @@ export default function Payroll() {
             </p>
           </Reveal>
           <Reveal delay={0.1}>
-            <p className="font-mono text-xs tracking-[0.2em] uppercase text-zinc-500">
+            <p className="font-mono text-xs tracking-[0.2em] uppercase text-zinc-400">
               Also for
             </p>
             <h2 className="mt-4 font-heading font-bold tracking-tight text-2xl md:text-3xl text-white">
@@ -230,7 +230,7 @@ export default function Payroll() {
           <div className="md:col-span-7">
             <Reveal delay={0.15}>
               <div className="rounded-2xl border border-white/10 bg-surface p-8">
-                <p className="font-mono text-[10px] tracking-[0.25em] uppercase text-zinc-500 mb-4">
+                <p className="font-mono text-[10px] tracking-[0.25em] uppercase text-zinc-400 mb-4">
                   Verified against
                 </p>
                 <ul className="space-y-3">
@@ -296,7 +296,7 @@ export default function Payroll() {
         <div className="glow-orb animate-pulse-glow absolute left-1/2 top-1/2 h-[460px] w-[460px] -translate-x-1/2 -translate-y-1/2" />
         <div className="relative max-w-7xl mx-auto px-6 md:px-12 text-center">
           <Reveal>
-            <p className="font-mono text-xs tracking-[0.2em] uppercase text-zinc-500">
+            <p className="font-mono text-xs tracking-[0.2em] uppercase text-zinc-400">
               Launching upon HMRC recognition
             </p>
           </Reveal>

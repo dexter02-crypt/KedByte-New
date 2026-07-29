@@ -87,7 +87,7 @@ export function PathNode({ index, active, top }) {
         >
           <span
             className={`font-mono text-[10px] transition-colors duration-500 ${
-              lit ? "text-cyan-accent" : "text-zinc-500"
+              lit ? "text-cyan-accent" : "text-zinc-400"
             }`}
           >
             {String(index).padStart(2, "0")}

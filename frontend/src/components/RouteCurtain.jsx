@@ -41,6 +41,7 @@ export default function RouteCurtain() {
       <AnimatePresence mode="wait">
         <motion.div
           key={pathname}
+          aria-hidden="true"
           className="pointer-events-none fixed inset-0 z-[150] bg-[#050505]"
           initial={{ opacity: first ? 0 : 1 }}
           animate={{ opacity: 0, transition: { duration: 0.3, delay: 0.1 } }}
@@ -52,7 +53,11 @@ export default function RouteCurtain() {
 
   return (
     <AnimatePresence mode="wait">
-      <motion.div key={pathname} className="pointer-events-none fixed inset-0 z-[150]">
+      <motion.div
+        key={pathname}
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-0 z-[150]"
+      >
         {/* Two vertical panels: exit slides them down (cover), entry slides them up (reveal) */}
         {[0, 1].map((i) => (
           <motion.div

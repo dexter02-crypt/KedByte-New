@@ -209,7 +209,7 @@ export default function Home() {
         {/* HUD corner readouts — top-24 (96px): clear of the 80px fixed header
             above, and of the hero content which starts at pt-32 (128px) */}
         <motion.div
-          className="absolute top-24 left-6 md:left-12 z-10 hidden sm:flex items-center gap-3 font-mono text-[10px] tracking-[0.2em] uppercase text-zinc-500"
+          className="absolute top-24 left-6 md:left-12 z-10 hidden sm:flex items-center gap-3 font-mono text-[10px] tracking-[0.2em] uppercase text-zinc-400"
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.5, duration: 0.8 }}
@@ -229,7 +229,7 @@ export default function Home() {
           Systems operational
         </motion.div>
         <motion.div
-          className="absolute top-24 right-6 md:right-12 z-10 hidden sm:block font-mono text-[10px] tracking-[0.2em] uppercase text-zinc-500"
+          className="absolute top-24 right-6 md:right-12 z-10 hidden sm:block font-mono text-[10px] tracking-[0.2em] uppercase text-zinc-400"
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.6, duration: 0.8 }}
@@ -352,7 +352,7 @@ export default function Home() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.2 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 font-mono text-[10px] tracking-[0.3em] uppercase text-zinc-500"
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 font-mono text-[10px] tracking-[0.3em] uppercase text-zinc-400"
         >
           <motion.div
             animate={{ y: [0, 5, 0] }}
@@ -366,7 +366,7 @@ export default function Home() {
       {/* MARQUEE */}
       <section className="py-12 border-y border-white/10 bg-ink overflow-hidden">
         <Reveal className="max-w-7xl mx-auto px-6 md:px-12 mb-8">
-          <p className="font-mono text-xs tracking-[0.2em] uppercase text-zinc-500 text-center">
+          <p className="font-mono text-xs tracking-[0.2em] uppercase text-zinc-400 text-center">
             The stack we engineer with
           </p>
         </Reveal>
@@ -551,7 +551,7 @@ export default function Home() {
                     <Counter to={s.to} prefix={s.prefix} suffix={s.suffix} decimals={s.decimals} />
                   </div>
                   <motion.p 
-                    className="mt-3 font-mono text-xs tracking-wider uppercase text-zinc-500 group-hover:text-cyan-accent transition-colors"
+                    className="mt-3 font-mono text-xs tracking-wider uppercase text-zinc-400 group-hover:text-cyan-accent transition-colors"
                   >
                     {s.label}
                   </motion.p>

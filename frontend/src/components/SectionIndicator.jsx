@@ -17,7 +17,7 @@ export default function SectionIndicator() {
       {sections.map((section, i) => (
         <div key={section} className="flex items-center gap-3 group cursor-pointer">
           <motion.span
-            className="text-xs font-mono uppercase tracking-wider text-zinc-500 opacity-0 group-hover:opacity-100 transition-opacity"
+            className="text-xs font-mono uppercase tracking-wider text-zinc-400 opacity-0 group-hover:opacity-100 transition-opacity"
             initial={{ x: 10 }}
             whileHover={{ x: 0 }}
           >

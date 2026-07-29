@@ -3,9 +3,9 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const lines = [
   { t: "$ kedbyte deploy --stack ai,cloud", c: "text-zinc-300" },
-  { t: "› provisioning infrastructure ...", c: "text-zinc-500" },
+  { t: "› provisioning infrastructure ...", c: "text-zinc-400" },
   { t: "✓ containers online  ·  region: ap-south", c: "text-emerald-400" },
-  { t: "› training model ...", c: "text-zinc-500" },
+  { t: "› training model ...", c: "text-zinc-400" },
   { t: "✓ accuracy 99.2%  ·  latency 38ms", c: "text-emerald-400" },
   { t: "✓ pipeline shipped to production", c: "text-cyan-accent" },
 ];
@@ -82,7 +82,7 @@ export default function TerminalCard({ progress }) {
           <span className="h-2.5 w-2.5 rounded-full bg-red-500/70" />
           <span className="h-2.5 w-2.5 rounded-full bg-yellow-500/70" />
           <span className="h-2.5 w-2.5 rounded-full bg-green-500/70" />
-          <span className="ml-2 font-mono text-[10px] tracking-wider text-zinc-500">
+          <span className="ml-2 font-mono text-[10px] tracking-wider text-zinc-400">
             kedbyte@core — zsh
           </span>
         </div>
@@ -116,7 +116,7 @@ export default function TerminalCard({ progress }) {
         <span className="h-2.5 w-2.5 rounded-full bg-red-500/70" />
         <span className="h-2.5 w-2.5 rounded-full bg-yellow-500/70" />
         <span className="h-2.5 w-2.5 rounded-full bg-green-500/70" />
-        <span className="ml-2 font-mono text-[10px] tracking-wider text-zinc-500">
+        <span className="ml-2 font-mono text-[10px] tracking-wider text-zinc-400">
           kedbyte@core — zsh
         </span>
       </div>

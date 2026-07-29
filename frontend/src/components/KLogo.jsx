@@ -22,7 +22,7 @@ export default function KLogo({ className = "h-8 w-8", animate = false, accent =
       : {};
 
   return (
-    <svg viewBox="0 0 100 100" className={className} aria-label="Kedbyte">
+    <svg viewBox="0 0 100 100" className={className} role="img" aria-label="Kedbyte">
       {/* vertical stem */}
       <motion.path d="M30 10 V90" stroke="#FFFFFF" {...common} {...drawProps(0)} />
       {/* upper arm */}

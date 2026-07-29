@@ -67,12 +67,11 @@ export default function TextScramble({
   return (
     <motion.span
       className={`relative inline-block ${className}`}
-      aria-label={text}
-      role="text"
       onViewportEnter={trigger === "view" ? handleViewport : undefined}
       onMouseEnter={trigger === "hover" ? scramble : undefined}
       viewport={{ once: true, margin: "-40px" }}
     >
+      <span className="sr-only">{text}</span>
       {/* Final text owns the layout — invisible but fully measured */}
       <span className="invisible" aria-hidden>
         {text}

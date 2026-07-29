@@ -69,7 +69,7 @@ export default function SelectedWork() {
             </h2>
           </Reveal>
           <Reveal delay={0.2}>
-            <p className="max-w-sm text-sm text-zinc-500 leading-relaxed">
+            <p className="max-w-sm text-sm text-zinc-400 leading-relaxed">
               Capability builds from the studio — the same architecture, motion
               and reliability standards every client project inherits.
             </p>
@@ -135,7 +135,7 @@ export default function SelectedWork() {
                       </span>
                       <p
                         className={`font-mono text-[10px] tracking-[0.2em] uppercase transition-colors duration-500 ${
-                          active ? "text-cyan-accent" : "text-zinc-500 group-hover:text-cyan-accent"
+                          active ? "text-cyan-accent" : "text-zinc-400 group-hover:text-cyan-accent"
                         }`}
                       >
                         {w.kicker}
@@ -158,7 +158,7 @@ export default function SelectedWork() {
                     <div className="mt-6 flex items-center justify-between">
                       <div>
                         <span className="font-heading font-bold text-xl text-cyan-accent">{w.metric.value}</span>
-                        <span className="ml-2 font-mono text-[10px] uppercase tracking-wider text-zinc-500">
+                        <span className="ml-2 font-mono text-[10px] uppercase tracking-wider text-zinc-400">
                           {w.metric.label}
                         </span>
                       </div>
@@ -229,13 +229,13 @@ export default function SelectedWork() {
                   </div>
                   <div className="md:col-span-4 space-y-5">
                     <div>
-                      <p className="font-mono text-[10px] tracking-[0.25em] uppercase text-zinc-500 mb-2">
+                      <p className="font-mono text-[10px] tracking-[0.25em] uppercase text-zinc-400 mb-2">
                         Engineered
                       </p>
                       <p className="text-sm text-zinc-300 leading-relaxed">{openCase.engineered}</p>
                     </div>
                     <div>
-                      <p className="font-mono text-[10px] tracking-[0.25em] uppercase text-zinc-500 mb-2">
+                      <p className="font-mono text-[10px] tracking-[0.25em] uppercase text-zinc-400 mb-2">
                         Stack
                       </p>
                       <div className="flex flex-wrap gap-2">

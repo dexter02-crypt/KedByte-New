@@ -84,7 +84,7 @@ export default function About() {
             <div className="grid md:grid-cols-12 gap-12">
           <div className="md:col-span-4">
             <Reveal>
-              <p className="font-mono text-xs tracking-[0.2em] uppercase text-zinc-500">Our story</p>
+              <p className="font-mono text-xs tracking-[0.2em] uppercase text-zinc-400">Our story</p>
             </Reveal>
           </div>
           <div className="md:col-span-8 space-y-8">
@@ -130,7 +130,7 @@ export default function About() {
               <div className="font-heading font-black tracking-tighter text-4xl md:text-5xl text-white">
                 <Counter to={s.to} suffix={s.suffix} />
               </div>
-              <p className="mt-3 text-zinc-500 text-sm">{s.label}</p>
+              <p className="mt-3 text-zinc-400 text-sm">{s.label}</p>
             </Reveal>
           ))}
         </div>

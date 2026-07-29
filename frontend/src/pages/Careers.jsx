@@ -113,10 +113,10 @@ export default function Careers() {
                       variants={{ rest: { x: 0 }, hover: { x: 8 } }}
                       transition={rowSpring}
                     >
-                      <h3 className="font-heading text-2xl md:text-4xl tracking-tight text-white group-hover:text-cyan-accent transition-colors">
+                      <h2 className="font-heading text-2xl md:text-4xl tracking-tight text-white group-hover:text-cyan-accent transition-colors">
                         <WaveText text={r.title} />
-                      </h3>
-                      <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2 font-mono text-xs text-zinc-500 uppercase tracking-wider">
+                      </h2>
+                      <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2 font-mono text-xs text-zinc-400 uppercase tracking-wider">
                         <motion.span
                           initial={{ opacity: 0, x: -10 }}
                           whileInView={{ opacity: 1, x: 0 }}
@@ -193,9 +193,9 @@ export default function Careers() {
           <Reveal className="mt-16">
             <div className="rounded-2xl border border-white/10 bg-surface p-8 md:p-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
               <div>
-                <h3 className="font-heading text-2xl text-white tracking-tight">
+                <h2 className="font-heading text-2xl text-white tracking-tight">
                   Don't see your role?
-                </h3>
+                </h2>
                 <p className="mt-2 text-zinc-400">
                   We're always meeting exceptional people. Send us a note.
                 </p>

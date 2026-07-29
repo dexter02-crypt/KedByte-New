@@ -58,10 +58,10 @@ function IconRow() {
       {icons.map(({ Icon, name }, i) => (
         <div
           key={i}
-          className="mx-10 flex items-center gap-3 text-zinc-500 hover:text-white transition-colors duration-300"
+          className="mx-10 flex items-center gap-3 text-zinc-400 hover:text-white transition-colors duration-300"
           title={name}
         >
-          <Icon className="h-8 w-8" />
+          <Icon className="h-8 w-8" aria-hidden="true" focusable="false" />
           <span className="font-mono text-sm tracking-tight hidden sm:inline">{name}</span>
         </div>
       ))}

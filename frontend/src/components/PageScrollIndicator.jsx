@@ -18,7 +18,10 @@ export default function PageScrollIndicator() {
   const percentage = useTransform(scrollYProgress, (v) => `${Math.round(v * 100)}%`);
 
   return (
-    <div className="fixed right-0 top-1/2 z-[15] hidden w-12 -translate-y-1/2 flex-col items-center gap-3 xl:flex">
+    <div
+      aria-hidden="true"
+      className="fixed right-0 top-1/2 z-[15] hidden w-12 -translate-y-1/2 flex-col items-center gap-3 xl:flex"
+    >
       <div
         className="font-mono text-[9px] tracking-[0.25em] uppercase text-zinc-600"
         style={{ writingMode: "vertical-rl" }}

@@ -204,7 +204,7 @@ function Panel({ isOpen, onClose, context }) {
                 className="absolute left-[-9999px] top-auto h-px w-px opacity-0"
               />
               <div>
-                <label className="font-mono text-[10px] tracking-[0.25em] uppercase text-zinc-500">
+                <label className="font-mono text-[10px] tracking-[0.25em] uppercase text-zinc-400">
                   Your name
                 </label>
                 <input
@@ -217,7 +217,7 @@ function Panel({ isOpen, onClose, context }) {
                 />
               </div>
               <div>
-                <label className="font-mono text-[10px] tracking-[0.25em] uppercase text-zinc-500">
+                <label className="font-mono text-[10px] tracking-[0.25em] uppercase text-zinc-400">
                   Email
                 </label>
                 <input
@@ -232,7 +232,7 @@ function Panel({ isOpen, onClose, context }) {
                 />
               </div>
               <div>
-                <label className="font-mono text-[10px] tracking-[0.25em] uppercase text-zinc-500">
+                <label className="font-mono text-[10px] tracking-[0.25em] uppercase text-zinc-400">
                   {context.messageLabel}
                 </label>
                 <input
@@ -303,7 +303,7 @@ function Panel({ isOpen, onClose, context }) {
             >
               Close
             </button>
-            <p className="mt-8 text-sm text-zinc-500">
+            <p className="mt-8 text-sm text-zinc-400">
               Prefer the full brief?{" "}
               <Link
                 to="/contact"

@@ -14,7 +14,7 @@ export default function CTASection({
       <div className="glow-orb animate-pulse-glow absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2" />
       <div className="relative max-w-7xl mx-auto px-6 md:px-12 text-center">
         <Reveal>
-          <p className="font-mono text-xs tracking-[0.2em] uppercase text-zinc-500">{eyebrow}</p>
+          <p className="font-mono text-xs tracking-[0.2em] uppercase text-zinc-400">{eyebrow}</p>
         </Reveal>
         <Reveal delay={0.1}>
           <h2 className="mt-6 font-heading font-black uppercase text-4xl md:text-6xl lg:text-7xl text-white max-w-4xl mx-auto leading-[0.95]" style={{ letterSpacing: '0.02em', wordSpacing: '0.15em' }}>

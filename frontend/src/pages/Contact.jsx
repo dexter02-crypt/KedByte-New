@@ -42,16 +42,18 @@ function Field({
       transition={{ duration: 0.4 }}
     >
       <label
+        htmlFor={testid}
         className={`pointer-events-none absolute left-0 font-mono uppercase transition-all duration-300 ${
           floated
             ? "top-0 text-[10px] tracking-[0.25em] " +
-              (error ? "text-red-400" : focused ? "text-cyan-accent" : "text-zinc-500")
-            : "top-9 text-xs tracking-[0.2em] text-zinc-500"
+              (error ? "text-red-400" : focused ? "text-cyan-accent" : "text-zinc-400")
+            : "top-9 text-xs tracking-[0.2em] text-zinc-400"
         }`}
       >
         {label}
       </label>
       <InputTag
+        id={testid}
         type={textarea ? undefined : type}
         rows={textarea ? 4 : undefined}
         className={`w-full bg-transparent border-b rounded-none py-3 text-white placeholder:text-zinc-600 focus:outline-none transition-colors ${
@@ -214,10 +216,14 @@ export default function Contact() {
                 autoComplete="organization"
               />
               <div className="relative pt-6">
-                <label className="pointer-events-none absolute left-0 top-0 font-mono text-[10px] tracking-[0.25em] uppercase text-zinc-500">
+                <label
+                  htmlFor="contact-budget-select"
+                  className="pointer-events-none absolute left-0 top-0 font-mono text-[10px] tracking-[0.25em] uppercase text-zinc-400"
+                >
                   Estimated budget
                 </label>
                 <select
+                  id="contact-budget-select"
                   className={selectCls}
                   value={form.budget}
                   onChange={update("budget")}
