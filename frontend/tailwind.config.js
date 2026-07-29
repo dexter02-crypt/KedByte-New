@@ -12,19 +12,19 @@ module.exports = {
         body: ['Satoshi', 'sans-serif'],
         mono: ['JetBrains Mono', 'monospace'],
       },
+      borderRadius: {
+        lg: 'var(--radius)',
+        md: 'calc(var(--radius) - 2px)',
+        sm: 'calc(var(--radius) - 4px)'
+      },
+      // NOTE: keep this as ONE colors object — a duplicate key here silently
+      // clobbered ink/surface/cyan-accent for the site's entire history.
       colors: {
         ink: '#050505',
         surface: '#121212',
         cyan: {
           accent: '#00F0FF',
         },
-      },
-      borderRadius: {
-        lg: 'var(--radius)',
-        md: 'calc(var(--radius) - 2px)',
-        sm: 'calc(var(--radius) - 4px)'
-      },
-      colors: {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {
