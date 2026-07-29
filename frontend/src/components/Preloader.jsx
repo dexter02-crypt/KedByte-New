@@ -62,6 +62,7 @@ export default function Preloader({ onReveal, onComplete }) {
   if (reduced) {
     return (
       <motion.div
+        data-testid="site-preloader"
         className="fixed inset-0 z-[200] flex items-center justify-center bg-[#050505]"
         animate={{ opacity: exiting ? 0 : 1 }}
         transition={{ duration: 0.4 }}
@@ -76,7 +77,7 @@ export default function Preloader({ onReveal, onComplete }) {
   }
 
   return (
-    <div className="fixed inset-0 z-[200] pointer-events-none" aria-hidden="true">
+    <div data-testid="site-preloader" className="fixed inset-0 z-[200] pointer-events-none" aria-hidden="true">
       {/* Vertical panels — wipe upward on exit, cyan hairline at the seam */}
       {panels.map((i) => (
         <motion.div

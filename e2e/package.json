@@ -1,0 +1,13 @@
+{
+  "name": "kedbyte-e2e",
+  "private": true,
+  "scripts": {
+    "test:e2e": "playwright test",
+    "test:e2e:desktop": "playwright test --project=desktop-chrome",
+    "test:e2e:iphone": "playwright test --project=iphone-14-pro"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.62.0",
+    "mongodb": "^7.5.0"
+  }
+}
