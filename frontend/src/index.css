@@ -82,8 +82,12 @@ html.lenis, html.lenis body { height: auto; }
   }
 }
 
+/* Faint single-layer glow for large display text: at heading sizes the
+   pure #00F0FF fill carries the brand — heavy multi-layer glow bleeds
+   between letters at font-black/tracking-tighter and fuses letterforms.
+   (Strong glow belongs to small elements: nodes, hairlines, dots.) */
 .text-glow {
-  text-shadow: 0 0 30px rgba(0, 240, 255, 0.45);
+  text-shadow: 0 0 18px rgba(0, 240, 255, 0.25);
 }
 
 .grain {

@@ -85,11 +85,31 @@ export default function Payroll() {
           <Reveal>
             <SectionKicker index="[06]">Product</SectionKicker>
           </Reveal>
-          <Reveal delay={0.1} variant="mask">
-            <h1 className="mt-6 font-heading font-black uppercase tracking-tighter text-5xl md:text-7xl lg:text-8xl text-white leading-[0.9] max-w-5xl">
-              Kedbyte <span className="text-cyan-accent text-glow">Payroll.</span>
-            </h1>
-          </Reveal>
+          {/* Stacked mask-reveal lines (same pattern as the Home hero) so the
+              wordmark never crowds one line; the cyan word runs at
+              tracking-tight — tighter fuses letterforms at font-black */}
+          <h1 className="mt-6 font-heading font-black uppercase tracking-tighter text-5xl md:text-7xl lg:text-8xl text-white leading-[0.9] max-w-5xl">
+            <span className="block overflow-hidden">
+              <motion.span
+                className="inline-block"
+                initial={{ y: "110%" }}
+                animate={{ y: 0 }}
+                transition={{ delay: 0.1, duration: 0.8, ease: EASE }}
+              >
+                Kedbyte
+              </motion.span>
+            </span>
+            <span className="block overflow-hidden">
+              <motion.span
+                className="inline-block tracking-tight text-cyan-accent text-glow"
+                initial={{ y: "110%" }}
+                animate={{ y: 0 }}
+                transition={{ delay: 0.22, duration: 0.8, ease: EASE }}
+              >
+                Payroll.
+              </motion.span>
+            </span>
+          </h1>
 
           {/* Status badge — claims policy: in-development state visible near the top */}
           <Reveal delay={0.18}>

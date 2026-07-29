@@ -292,19 +292,10 @@ export default function Home() {
               <motion.span
                 className="inline-block text-glow text-cyan-accent"
                 initial={{ y: "110%", rotateX: -90 }}
-                animate={{
-                  y: 0,
-                  rotateX: 0,
-                  textShadow: [
-                    "0 0 30px rgba(0, 240, 255, 0.5)",
-                    "0 0 60px rgba(0, 240, 255, 0.8)",
-                    "0 0 30px rgba(0, 240, 255, 0.5)",
-                  ],
-                }}
+                animate={{ y: 0, rotateX: 0 }}
                 transition={{
                   y: { delay: 0.74, duration: 0.9, ease: EASE },
                   rotateX: { delay: 0.74, duration: 0.9, ease: EASE },
-                  textShadow: { duration: 2, repeat: Infinity, ease: "easeInOut" }
                 }}
               >
                 {/* Starts cycling only after its line has fully revealed (~1.65s) */}

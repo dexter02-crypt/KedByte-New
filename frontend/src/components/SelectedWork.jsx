@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight, X } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import { StaggerGroup, StaggerItem } from "@/components/Stagger";
 import SectionKicker from "@/components/SectionKicker";
 import Corners from "@/components/Corners";
+import { useLenis } from "@/components/SmoothScroll";
 import { work } from "@/data/work";
 
 const EASE = [0.22, 1, 0.36, 1];
@@ -13,12 +14,44 @@ const hoverSpring = { type: "spring", stiffness: 350, damping: 22 };
 /**
  * SelectedWork — flagship builds as case-study cards (data: src/data/work.js,
  * honestly framed as internal builds until real client work replaces them).
- * Clicking a card opens an in-page expanded panel below the grid.
+ * Clicking a card opens an in-page expanded panel below the grid and
+ * smooth-scrolls it into view (the panel is otherwise below the fold and
+ * the click would appear to do nothing).
  */
 export default function SelectedWork() {
   const [openId, setOpenId] = useState(null);
   const reduced = useReducedMotion();
+  const lenis = useLenis();
+  const gridRef = useRef(null);
   const openCase = work.find((w) => w.id === openId);
+
+  // Scroll so `el`'s top sits just below the fixed header. Falls back to
+  // native scrolling when Lenis is absent (reduced motion / touch).
+  const scrollToEl = (el) => {
+    if (!el) return;
+    const OFFSET = -96;
+    if (lenis && !reduced) {
+      lenis.scrollTo(el, { offset: OFFSET, duration: 0.9 });
+    } else {
+      const top = el.getBoundingClientRect().top + window.scrollY + OFFSET;
+      window.scrollTo({ top, behavior: reduced ? "auto" : "smooth" });
+    }
+  };
+
+  const toggleCase = (id) => {
+    const next = openId === id ? null : id;
+    setOpenId(next);
+    if (next) {
+      // ~180ms: the expand has begun, so the panel has a real position
+      setTimeout(() => scrollToEl(document.getElementById("work-case-panel")), 180);
+    } else {
+      // Closing: if the collapse left the grid above the viewport, return to it
+      setTimeout(() => {
+        const rect = gridRef.current?.getBoundingClientRect();
+        if (rect && rect.top < 0) scrollToEl(gridRef.current);
+      }, 220);
+    }
+  };
 
   return (
     <section className="relative py-24 md:py-32 border-t border-white/10 overflow-hidden" data-testid="home-work">
@@ -41,19 +74,26 @@ export default function SelectedWork() {
           </Reveal>
         </div>
 
+        <div ref={gridRef}>
         <StaggerGroup stagger={0.08} className="mt-14 grid md:grid-cols-3 gap-5">
-          {work.map((w) => (
+          {work.map((w) => {
+            const active = openId === w.id;
+            return (
             <StaggerItem key={w.id}>
               <button
-                onClick={() => setOpenId(openId === w.id ? null : w.id)}
+                onClick={() => toggleCase(w.id)}
                 data-testid={`work-card-${w.id}`}
-                data-cursor-text="VIEW CASE"
-                aria-expanded={openId === w.id}
+                data-cursor-text={active ? "CLOSE" : "VIEW CASE"}
+                aria-expanded={active}
                 aria-controls="work-case-panel"
                 className="group relative block w-full h-full text-left"
               >
                 <motion.div
-                  className="glow-card relative h-full overflow-hidden rounded-2xl border border-white/10 bg-surface transition-colors duration-500 hover:border-cyan-accent/30"
+                  className={`glow-card relative h-full overflow-hidden rounded-2xl border bg-surface transition-colors duration-500 ${
+                    active
+                      ? "border-cyan-accent/60"
+                      : "border-white/10 hover:border-cyan-accent/30"
+                  }`}
                   initial="rest"
                   animate="rest"
                   whileHover="hover"
@@ -85,9 +125,17 @@ export default function SelectedWork() {
                     {/* Kicker line sweeps cyan on hover */}
                     <div className="flex items-center gap-3">
                       <span className="relative h-px w-8 overflow-hidden bg-white/20">
-                        <span className="absolute inset-0 origin-left scale-x-0 bg-cyan-accent transition-transform duration-500 ease-out group-hover:scale-x-100" />
+                        <span
+                          className={`absolute inset-0 origin-left bg-cyan-accent transition-transform duration-500 ease-out ${
+                            active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                          }`}
+                        />
                       </span>
-                      <p className="font-mono text-[10px] tracking-[0.2em] uppercase text-zinc-500 transition-colors duration-500 group-hover:text-cyan-accent">
+                      <p
+                        className={`font-mono text-[10px] tracking-[0.2em] uppercase transition-colors duration-500 ${
+                          active ? "text-cyan-accent" : "text-zinc-500 group-hover:text-cyan-accent"
+                        }`}
+                      >
                         {w.kicker}
                       </p>
                     </div>
@@ -121,12 +169,18 @@ export default function SelectedWork() {
                       </motion.span>
                     </div>
                   </div>
-                  <Corners className="opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <Corners
+                    className={`transition-opacity duration-300 ${
+                      active ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+                    }`}
+                  />
                 </motion.div>
               </button>
             </StaggerItem>
-          ))}
+            );
+          })}
         </StaggerGroup>
+        </div>
 
         {/* In-page expanded case panel */}
         <AnimatePresence initial={false}>
@@ -157,7 +211,7 @@ export default function SelectedWork() {
                     </h3>
                   </div>
                   <button
-                    onClick={() => setOpenId(null)}
+                    onClick={() => toggleCase(openCase.id)}
                     aria-label="Close case"
                     data-testid="work-case-close"
                     className="shrink-0 rounded-full border border-white/15 p-2 text-zinc-400 hover:text-white hover:border-cyan-accent/50 transition-colors"
