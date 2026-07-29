@@ -17,6 +17,8 @@ from bson import ObjectId
 from pydantic import BeforeValidator
 import resend
 
+from emails import build_confirmation_email
+
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
@@ -28,6 +30,7 @@ db = client[os.environ['DB_NAME']]
 # Resend config
 RESEND_API_KEY = os.environ.get('RESEND_API_KEY', '')
 SENDER_EMAIL = os.environ.get('SENDER_EMAIL', 'onboarding@resend.dev')
+SENDER_HEADER = f"Kedbyte <{SENDER_EMAIL}>"
 CONTACT_RECIPIENT_EMAIL = os.environ.get('CONTACT_RECIPIENT_EMAIL', '')
 if RESEND_API_KEY:
     resend.api_key = RESEND_API_KEY
@@ -124,7 +127,7 @@ async def _send_contact_email(c: ContactCreate):
         logger.info("Resend not configured; skipping email send.")
         return None
     params = {
-        "from": SENDER_EMAIL,
+        "from": SENDER_HEADER,
         "to": [CONTACT_RECIPIENT_EMAIL],
         "reply_to": c.email,
         "subject": f"New enquiry from {c.name} — Kedbyte",
@@ -135,6 +138,38 @@ async def _send_contact_email(c: ContactCreate):
         return result.get("id") if isinstance(result, dict) else None
     except Exception as e:
         logger.error(f"Failed to send contact email: {e}")
+        return None
+
+
+async def _send_confirmation_email(c: ContactCreate):
+    """Branded auto-confirmation to the submitter.
+
+    Only called after validation, honeypot and rate-limit checks pass AND
+    the submission is stored. Must never fail the API response.
+    """
+    if not RESEND_API_KEY:
+        logger.info("Resend not configured; skipping confirmation email.")
+        return None
+    tpl = build_confirmation_email(
+        name=c.name, company=c.company or "", message=c.message, source=c.source or ""
+    )
+    params = {
+        "from": SENDER_HEADER,
+        "to": [c.email],
+        "subject": tpl["subject"],
+        "html": tpl["html"],
+        "text": tpl["text"],
+    }
+    # Replies to the confirmation should reach a human inbox.
+    if CONTACT_RECIPIENT_EMAIL:
+        params["reply_to"] = CONTACT_RECIPIENT_EMAIL
+    try:
+        result = await asyncio.to_thread(resend.Emails.send, params)
+        email_id = result.get("id") if isinstance(result, dict) else None
+        logger.info("Confirmation email sent to submitter (id=%s)", email_id)
+        return email_id
+    except Exception as e:
+        logger.error(f"Failed to send confirmation email: {e}")
         return None
 
 
@@ -206,6 +241,9 @@ async def create_contact(payload: ContactCreate, request: Request):
     contact = Contact(**data)
     await db.contacts.insert_one(contact.to_mongo())
     email_id = await _send_contact_email(payload)
+    # Confirmation to the submitter — only for stored submissions (the
+    # honeypot and rate-limit paths returned above) and never fatal.
+    await _send_confirmation_email(payload)
     return {
         "status": "success",
         "message": "Thanks for reaching out. Our team will get back to you shortly.",
