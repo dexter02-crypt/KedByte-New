@@ -6,6 +6,7 @@ import { StaggerGroup, StaggerItem } from "@/components/Stagger";
 import SectionKicker from "@/components/SectionKicker";
 import Corners from "@/components/Corners";
 import { useLenis } from "@/components/SmoothScroll";
+import useMediaQuery from "@/hooks/use-media-query";
 import { work } from "@/data/work";
 
 const EASE = [0.22, 1, 0.36, 1];
@@ -21,6 +22,7 @@ const hoverSpring = { type: "spring", stiffness: 350, damping: 22 };
 export default function SelectedWork() {
   const [openId, setOpenId] = useState(null);
   const reduced = useReducedMotion();
+  const touch = useMediaQuery("(hover: none)");
   const lenis = useLenis();
   const gridRef = useRef(null);
   const openCase = work.find((w) => w.id === openId);
@@ -54,7 +56,7 @@ export default function SelectedWork() {
   };
 
   return (
-    <section className="relative py-24 md:py-32 border-t border-white/10 overflow-hidden" data-testid="home-work">
+    <section className="relative py-16 md:py-32 border-t border-white/10 overflow-hidden" data-testid="home-work">
       <div className="tech-grid grid-fade absolute inset-0 opacity-20" />
       <div className="relative max-w-7xl mx-auto px-6 md:px-12">
         <Reveal>
@@ -114,7 +116,7 @@ export default function SelectedWork() {
                         alt={w.title}
                         className="h-full w-full object-cover"
                         initial={false}
-                        whileInView={reduced ? {} : { scale: [1, 1.06, 1] }}
+                        whileInView={reduced || touch ? {} : { scale: [1, 1.06, 1] }}
                         transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-surface via-surface/40 to-transparent" />
@@ -214,9 +216,9 @@ export default function SelectedWork() {
                     onClick={() => toggleCase(openCase.id)}
                     aria-label="Close case"
                     data-testid="work-case-close"
-                    className="shrink-0 rounded-full border border-white/15 p-2 text-zinc-400 hover:text-white hover:border-cyan-accent/50 transition-colors"
+                    className="shrink-0 rounded-full border border-white/15 p-3 text-zinc-400 hover:text-white hover:border-cyan-accent/50 transition-colors"
                   >
-                    <X className="h-4 w-4" />
+                    <X className="h-5 w-5" />
                   </button>
                 </div>
                 <div className="mt-6 grid md:grid-cols-12 gap-8">

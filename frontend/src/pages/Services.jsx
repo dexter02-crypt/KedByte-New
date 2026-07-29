@@ -182,7 +182,7 @@ export default function Services() {
   return (
     <div data-testid="services-page">
       {/* HERO */}
-      <section className="relative pt-40 pb-20 md:pt-52 md:pb-28 overflow-hidden">
+      <section className="relative pt-32 pb-14 md:pt-52 md:pb-28 overflow-hidden">
         <div className="tech-grid grid-fade absolute inset-0 opacity-40" />
         <div className="glow-orb animate-pulse-glow absolute -top-10 right-[15%] h-[400px] w-[400px]" />
         <div className="relative max-w-7xl mx-auto px-6 md:px-12">
@@ -190,7 +190,9 @@ export default function Services() {
             <SectionKicker index="[ 02 ]">Services</SectionKicker>
           </Reveal>
           <Reveal delay={0.1} variant="mask">
-            <h1 className="mt-6 font-heading font-black uppercase tracking-tight text-5xl md:text-7xl lg:text-8xl text-white leading-[0.9] max-w-5xl">
+            {/* text-4xl below sm: the nowrap WaveText word "ENGINEERING," cannot
+                wrap internally and overflows 375px screens at text-5xl */}
+            <h1 className="mt-6 font-heading font-black uppercase tracking-tight text-4xl sm:text-5xl md:text-7xl lg:text-8xl text-white leading-[0.9] max-w-5xl">
               <WaveText text="End-to-end engineering, one partner." />
             </h1>
           </Reveal>
@@ -235,7 +237,7 @@ export default function Services() {
       <section className="pb-20 md:pb-28">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <ScrollConnectedPath>
-            <div className="space-y-20 md:space-y-28">
+            <div className="space-y-16 md:space-y-28">
               {services.map((s, i) => (
                 <ServiceBlock key={s.title} s={s} i={i} />
               ))}

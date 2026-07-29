@@ -26,6 +26,7 @@ import SelectedWork from "@/components/SelectedWork";
 import ProcessSection from "@/components/ProcessSection";
 import { useCtaPanel } from "@/components/StartProjectPanel";
 import { metrics } from "@/data/metrics";
+import useMediaQuery from "@/hooks/use-media-query";
 import { Link } from "react-router-dom";
 
 const MotionLink = motion(Link);
@@ -87,6 +88,8 @@ export default function Home() {
   const overlayOpacity = useTransform(scrollYProgress, [0, 1], [0.45, 0.9]);
   const scale = useTransform(scrollYProgress, [0, 1], [1, 1.1]);
 
+  // Touch devices: no Ken Burns / heavy atmosphere
+  const touch = useMediaQuery("(hover: none)");
   // Pause hero atmosphere (orbs, particles) when the hero is off-screen
   const heroInView = useInView(heroRef, { amount: 0.15 });
   // Atmosphere mounts last in the entrance timeline (t≈1.3s)
@@ -158,7 +161,7 @@ export default function Home() {
         />
 
         {/* Floating particles — mount last (t≈1.3s), dim, paused off-screen */}
-        {atmosphereReady && (
+        {atmosphereReady && !touch && (
           <motion.div
             className="absolute inset-0"
             initial={{ opacity: 0 }}
@@ -263,7 +266,7 @@ export default function Home() {
             bottom band so the CTA row never meets the scroll indicator */}
         <motion.div
           style={{ y: textY }}
-          className="relative z-10 min-h-screen max-w-7xl mx-auto px-6 md:px-12 flex flex-col justify-center pt-32 pb-36"
+          className="relative z-10 min-h-screen max-w-7xl mx-auto px-6 md:px-12 flex flex-col justify-center pt-28 pb-24 md:pt-32 md:pb-36"
         >
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -338,7 +341,7 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.18, duration: 0.6, ease: EASE }}
             >
-              <MagneticButton onClick={ctaPanel.open} testid="home-hero-cta">
+              <MagneticButton onClick={() => ctaPanel.open()} testid="home-hero-cta">
                 Start a project
               </MagneticButton>
             </motion.div>
@@ -371,7 +374,7 @@ export default function Home() {
       </section>
 
       {/* SERVICES BENTO */}
-      <section className="relative py-24 md:py-40 overflow-hidden" data-testid="home-services">
+      <section className="relative py-16 md:py-40 overflow-hidden" data-testid="home-services">
         <div className="tech-grid grid-fade absolute inset-0 opacity-30" />
         
         {/* Animated background elements */}
@@ -458,7 +461,7 @@ export default function Home() {
                             alt=""
                             className="h-full w-full object-cover"
                             initial={false}
-                            whileInView={reduced ? {} : { scale: [1, 1.06, 1] }}
+                            whileInView={reduced || touch ? {} : { scale: [1, 1.06, 1] }}
                             transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-surface via-surface/70 to-surface/30" />
@@ -510,7 +513,7 @@ export default function Home() {
       <ProcessSection />
 
       {/* PROOF STRIP (data: src/data/metrics.js) */}
-      <section className="relative py-24 border-y border-white/10 bg-surface/40 overflow-hidden" data-testid="home-stats">
+      <section className="relative py-16 md:py-24 border-y border-white/10 bg-surface/40 overflow-hidden" data-testid="home-stats">
         <div className="tech-grid grid-fade absolute inset-0 opacity-20" />
         
         {/* Animated scanline effect */}
@@ -585,7 +588,7 @@ export default function Home() {
       </section>
 
       {/* WORD SCRAMBLE - Interactive Service Discovery */}
-      <section className="relative py-24 md:py-32 bg-ink border-y border-white/10 overflow-hidden">
+      <section className="relative py-16 md:py-32 bg-ink border-y border-white/10 overflow-hidden">
         <div className="tech-grid grid-fade absolute inset-0 opacity-20" />
         <Reveal className="relative max-w-7xl mx-auto px-6 md:px-12">
           <WordScramble />

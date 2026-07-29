@@ -23,7 +23,7 @@ export default function FAQSection({
   const reduced = useReducedMotion();
 
   return (
-    <section className="relative pb-24 md:pb-32" data-testid={testid}>
+    <section className="relative pb-16 md:pb-32" data-testid={testid}>
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         <Reveal>
           <SectionKicker index="[FAQ]">{kicker}</SectionKicker>

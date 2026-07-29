@@ -28,7 +28,7 @@ const OFFICE_IMG_SET =
 export default function About() {
   return (
     <div data-testid="about-page">
-      <section className="relative pt-40 pb-16 md:pt-52 md:pb-24 overflow-hidden">
+      <section className="relative pt-32 pb-12 md:pt-52 md:pb-24 overflow-hidden">
         <div className="tech-grid grid-fade absolute inset-0 opacity-40" />
         <div className="glow-orb animate-pulse-glow absolute -top-10 left-[20%] h-[420px] w-[420px]" />
         <div className="relative max-w-7xl mx-auto px-6 md:px-12">
@@ -137,7 +137,7 @@ export default function About() {
       </section>
 
       {/* Values */}
-      <section className="py-24 md:py-40">
+      <section className="py-16 md:py-40">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <Reveal variant="mask">
             <h2 className="font-heading font-bold tracking-tighter text-4xl md:text-5xl text-white mb-4">

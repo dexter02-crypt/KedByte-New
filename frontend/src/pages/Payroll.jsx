@@ -78,7 +78,7 @@ export default function Payroll() {
   return (
     <div data-testid="payroll-page">
       {/* HERO */}
-      <section className="relative pt-40 pb-20 md:pt-52 md:pb-24 overflow-hidden">
+      <section className="relative pt-32 pb-14 md:pt-52 md:pb-24 overflow-hidden">
         <div className="tech-grid grid-fade absolute inset-0 opacity-40" />
         <div className="glow-orb animate-pulse-glow absolute -top-10 right-[12%] h-[420px] w-[420px]" />
         <div className="relative max-w-7xl mx-auto px-6 md:px-12">
@@ -158,7 +158,7 @@ export default function Payroll() {
       </section>
 
       {/* WHO IT'S FOR */}
-      <section className="pb-20 md:pb-28" data-testid="payroll-audience">
+      <section className="pb-14 md:pb-28" data-testid="payroll-audience">
         <div className="max-w-7xl mx-auto px-6 md:px-12 grid md:grid-cols-2 gap-10 md:gap-16">
           <Reveal>
             <p className="font-mono text-xs tracking-[0.2em] uppercase text-cyan-accent">
@@ -190,7 +190,7 @@ export default function Payroll() {
       </section>
 
       {/* WHAT IT DOES — rides the studio's pipeline rail */}
-      <section className="relative py-20 md:py-28 border-t border-white/10" data-testid="payroll-features">
+      <section className="relative py-14 md:py-28 border-t border-white/10" data-testid="payroll-features">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <Reveal>
             <SectionKicker index="[01]">What it does</SectionKicker>
@@ -212,7 +212,7 @@ export default function Payroll() {
       </section>
 
       {/* COMPLIANCE & TRUST */}
-      <section className="relative py-20 md:py-28 border-t border-white/10 bg-surface/40" data-testid="payroll-compliance">
+      <section className="relative py-14 md:py-28 border-t border-white/10 bg-surface/40" data-testid="payroll-compliance">
         <div className="max-w-7xl mx-auto px-6 md:px-12 grid md:grid-cols-12 gap-10">
           <div className="md:col-span-5">
             <Reveal>
@@ -254,7 +254,7 @@ export default function Payroll() {
       </section>
 
       {/* ROADMAP */}
-      <section className="relative py-20 md:py-28 border-t border-white/10" data-testid="payroll-roadmap">
+      <section className="relative py-14 md:py-28 border-t border-white/10" data-testid="payroll-roadmap">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <Reveal>
             <SectionKicker index="[03]">Roadmap</SectionKicker>
@@ -281,7 +281,7 @@ export default function Payroll() {
       </section>
 
       {/* FAQ — reuses the site's accordion pattern */}
-      <div className="border-t border-white/10 pt-20 md:pt-24">
+      <div className="border-t border-white/10 pt-14 md:pt-24">
         <FAQSection
           items={payrollFaq}
           kicker="Payroll, answered"
@@ -291,7 +291,7 @@ export default function Payroll() {
       </div>
 
       {/* FINAL CTA */}
-      <section className="relative py-24 md:py-36 border-t border-white/10 overflow-hidden" data-testid="payroll-cta">
+      <section className="relative py-16 md:py-36 border-t border-white/10 overflow-hidden" data-testid="payroll-cta">
         <div className="tech-grid grid-fade absolute inset-0 opacity-30" />
         <div className="glow-orb animate-pulse-glow absolute left-1/2 top-1/2 h-[460px] w-[460px] -translate-x-1/2 -translate-y-1/2" />
         <div className="relative max-w-7xl mx-auto px-6 md:px-12 text-center">

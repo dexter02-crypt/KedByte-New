@@ -63,7 +63,7 @@ export function CtaPanelProvider({ children }) {
 function Panel({ isOpen, onClose, context }) {
   const reduced = useReducedMotion();
   const panelRef = useRef(null);
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [form, setForm] = useState({ name: "", email: "", message: "", website: "" });
   const [status, setStatus] = useState("idle"); // idle | sending | success
 
   // Inert background + Esc + focus trap while open
@@ -78,9 +78,9 @@ function Panel({ isOpen, onClose, context }) {
         return;
       }
       if (e.key !== "Tab" || !panelRef.current) return;
-      const focusables = panelRef.current.querySelectorAll(
-        "button, [href], input, textarea, select"
-      );
+      const focusables = [
+        ...panelRef.current.querySelectorAll("button, [href], input, textarea, select"),
+      ].filter((el) => el.tabIndex >= 0); // excludes the honeypot
       if (!focusables.length) return;
       const first = focusables[0];
       const last = focusables[focusables.length - 1];
@@ -95,7 +95,7 @@ function Panel({ isOpen, onClose, context }) {
     document.addEventListener("keydown", onKey);
     // Focus the first field once mounted
     const t = setTimeout(
-      () => panelRef.current?.querySelector("input")?.focus(),
+      () => panelRef.current?.querySelector("[data-testid='cta-panel-name']")?.focus(),
       reduced ? 50 : 350
     );
     return () => {
@@ -123,14 +123,18 @@ function Panel({ isOpen, onClose, context }) {
         source: context.source,
       });
       setStatus("success");
-      setForm({ name: "", email: "", message: "" });
+      setForm({ name: "", email: "", message: "", website: "" });
       setTimeout(() => {
         setStatus("idle");
         onClose();
       }, 2200);
     } catch (err) {
       setStatus("idle");
-      toast.error("Something went wrong. Please try again.");
+      if (err.response?.status === 429) {
+        toast.error(err.response.data?.message || "Too many requests — please try again in a minute.");
+      } else {
+        toast.error("Something went wrong. Please try again.");
+      }
     }
   };
 
@@ -179,15 +183,26 @@ function Panel({ isOpen, onClose, context }) {
                 onClick={onClose}
                 aria-label="Close"
                 data-testid="cta-panel-close"
-                className="rounded-full border border-white/15 p-2 text-zinc-400 hover:text-white hover:border-cyan-accent/50 transition-colors"
+                className="rounded-full border border-white/15 p-3 text-zinc-400 hover:text-white hover:border-cyan-accent/50 transition-colors"
               >
-                <X className="h-4 w-4" />
+                <X className="h-5 w-5" />
               </button>
             </div>
 
             <p className="mt-4 text-zinc-400 leading-relaxed text-sm">{context.subtitle}</p>
 
             <form onSubmit={submit} className="mt-8 space-y-6" data-testid="cta-panel-form">
+              {/* Honeypot — humans never see this; bots autofill it */}
+              <input
+                type="text"
+                name="website"
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                value={form.website}
+                onChange={update("website")}
+                className="absolute left-[-9999px] top-auto h-px w-px opacity-0"
+              />
               <div>
                 <label className="font-mono text-[10px] tracking-[0.25em] uppercase text-zinc-500">
                   Your name
@@ -197,6 +212,7 @@ function Panel({ isOpen, onClose, context }) {
                   value={form.name}
                   onChange={update("name")}
                   placeholder="Jane Doe"
+                  autoComplete="name"
                   data-testid="cta-panel-name"
                 />
               </div>
@@ -209,6 +225,8 @@ function Panel({ isOpen, onClose, context }) {
                   className={inputCls}
                   value={form.email}
                   onChange={update("email")}
+                  autoComplete="email"
+                  inputMode="email"
                   placeholder="jane@company.com"
                   data-testid="cta-panel-email"
                 />
@@ -278,6 +296,13 @@ function Panel({ isOpen, onClose, context }) {
               </motion.button>
             </form>
 
+            <button
+              onClick={onClose}
+              data-testid="cta-panel-close-mobile"
+              className="mt-8 w-full rounded-full border border-white/15 py-3.5 font-mono text-xs tracking-[0.25em] uppercase text-zinc-400 hover:text-white transition-colors sm:hidden"
+            >
+              Close
+            </button>
             <p className="mt-8 text-sm text-zinc-500">
               Prefer the full brief?{" "}
               <Link

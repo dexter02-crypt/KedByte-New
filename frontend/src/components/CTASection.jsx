@@ -9,7 +9,7 @@ export default function CTASection({
 }) {
   const ctaPanel = useCtaPanel();
   return (
-    <section className="relative py-24 md:py-40 border-t border-white/10 overflow-hidden" data-testid="cta-section">
+    <section className="relative py-16 md:py-40 border-t border-white/10 overflow-hidden" data-testid="cta-section">
       <div className="tech-grid grid-fade absolute inset-0 opacity-30" />
       <div className="glow-orb animate-pulse-glow absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2" />
       <div className="relative max-w-7xl mx-auto px-6 md:px-12 text-center">
@@ -35,7 +35,7 @@ export default function CTASection({
         </Reveal>
         <Reveal delay={0.2}>
           <div className="mt-10 flex justify-center">
-            <MagneticButton onClick={ctaPanel.open} testid="cta-section-button">
+            <MagneticButton onClick={() => ctaPanel.open()} testid="cta-section-button">
               Start a project
             </MagneticButton>
           </div>

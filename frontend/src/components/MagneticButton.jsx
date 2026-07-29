@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import useMediaQuery from "@/hooks/use-media-query";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
@@ -16,10 +17,12 @@ export const MagneticButton = ({
   disabled,
 }) => {
   const ref = useRef(null);
+  const touch = useMediaQuery("(hover: none)");
   const [pos, setPos] = useState({ x: 0, y: 0 });
   const [ripples, setRipples] = useState([]);
 
   const handleMove = (e) => {
+    if (touch || !ref.current) return; // plain tap on touch; whileTap gives the active state
     const rect = ref.current.getBoundingClientRect();
     const x = (e.clientX - (rect.left + rect.width / 2)) * 0.25;
     const y = (e.clientY - (rect.top + rect.height / 2)) * 0.25;

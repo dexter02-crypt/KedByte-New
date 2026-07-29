@@ -59,7 +59,7 @@ function ProcessStep({ step, i }) {
  */
 export default function ProcessSection() {
   return (
-    <section className="relative py-24 md:py-32 border-t border-white/10 overflow-hidden" data-testid="home-process">
+    <section className="relative py-16 md:py-32 border-t border-white/10 overflow-hidden" data-testid="home-process">
       <div className="relative max-w-7xl mx-auto px-6 md:px-12">
         <Reveal>
           <SectionKicker index="[03]">How we ship</SectionKicker>
@@ -71,7 +71,7 @@ export default function ProcessSection() {
         </Reveal>
 
         <ScrollConnectedPath>
-          <motion.div className="space-y-14 md:space-y-16">
+          <motion.div className="space-y-10 md:space-y-16">
             {steps.map((s, i) => (
               <ProcessStep key={s.title} step={s} i={i} />
             ))}

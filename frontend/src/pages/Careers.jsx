@@ -54,7 +54,7 @@ export default function Careers() {
 
   return (
     <div data-testid="careers-page">
-      <section className="relative pt-40 pb-20 md:pt-52 md:pb-28 overflow-hidden">
+      <section className="relative pt-32 pb-14 md:pt-52 md:pb-28 overflow-hidden">
         <div className="tech-grid grid-fade absolute inset-0 opacity-40" />
         <div className="glow-orb animate-pulse-glow absolute -top-10 right-[18%] h-[400px] w-[400px]" />
         <div className="relative max-w-7xl mx-auto px-6 md:px-12">
@@ -84,7 +84,7 @@ export default function Careers() {
         </div>
       </section>
 
-      <section className="pb-24 md:pb-40">
+      <section className="pb-16 md:pb-40">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <div className="border-t border-white/10">
             {roles.map((r, i) => {

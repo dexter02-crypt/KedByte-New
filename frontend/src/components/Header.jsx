@@ -199,13 +199,13 @@ export default function Header() {
         </nav>
 
         <div className="hidden md:block">
-          <MagneticButton onClick={ctaPanel.open} testid="header-contact-cta">
+          <MagneticButton onClick={() => ctaPanel.open()} testid="header-contact-cta">
             Let's Talk
           </MagneticButton>
         </div>
 
         <button
-          className="md:hidden text-white"
+          className="md:hidden text-white p-2.5 -m-1"
           onClick={() => setOpen((v) => !v)}
           data-testid="mobile-menu-toggle"
           aria-label="Menu"
@@ -229,7 +229,7 @@ export default function Header() {
                   key={l.to}
                   to={l.to}
                   data-testid={`mobile-nav-${l.label.toLowerCase()}`}
-                  className="text-lg text-zinc-200 font-heading"
+                  className="block py-2.5 text-lg text-zinc-200 font-heading"
                 >
                   {l.label}
                 </NavLink>

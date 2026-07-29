@@ -27,6 +27,8 @@ function Field({
   placeholder,
   testid,
   reduced,
+  autoComplete,
+  inputMode,
 }) {
   const [focused, setFocused] = useState(false);
   const floated = focused || value.length > 0;
@@ -60,6 +62,8 @@ function Field({
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
         placeholder={floated ? placeholder : ""}
+        autoComplete={autoComplete}
+        inputMode={inputMode}
         data-testid={testid}
       />
       {/* Focus hairline draws along the bottom border */}
@@ -74,7 +78,7 @@ function Field({
 
 export default function Contact() {
   const reduced = useReducedMotion();
-  const [form, setForm] = useState({ name: "", email: "", company: "", budget: "", message: "" });
+  const [form, setForm] = useState({ name: "", email: "", company: "", budget: "", message: "", website: "" });
   const [errors, setErrors] = useState({});
   const [nonce, setNonce] = useState(0);
   const [status, setStatus] = useState("idle"); // idle | sending | success
@@ -103,13 +107,17 @@ export default function Contact() {
       const { data } = await axios.post(`${API}/contact`, form);
       setStatus("success");
       toast.success(data.message || "Message sent!");
-      setForm({ name: "", email: "", company: "", budget: "", message: "" });
+      setForm({ name: "", email: "", company: "", budget: "", message: "", website: "" });
       setTimeout(() => setStatus("idle"), 3000);
     } catch (err) {
       setStatus("idle");
       setErrors({});
       setNonce((n) => n + 1);
-      toast.error("Something went wrong. Please try again.");
+      if (err.response?.status === 429) {
+        toast.error(err.response.data?.message || "Too many requests — please try again in a minute.");
+      } else {
+        toast.error("Something went wrong. Please try again.");
+      }
     }
   };
 
@@ -118,7 +126,7 @@ export default function Contact() {
 
   return (
     <div data-testid="contact-page">
-      <section className="relative pt-40 pb-24 md:pt-52 md:pb-40 overflow-hidden">
+      <section className="relative pt-32 pb-16 md:pt-52 md:pb-40 overflow-hidden">
         <div className="tech-grid grid-fade absolute inset-0 opacity-40" />
         <div className="glow-orb animate-pulse-glow absolute top-1/4 left-[10%] h-[450px] w-[450px]" />
         <div className="relative max-w-7xl mx-auto px-6 md:px-12 grid md:grid-cols-2 gap-16 md:gap-24">
@@ -159,6 +167,17 @@ export default function Contact() {
           {/* Form */}
           <Reveal delay={0.2}>
             <form onSubmit={submit} className="space-y-6" data-testid="contact-form">
+              {/* Honeypot — humans never see this; bots autofill it */}
+              <input
+                type="text"
+                name="website"
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                value={form.website}
+                onChange={update("website")}
+                className="absolute left-[-9999px] top-auto h-px w-px opacity-0"
+              />
               <Field
                 label="Your name *"
                 value={form.name}
@@ -168,6 +187,7 @@ export default function Contact() {
                 placeholder="Jane Doe"
                 testid="contact-name-input"
                 reduced={reduced}
+                autoComplete="name"
               />
               <Field
                 label="Email *"
@@ -179,6 +199,8 @@ export default function Contact() {
                 placeholder="jane@company.com"
                 testid="contact-email-input"
                 reduced={reduced}
+                autoComplete="email"
+                inputMode="email"
               />
               <Field
                 label="Company"
@@ -189,6 +211,7 @@ export default function Contact() {
                 placeholder="Acme Inc."
                 testid="contact-company-input"
                 reduced={reduced}
+                autoComplete="organization"
               />
               <div className="relative pt-6">
                 <label className="pointer-events-none absolute left-0 top-0 font-mono text-[10px] tracking-[0.25em] uppercase text-zinc-500">

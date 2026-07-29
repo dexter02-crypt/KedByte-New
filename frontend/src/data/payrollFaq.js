@@ -10,7 +10,7 @@ export const payrollFaq = [
     a: "Upon completion of HMRC PAYE recognition. Join the early-access list and you'll be the first to know — early-access members get first access at launch.",
   },
   {
-    q: "Is it HMRC-recognised?",
+    q: "What's the HMRC recognition status?",
     a: "Recognition is in progress — our application is with HMRC. The calculation engine already passes every row of HMRC's published 2026-27 payroll test data (1,129 assertions across PAYE, NI and student loans), which is the standard the recognition process tests against.",
   },
   {

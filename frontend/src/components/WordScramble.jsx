@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { motion } from "framer-motion";
+import useMediaQuery from "@/hooks/use-media-query";
 
 /**
  * WordScramble - Interactive letter grid where users discover hidden words on hover
@@ -62,6 +63,10 @@ function generateGrid(words) {
 }
 
 export default function WordScramble({ className = "" }) {
+  // Touch judgment call: hover-tracing is meaningless on phones and the
+  // 700px grid would need horizontal panning. Below md the section shows
+  // the capabilities directly as a clean revealed chip list.
+  const mobile = useMediaQuery("(max-width: 767px)");
   const [grid] = useState(() => generateGrid(WORDS_TO_FIND));
   const [hoveredCells, setHoveredCells] = useState(new Set());
   const [foundWords, setFoundWords] = useState(new Set());
@@ -141,6 +146,29 @@ export default function WordScramble({ className = "" }) {
         )}
       </motion.div>
 
+      {mobile ? (
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="flex flex-wrap justify-center gap-2"
+          data-testid="scramble-mobile-chips"
+        >
+          {WORDS_TO_FIND.map(({ word, label }, i) => (
+            <motion.span
+              key={word}
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.06, duration: 0.4 }}
+              className="rounded-full border border-cyan-accent/40 bg-cyan-accent/5 px-4 py-2 text-sm text-cyan-accent"
+            >
+              {label}
+            </motion.span>
+          ))}
+        </motion.div>
+      ) : (
+      <>
       {/* Grid — flex justify-center actually centers the inline-flex block
           (mx-auto alone never centered it: inline-level boxes ignore auto
           margins, which left the grid hugging the left half) */}
@@ -229,6 +257,8 @@ export default function WordScramble({ className = "" }) {
           );
         })}
       </motion.div>
+      </>
+      )}
     </div>
   );
 }
