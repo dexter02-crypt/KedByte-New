@@ -1,0 +1,38 @@
+# Kedbyte — Apache config for Hostinger shared hosting (lives in public_html).
+# CRA copies this file from public/ into build/ verbatim.
+# /static/ gets its own .htaccess (1-year immutable — those files are
+# content-hashed); everything here uses re-deployable cache lifetimes.
+
+# ---- Force HTTPS ----
+RewriteEngine On
+RewriteCond %{HTTPS} !=on
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# ---- SPA fallback: any path that is not a real file/dir -> index.html ----
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ /index.html [L]
+
+# ---- Caching ----
+<IfModule mod_headers.c>
+  # The HTML shell must always revalidate so new deploys go live instantly.
+  <FilesMatch "^index\.html$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+  # Crawl/config files: short cache.
+  <FilesMatch "^(sitemap\.xml|robots\.txt|manifest\.json)$">
+    Header set Cache-Control "public, max-age=3600"
+  </FilesMatch>
+  # Images/icons are NOT content-hashed — cache one week, not forever.
+  <FilesMatch "\.(webp|png|jpg|svg|ico)$">
+    Header set Cache-Control "public, max-age=604800"
+  </FilesMatch>
+</IfModule>
+
+# ---- Basic hardening ----
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+  Header set X-Frame-Options "SAMEORIGIN"
+</IfModule>
+Options -Indexes

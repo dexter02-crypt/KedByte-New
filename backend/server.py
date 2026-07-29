@@ -144,10 +144,27 @@ async def root():
     return {"message": "Kedbyte API is live"}
 
 
+@api_router.get("/health")
+async def health():
+    return {"status": "ok"}
+
+
 # ---- Per-IP rate limiting (in-memory sliding windows) ----
 RATE_MINUTE, RATE_HOUR = 5, 20
 _hits: dict = defaultdict(deque)
 E2E_BYPASS_TOKEN = os.environ.get("E2E_BYPASS_TOKEN", "")
+
+
+def _client_ip(request: Request) -> str:
+    """Real client IP behind Render's proxy (first X-Forwarded-For hop).
+
+    uvicorn --proxy-headers rewrites request.client.host too; this keeps the
+    limiter per-client even if the flag is dropped from the start command.
+    """
+    fwd = request.headers.get("x-forwarded-for", "")
+    if fwd:
+        return fwd.split(",")[0].strip()
+    return request.client.host if request.client else "unknown"
 
 
 def _rate_limited(ip: str) -> bool:
@@ -164,7 +181,7 @@ def _rate_limited(ip: str) -> bool:
 
 @api_router.post("/contact")
 async def create_contact(payload: ContactCreate, request: Request):
-    ip = request.client.host if request.client else "unknown"
+    ip = _client_ip(request)
     bypass = bool(E2E_BYPASS_TOKEN) and request.headers.get("x-e2e-bypass") == E2E_BYPASS_TOKEN
     if not bypass and _rate_limited(ip):
         return JSONResponse(
@@ -196,8 +213,14 @@ async def create_contact(payload: ContactCreate, request: Request):
     }
 
 
+# Lead export — disabled unless ADMIN_TOKEN is configured; never public.
+ADMIN_TOKEN = os.environ.get("ADMIN_TOKEN", "")
+
+
 @api_router.get("/contacts", response_model=List[Contact], response_model_by_alias=False)
-async def list_contacts():
+async def list_contacts(request: Request):
+    if not ADMIN_TOKEN or request.headers.get("x-admin-token") != ADMIN_TOKEN:
+        raise HTTPException(status_code=404, detail="Not found")
     docs = await db.contacts.find().sort("created_at", -1).to_list(500)
     return [Contact.from_mongo(d) for d in docs]
 
@@ -207,7 +230,7 @@ app.include_router(api_router)
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
-    allow_origins=os.environ.get('CORS_ORIGINS', '*').split(','),
+    allow_origins=[o.strip() for o in os.environ.get('CORS_ORIGINS', '*').split(',') if o.strip()],
     allow_methods=["*"],
     allow_headers=["*"],
 )

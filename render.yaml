@@ -1,0 +1,33 @@
+# Render Blueprint — Kedbyte backend (FastAPI, free tier).
+# Either create the service from this file (Render → New → Blueprint) or
+# mirror these settings manually in the dashboard; DEPLOY_RUNBOOK.md Step 2
+# walks through the manual path.
+services:
+  - type: web
+    name: kedbyte-api
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    # --proxy-headers + forwarded-allow-ips: Render terminates TLS at its
+    # proxy; without these every request's client IP is the proxy's and the
+    # per-IP rate limiter would throttle all visitors together.
+    startCommand: uvicorn server:app --host 0.0.0.0 --port $PORT --proxy-headers --forwarded-allow-ips="*"
+    healthCheckPath: /api/health
+    envVars:
+      - key: MONGO_URL
+        sync: false # mongodb+srv://<user>:<password>@<cluster>.mongodb.net/?retryWrites=true&w=majority
+      - key: DB_NAME
+        value: kedbyte
+      - key: CORS_ORIGINS
+        value: https://kedbyte.com,https://www.kedbyte.com
+      - key: RESEND_API_KEY
+        sync: false # re_... from resend.com/api-keys
+      - key: SENDER_EMAIL
+        sync: false # e.g. hello@kedbyte.com once the domain is verified in Resend
+      - key: CONTACT_RECIPIENT_EMAIL
+        sync: false # where enquiry notifications are delivered
+      - key: ADMIN_TOKEN
+        sync: false # optional: enables GET /api/contacts with x-admin-token header; leave unset to keep it disabled
+      # Do NOT set E2E_BYPASS_TOKEN in production — it is a local-test-only
+      # rate-limit bypass.
