@@ -47,42 +47,53 @@ export default function ScrollConnectedPath({ children, className = "" }) {
  * (content is inset md:pl-24 = 96px; rail center x = 32px → left: -64px).
  * `active` lights it up: cyan ring/fill, glow pulse, mono index turns cyan.
  * (content inset is md:pl-28 = 112px; rail center x = 32px → left: -80px)
+ *
+ * `top` (px, relative to the block) anchors the node beside its block's
+ * kicker line; falls back to the block's vertical center. The opaque
+ * bg-ink base sits above the rail (z-10) so the line terminates at the
+ * node's edge instead of running through the digits.
  */
-export function PathNode({ index, active }) {
+export function PathNode({ index, active, top }) {
   const reduced = useReducedMotion();
   const lit = active || reduced;
 
   return (
-    <div className="absolute -left-20 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 md:block">
-      <motion.div
-        className="flex h-8 w-8 items-center justify-center rounded-full border bg-[#050505]"
-        animate={
-          lit
-            ? {
-                borderColor: "rgba(0,240,255,0.8)",
-                backgroundColor: "rgba(0,240,255,0.12)",
-                boxShadow: [
-                  "0 0 0px rgba(0,240,255,0)",
-                  "0 0 18px rgba(0,240,255,0.7)",
-                  "0 0 8px rgba(0,240,255,0.35)",
-                ],
-              }
-            : {
-                borderColor: "rgba(255,255,255,0.15)",
-                backgroundColor: "rgba(5,5,5,1)",
-                boxShadow: "0 0 0px rgba(0,240,255,0)",
-              }
-        }
-        transition={{ duration: reduced ? 0 : 0.6, ease: "easeOut" }}
-      >
-        <span
-          className={`font-mono text-[10px] transition-colors duration-500 ${
-            lit ? "text-cyan-accent" : "text-zinc-500"
-          }`}
+    <div
+      className="absolute -left-20 z-10 hidden -translate-x-1/2 -translate-y-1/2 md:block"
+      style={{ top: top ?? "50%" }}
+    >
+      {/* Opaque base — occludes the rail line behind the node */}
+      <div className="rounded-full bg-ink">
+        <motion.div
+          className="flex h-8 w-8 items-center justify-center rounded-full border"
+          animate={
+            lit
+              ? {
+                  borderColor: "rgba(0,240,255,0.8)",
+                  backgroundColor: "rgba(0,240,255,0.12)",
+                  boxShadow: [
+                    "0 0 0px rgba(0,240,255,0)",
+                    "0 0 18px rgba(0,240,255,0.7)",
+                    "0 0 8px rgba(0,240,255,0.35)",
+                  ],
+                }
+              : {
+                  borderColor: "rgba(255,255,255,0.15)",
+                  backgroundColor: "rgba(5,5,5,0)",
+                  boxShadow: "0 0 0px rgba(0,240,255,0)",
+                }
+          }
+          transition={{ duration: reduced ? 0 : 0.6, ease: "easeOut" }}
         >
-          {String(index).padStart(2, "0")}
-        </span>
-      </motion.div>
+          <span
+            className={`font-mono text-[10px] transition-colors duration-500 ${
+              lit ? "text-cyan-accent" : "text-zinc-500"
+            }`}
+          >
+            {String(index).padStart(2, "0")}
+          </span>
+        </motion.div>
+      </div>
     </div>
   );
 }

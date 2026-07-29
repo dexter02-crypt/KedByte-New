@@ -28,8 +28,9 @@ const MotionLink = motion(Link);
 const EASE = [0.22, 1, 0.36, 1];
 const hoverSpring = { type: "spring", stiffness: 350, damping: 22 };
 
-const HERO_IMG =
-  "https://images.unsplash.com/photo-1709625862266-014ef072fd93?crop=entropy&cs=srgb&fm=jpg&q=85&w=1920";
+const HERO_IMG = "/images/hero-abstract-1600.webp";
+const HERO_IMG_SET =
+  "/images/hero-abstract-800.webp 800w, /images/hero-abstract-1600.webp 1600w";
 
 const heroWords = ["WE", "BUILD"];
 const morphingWords = ["DIGITAL", "INTELLIGENT", "SCALABLE", "INNOVATIVE", "POWERFUL"];
@@ -47,21 +48,30 @@ const services = [
     title: "Custom Software & Apps",
     desc: "Web platforms, mobile apps and bespoke enterprise software — engineered to be fast, scalable and effortless to use.",
     span: "md:col-span-7",
-    img: "https://images.pexels.com/photos/12627677/pexels-photo-12627677.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    img: "/images/bento-software-800.webp",
+    imgSet: "/images/bento-software-800.webp 800w, /images/bento-software-1600.webp 1600w",
+    imgW: 1600,
+    imgH: 900,
   },
   {
     icon: BrainCircuit,
     title: "AI & Machine Learning",
     desc: "Custom models, fine-tuning and seamless AI integration built into your product.",
     span: "md:col-span-5",
-    img: "https://images.unsplash.com/photo-1709625862266-014ef072fd93?crop=entropy&cs=srgb&fm=jpg&q=85&w=1200",
+    img: "/images/hero-abstract-800.webp",
+    imgSet: "/images/hero-abstract-800.webp 800w, /images/hero-abstract-1600.webp 1600w",
+    imgW: 1600,
+    imgH: 1067,
   },
   {
     icon: Cloud,
     title: "Infrastructure, Pipelines & Automation",
     desc: "CI/CD pipelines, DevOps and workflow automation — secure, monitored and highly available by default.",
     span: "md:col-span-12",
-    img: "https://images.pexels.com/photos/1148820/pexels-photo-1148820.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    img: "/images/infra-800.webp",
+    imgSet: "/images/infra-800.webp 800w, /images/infra-1600.webp 1600w",
+    imgW: 1600,
+    imgH: 1068,
   },
 ];
 
@@ -102,7 +112,17 @@ export default function Home() {
             animate={{ scale: 1 }}
             transition={{ duration: 1.2, ease: EASE }}
           >
-            <img src={HERO_IMG} alt="Abstract technology" className="h-[130%] w-full object-cover" />
+            <img
+              src={HERO_IMG}
+              srcSet={HERO_IMG_SET}
+              sizes="100vw"
+              width={1600}
+              height={1067}
+              loading="eager"
+              fetchPriority="high"
+              alt="Abstract technology"
+              className="h-[130%] w-full object-cover"
+            />
           </motion.div>
         </motion.div>
         <motion.div className="absolute inset-0 bg-ink" style={{ opacity: overlayOpacity }} />
@@ -436,6 +456,11 @@ export default function Home() {
                           {/* Slow perpetual Ken Burns zoom, paused off-screen */}
                           <motion.img
                             src={s.img}
+                            srcSet={s.imgSet}
+                            sizes="(min-width: 768px) 60vw, 100vw"
+                            width={s.imgW}
+                            height={s.imgH}
+                            loading="lazy"
                             alt=""
                             className="h-full w-full object-cover"
                             initial={false}

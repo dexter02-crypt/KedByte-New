@@ -21,8 +21,9 @@ const values = [
 
 const morphingValues = ["Innovation", "Excellence", "Integrity", "Impact"];
 
-const OFFICE_IMG =
-  "https://images.pexels.com/photos/6804068/pexels-photo-6804068.jpeg?auto=compress&cs=tinysrgb&w=1600";
+const OFFICE_IMG = "/images/studio-office-1600.webp";
+const OFFICE_IMG_SET =
+  "/images/studio-office-800.webp 800w, /images/studio-office-1600.webp 1600w";
 
 export default function About() {
   return (
@@ -58,6 +59,11 @@ export default function About() {
             <div className="relative overflow-hidden rounded-3xl border border-white/10 aspect-[16/9]">
               <motion.img
                 src={OFFICE_IMG}
+                srcSet={OFFICE_IMG_SET}
+                sizes="(min-width: 1280px) 1152px, 92vw"
+                width={1600}
+                height={1067}
+                loading="lazy"
                 alt="Kedbyte studio"
                 className="h-full w-full object-cover"
                 initial={{ scale: 1.15 }}

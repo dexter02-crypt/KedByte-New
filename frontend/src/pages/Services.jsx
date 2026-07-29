@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { motion, useInView, useReducedMotion } from "framer-motion";
 import { Code2, Cloud, BrainCircuit, Palette, Layers, Workflow, Check } from "lucide-react";
 import Reveal from "@/components/Reveal";
@@ -19,7 +19,7 @@ const services = [
     title: "Custom Software & Application Development",
     desc: "We design and engineer products end-to-end — high-performance web apps, polished native and cross-platform mobile apps, and bespoke enterprise software that automates operations and removes manual bottlenecks.",
     points: ["Responsive web applications", "Native & cross-platform mobile", "Bespoke enterprise software", "Workflow-driven platforms"],
-    img: "https://images.pexels.com/photos/12627677/pexels-photo-12627677.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    img: "/images/bento-software-800.webp", imgSet: "/images/bento-software-800.webp 800w, /images/bento-software-1600.webp 1600w", imgW: 1600, imgH: 900,
   },
   {
     icon: Layers,
@@ -27,7 +27,7 @@ const services = [
     title: "Frontend & Backend Engineering",
     desc: "Production-ready interfaces built to an ultra-minimal, futuristic design system, backed by secure, high-performance APIs and scalable server-side infrastructure capable of heavy, real-time workloads.",
     points: ["Pixel-perfect frontend", "Secure high-performance APIs", "Scalable backend architecture", "Real-time systems"],
-    img: "https://images.unsplash.com/photo-1518773553398-650c184e0bb3?crop=entropy&cs=srgb&fm=jpg&q=85&w=1200",
+    img: "/images/svc-backend-800.webp", imgSet: "/images/svc-backend-800.webp 800w, /images/svc-backend-1600.webp 1600w", imgW: 1600, imgH: 1067,
   },
   {
     icon: BrainCircuit,
@@ -35,7 +35,7 @@ const services = [
     title: "Artificial Intelligence & Machine Learning",
     desc: "From custom AI architectures to rigorous training and fine-tuning for accuracy and low latency, we embed intelligent systems seamlessly into your software and workflows.",
     points: ["Custom AI models", "Training & fine-tuning", "Low-latency inference", "Seamless AI integration"],
-    img: "https://images.pexels.com/photos/14314636/pexels-photo-14314636.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    img: "/images/svc-aiml-800.webp", imgSet: "/images/svc-aiml-800.webp 800w, /images/svc-aiml-1600.webp 1600w", imgW: 1600, imgH: 1067,
   },
   {
     icon: Workflow,
@@ -43,7 +43,7 @@ const services = [
     title: "Infrastructure, Pipelines & Automation",
     desc: "Robust CI/CD pipelines for rapid, error-free releases, workflow automation that removes repetitive toil, and scalable, monitored, highly available cloud architectures.",
     points: ["Automated CI/CD pipelines", "Workflow automation", "DevOps & cloud infrastructure", "Monitoring & high availability"],
-    img: "https://images.pexels.com/photos/1148820/pexels-photo-1148820.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    img: "/images/infra-800.webp", imgSet: "/images/infra-800.webp 800w, /images/infra-1600.webp 1600w", imgW: 1600, imgH: 1068,
   },
   {
     icon: Palette,
@@ -51,17 +51,41 @@ const services = [
     title: "UI/UX Design",
     desc: "End-to-end user journey mapping, wireframing and prototyping paired with dark-themed, futuristic, ultra-minimal interfaces that prioritise focus and aesthetic precision.",
     points: ["Product design & journeys", "Wireframing & prototyping", "Ultra-minimal UI systems", "Dark, futuristic aesthetics"],
-    img: "https://images.pexels.com/photos/6804068/pexels-photo-6804068.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    img: "/images/studio-office-800.webp", imgSet: "/images/studio-office-800.webp 800w, /images/studio-office-1600.webp 1600w", imgW: 1600, imgH: 1067,
   },
 ];
 
 function ServiceBlock({ s, i }) {
   const ref = useRef(null);
+  const kickerRef = useRef(null);
   const reduced = useReducedMotion();
   // Drives the pipeline node light-up and the active-heading lift.
   // amount 0.2: the node lights as the block meaningfully enters, not
   // after half of a tall block is visible.
   const active = useInView(ref, { amount: 0.2 });
+
+  // Anchor the rail node beside this block's kicker line ("01 — Build"),
+  // not the block's vertical center. Uses the offsetTop chain rather than
+  // getBoundingClientRect so the entrance reveal's transient y-transform
+  // doesn't skew the measurement; local images carry width/height so the
+  // layout is stable from first paint.
+  const [nodeTop, setNodeTop] = useState(null);
+  useLayoutEffect(() => {
+    const measure = () => {
+      let el = kickerRef.current;
+      const block = ref.current;
+      if (!el || !block) return;
+      let top = el.offsetHeight / 2;
+      while (el && el !== block) {
+        top += el.offsetTop;
+        el = el.offsetParent;
+      }
+      setNodeTop(top);
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
 
   return (
     <div
@@ -72,7 +96,7 @@ function ServiceBlock({ s, i }) {
       }`}
       data-testid={`service-block-${i}`}
     >
-      <PathNode index={i + 1} active={active} />
+      <PathNode index={i + 1} active={active} top={nodeTop} />
 
       <Reveal variant="clip" className="md:[direction:ltr]">
         <motion.div
@@ -89,6 +113,11 @@ function ServiceBlock({ s, i }) {
           >
             <motion.img
               src={s.img}
+              srcSet={s.imgSet}
+              sizes="(min-width: 768px) 45vw, 100vw"
+              width={s.imgW}
+              height={s.imgH}
+              loading="lazy"
               alt={s.title}
               className="h-full w-full object-cover"
               initial={{ scale: 1.15 }}
@@ -104,7 +133,7 @@ function ServiceBlock({ s, i }) {
       </Reveal>
 
       <Reveal delay={0.08} className="md:[direction:ltr]">
-        <p className="font-mono text-xs tracking-[0.2em] uppercase text-zinc-500">{s.tag}</p>
+        <p ref={kickerRef} className="font-mono text-xs tracking-[0.2em] uppercase text-zinc-500">{s.tag}</p>
         <div className="mt-5 flex items-center gap-4">
           <motion.div
             whileHover={{ rotate: [0, -10, 10, 0], scale: 1.1 }}
@@ -201,11 +230,12 @@ export default function Services() {
         </div>
       </section>
 
-      {/* SERVICE BLOCKS — connected pipeline */}
-      <section className="pb-24 md:pb-40">
+      {/* SERVICE BLOCKS — connected pipeline. space-y-28 (7rem): blocks
+          breathe but the next block is visible as you finish the previous */}
+      <section className="pb-20 md:pb-28">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <ScrollConnectedPath>
-            <div className="space-y-24 md:space-y-40">
+            <div className="space-y-20 md:space-y-28">
               {services.map((s, i) => (
                 <ServiceBlock key={s.title} s={s} i={i} />
               ))}
