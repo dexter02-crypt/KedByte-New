@@ -2,56 +2,60 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 
 /**
- * TextScramble - Text that scrambles and resolves letter by letter
- * Perfect for dramatic reveals and cyberpunk aesthetics
+ * TextScramble - text that decodes left-to-right from scrambled glyphs.
+ *
+ * Layout-shift-proof: the FINAL text is rendered invisibly as the layout
+ * element (locking the block's size and line-breaks from first paint) and
+ * the scrambling text is absolutely positioned on top of it — the random
+ * glyphs can never re-wrap the heading or move content below it.
+ *
+ * Decode is time-based (`duration` ms, default 700): multiple characters
+ * resolve per frame, left to right, with a small random look-ahead.
  */
 
-const chars = "!<>-_\\/[]{}—=+*^?#________";
+const chars = "!<>-_\\/[]{}—=+*^?#";
 
 export default function TextScramble({
   text,
   className = "",
-  speed = 50,
+  duration = 700,
   trigger = "view" // "view", "hover", "always"
 }) {
   const [displayText, setDisplayText] = useState(text);
-  // Refs (not state) so `scramble` stays referentially stable and the
-  // "always" effect doesn't retrigger itself every time a run finishes.
-  const scramblingRef = useRef(false);
-  const intervalRef = useRef(null);
+  const activeRef = useRef(false);
+  const rafRef = useRef(null);
 
   const scramble = useCallback(() => {
-    if (scramblingRef.current) return;
-    scramblingRef.current = true;
+    if (activeRef.current) return;
+    activeRef.current = true;
+    const start = performance.now();
 
-    let iteration = 0;
-    intervalRef.current = setInterval(() => {
-      setDisplayText(
-        text
-          .split("")
-          .map((letter, index) => {
-            if (index < iteration) {
-              return text[index];
-            }
-            return chars[Math.floor(Math.random() * chars.length)];
-          })
-          .join("")
-      );
-
-      if (iteration >= text.length) {
-        clearInterval(intervalRef.current);
-        scramblingRef.current = false;
+    const step = (now) => {
+      const p = Math.min((now - start) / duration, 1);
+      if (p === 1) {
+        setDisplayText(text);
+        activeRef.current = false;
+        return;
       }
-
-      iteration += 1 / 3;
-    }, speed);
-  }, [text, speed]);
+      const solved = Math.floor(text.length * p);
+      let out = "";
+      for (let i = 0; i < text.length; i++) {
+        const ch = text[i];
+        if (i < solved || ch === " ") out += ch;
+        else if (i < solved + 3 && Math.random() < 0.4) out += ch;
+        else out += chars[(Math.random() * chars.length) | 0];
+      }
+      setDisplayText(out);
+      rafRef.current = requestAnimationFrame(step);
+    };
+    rafRef.current = requestAnimationFrame(step);
+  }, [text, duration]);
 
   useEffect(() => {
     if (trigger === "always") {
       scramble();
     }
-    return () => clearInterval(intervalRef.current);
+    return () => cancelAnimationFrame(rafRef.current);
   }, [trigger, scramble]);
 
   const handleViewport = () => {
@@ -62,12 +66,21 @@ export default function TextScramble({
 
   return (
     <motion.span
-      className={className}
+      className={`relative inline-block ${className}`}
+      aria-label={text}
+      role="text"
       onViewportEnter={trigger === "view" ? handleViewport : undefined}
       onMouseEnter={trigger === "hover" ? scramble : undefined}
       viewport={{ once: true, margin: "-40px" }}
     >
-      {displayText}
+      {/* Final text owns the layout — invisible but fully measured */}
+      <span className="invisible" aria-hidden>
+        {text}
+      </span>
+      {/* Scrambling overlay — same box, cannot affect layout */}
+      <span className="absolute inset-0" aria-hidden>
+        {displayText}
+      </span>
     </motion.span>
   );
 }

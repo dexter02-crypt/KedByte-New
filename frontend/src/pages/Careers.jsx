@@ -102,6 +102,8 @@ export default function Careers() {
                     className="w-full flex items-start md:items-center justify-between gap-6 py-8 text-left"
                     data-testid={`role-toggle-${i}`}
                     data-cursor-text={isOpen ? "CLOSE" : "OPEN"}
+                    aria-expanded={isOpen}
+                    aria-controls={`role-panel-${i}`}
                     initial="rest"
                     animate="rest"
                     whileHover="hover"
@@ -155,6 +157,8 @@ export default function Careers() {
                   <AnimatePresence initial={false}>
                     {isOpen && (
                       <motion.div
+                        id={`role-panel-${i}`}
+                        role="region"
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: "auto", opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}

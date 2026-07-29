@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 import {
@@ -58,7 +58,10 @@ export default function Footer() {
   const footRef = useRef(null);
   const spacerRef = useRef(null);
 
-  useEffect(() => {
+  // useLayoutEffect: the flow→fixed swap must happen before first paint,
+  // otherwise the footer visibly jumps from document-end to viewport-bottom
+  // and registers a layout shift.
+  useLayoutEffect(() => {
     const measure = () => {
       const h = footRef.current?.offsetHeight || 0;
       setFooterH(h);
@@ -142,15 +145,17 @@ export default function Footer() {
         </motion.div>
       </motion.div>
 
-      {/* Big wordmark — letter-spacing settles slowly as the footer reveals */}
+      {/* Big wordmark — settles via scaleX (transform-only; the previous
+          letter-spacing animation was a layout-shift source) */}
       <div className="mt-16 overflow-hidden" aria-hidden>
         <motion.div
-          className="text-center font-heading font-black uppercase leading-none text-[13vw] md:text-[10vw] text-white/[0.06] select-none whitespace-nowrap"
-          initial={fixedMode ? { letterSpacing: "0.35em", opacity: 0 } : false}
+          className="text-center font-heading font-black uppercase leading-none text-[13vw] md:text-[10vw] text-white/[0.06] select-none whitespace-nowrap tracking-[0.02em]"
+          style={{ willChange: "transform" }}
+          initial={fixedMode ? { scaleX: 1.18, opacity: 0 } : false}
           animate={
             !fixedMode || revealed
-              ? { letterSpacing: "0.02em", opacity: 1 }
-              : { letterSpacing: "0.35em", opacity: 0 }
+              ? { scaleX: 1, opacity: 1 }
+              : { scaleX: 1.18, opacity: 0 }
           }
           transition={{ duration: 1.6, ease: [0.22, 1, 0.36, 1] }}
         >

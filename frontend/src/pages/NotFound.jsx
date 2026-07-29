@@ -25,7 +25,7 @@ export default function NotFound() {
           animate={{ opacity: 1 }}
           className="font-mono text-xs tracking-[0.3em] uppercase text-cyan-accent mb-6"
         >
-          <TextScramble text="Error · Signal lost" trigger="always" speed={40} />
+          <TextScramble text="Error · Signal lost" trigger="always" duration={900} />
         </motion.p>
 
         <motion.h1

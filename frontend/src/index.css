@@ -23,6 +23,14 @@ body {
   font-family: 'Satoshi', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Consistent cyan focus ring for keyboard navigation */
+:focus-visible {
+  outline: 2px solid rgba(0, 240, 255, 0.75);
+  outline-offset: 3px;
+  border-radius: 2px;
 }
 
 code {

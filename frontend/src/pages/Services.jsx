@@ -147,7 +147,7 @@ function ServiceBlock({ s, i }) {
             animate={{ opacity: active || reduced ? 1 : 0.85 }}
             transition={{ duration: 0.5 }}
           >
-            <TextScramble text={s.title} trigger="view" speed={30} />
+            <TextScramble text={s.title} trigger="view" duration={550} />
           </motion.h2>
         </div>
         <p className="mt-5 text-zinc-400 text-lg leading-relaxed">{s.desc}</p>
