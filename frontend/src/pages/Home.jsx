@@ -22,6 +22,10 @@ import FloatingParticles from "@/components/FloatingParticles";
 import WordScramble from "@/components/WordScramble";
 import MorphingText from "@/components/MorphingText";
 import WaveText from "@/components/WaveText";
+import SelectedWork from "@/components/SelectedWork";
+import ProcessSection from "@/components/ProcessSection";
+import { useCtaPanel } from "@/components/StartProjectPanel";
+import { metrics } from "@/data/metrics";
 import { Link } from "react-router-dom";
 
 const MotionLink = motion(Link);
@@ -35,12 +39,7 @@ const HERO_IMG_SET =
 const heroWords = ["WE", "BUILD"];
 const morphingWords = ["DIGITAL", "INTELLIGENT", "SCALABLE", "INNOVATIVE", "POWERFUL"];
 
-const stats = [
-  { to: 99.9, suffix: "%", decimals: 1, label: "Deployment reliability" },
-  { to: 5, suffix: "+", decimals: 0, label: "Core capabilities" },
-  { to: 2026, suffix: "", decimals: 0, label: "Founded in Gujarat" },
-  { to: 24, suffix: "/7", decimals: 0, label: "Pipeline monitoring" },
-];
+// Proof strip numbers live in src/data/metrics.js (see VERIFY notes there)
 
 const services = [
   {
@@ -78,6 +77,7 @@ const services = [
 export default function Home() {
   const heroRef = useRef(null);
   const reduced = useReducedMotion();
+  const ctaPanel = useCtaPanel();
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ["start start", "end start"],
@@ -344,7 +344,7 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.18, duration: 0.6, ease: EASE }}
             >
-              <MagneticButton to="/contact" testid="home-hero-cta">
+              <MagneticButton onClick={ctaPanel.open} testid="home-hero-cta">
                 Start a project
               </MagneticButton>
             </motion.div>
@@ -509,7 +509,13 @@ export default function Home() {
         </div>
       </section>
 
-      {/* STATS */}
+      {/* SELECTED WORK */}
+      <SelectedWork />
+
+      {/* PROCESS */}
+      <ProcessSection />
+
+      {/* PROOF STRIP (data: src/data/metrics.js) */}
       <section className="relative py-24 border-y border-white/10 bg-surface/40 overflow-hidden" data-testid="home-stats">
         <div className="tech-grid grid-fade absolute inset-0 opacity-20" />
         
@@ -527,7 +533,7 @@ export default function Home() {
         />
         
         <StaggerGroup className="relative max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-2 md:grid-cols-4 gap-12">
-          {stats.map((s) => (
+          {metrics.map((s) => (
             <StaggerItem key={s.label}>
               <motion.div
                 whileHover={{ 
@@ -545,7 +551,7 @@ export default function Home() {
                     transition={{ duration: 0.8, ease: EASE, delay: 0.15 }}
                   />
                   <div className="font-heading font-black tracking-tighter text-5xl md:text-6xl text-white">
-                    <Counter to={s.to} suffix={s.suffix} decimals={s.decimals} />
+                    <Counter to={s.to} prefix={s.prefix} suffix={s.suffix} decimals={s.decimals} />
                   </div>
                   <motion.p 
                     className="mt-3 font-mono text-xs tracking-wider uppercase text-zinc-500 group-hover:text-cyan-accent transition-colors"

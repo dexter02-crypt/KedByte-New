@@ -1,11 +1,13 @@
 import Reveal from "@/components/Reveal";
 import MagneticButton from "@/components/MagneticButton";
+import { useCtaPanel } from "@/components/StartProjectPanel";
 import { motion } from "framer-motion";
 
 export default function CTASection({
   eyebrow = "Ready when you are",
   title = "Let's build something that lasts.",
 }) {
+  const ctaPanel = useCtaPanel();
   return (
     <section className="relative py-24 md:py-40 border-t border-white/10 overflow-hidden" data-testid="cta-section">
       <div className="tech-grid grid-fade absolute inset-0 opacity-30" />
@@ -33,7 +35,7 @@ export default function CTASection({
         </Reveal>
         <Reveal delay={0.2}>
           <div className="mt-10 flex justify-center">
-            <MagneticButton to="/contact" testid="cta-section-button">
+            <MagneticButton onClick={ctaPanel.open} testid="cta-section-button">
               Start a project
             </MagneticButton>
           </div>

@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { Check, Loader2, ArrowUpRight, Mail, MapPin } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import SectionKicker from "@/components/SectionKicker";
+import FAQSection from "@/components/FAQSection";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
@@ -289,6 +290,8 @@ export default function Contact() {
           />
         </div>
       </section>
+
+      <FAQSection />
     </div>
   );
 }

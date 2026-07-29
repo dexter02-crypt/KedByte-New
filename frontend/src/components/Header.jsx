@@ -13,6 +13,7 @@ import {
 import { Menu, X } from "lucide-react";
 import MagneticButton from "@/components/MagneticButton";
 import KLogo from "@/components/KLogo";
+import { useCtaPanel } from "@/components/StartProjectPanel";
 
 const links = [
   { to: "/", label: "Home" },
@@ -28,6 +29,7 @@ export default function Header() {
   const location = useLocation();
   const logoRef = useRef(null);
   const reducedMotion = useReducedMotion();
+  const ctaPanel = useCtaPanel();
 
   // Mouse position for 3D logo tilt
   const mouseX = useMotionValue(0);
@@ -196,7 +198,7 @@ export default function Header() {
         </nav>
 
         <div className="hidden md:block">
-          <MagneticButton to="/contact" testid="header-contact-cta">
+          <MagneticButton onClick={ctaPanel.open} testid="header-contact-cta">
             Let's Talk
           </MagneticButton>
         </div>

@@ -7,6 +7,7 @@ import Cursor from "@/components/Cursor";
 import ScrollProgress from "@/components/ScrollProgress";
 import PageScrollIndicator from "@/components/PageScrollIndicator";
 import RouteCurtain from "@/components/RouteCurtain";
+import { CtaPanelProvider } from "@/components/StartProjectPanel";
 import SmoothScroll, { useLenis } from "@/components/SmoothScroll";
 import Preloader from "@/components/Preloader";
 import Layout from "@/components/Layout";
@@ -88,9 +89,11 @@ function App() {
             <PageScrollIndicator />
             <Toaster position="bottom-right" />
             <BrowserRouter>
-              <ScrollToTop />
-              <RouteCurtain />
-              <AnimatedRoutes />
+              <CtaPanelProvider>
+                <ScrollToTop />
+                <RouteCurtain />
+                <AnimatedRoutes />
+              </CtaPanelProvider>
             </BrowserRouter>
           </SmoothScroll>
         )}
