@@ -32,7 +32,7 @@ export default function NotFound() {
           initial={{ y: "20%", opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="font-heading font-black tracking-tighter text-white leading-none text-[28vw] md:text-[18rem]"
+          className="font-heading font-black tracking-tight text-white leading-none text-[28vw] md:text-[18rem]"
         >
           <GlitchText glitchOnHover>
             4<span className="text-cyan-accent text-glow">0</span>4

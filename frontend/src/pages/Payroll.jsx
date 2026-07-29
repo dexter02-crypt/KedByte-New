@@ -88,7 +88,7 @@ export default function Payroll() {
           {/* Stacked mask-reveal lines (same pattern as the Home hero) so the
               wordmark never crowds one line; the cyan word runs at
               tracking-tight — tighter fuses letterforms at font-black */}
-          <h1 className="mt-6 font-heading font-black uppercase tracking-tighter text-5xl md:text-7xl lg:text-8xl text-white leading-[0.9] max-w-5xl">
+          <h1 className="mt-6 font-heading font-black uppercase tracking-tight text-5xl md:text-7xl lg:text-8xl text-white leading-[0.9] max-w-5xl">
             <span className="block overflow-hidden">
               <motion.span
                 className="inline-block"
@@ -101,7 +101,7 @@ export default function Payroll() {
             </span>
             <span className="block overflow-hidden">
               <motion.span
-                className="inline-block tracking-tight text-cyan-accent text-glow"
+                className="inline-block text-cyan-accent text-glow"
                 initial={{ y: "110%" }}
                 animate={{ y: 0 }}
                 transition={{ delay: 0.22, duration: 0.8, ease: EASE }}

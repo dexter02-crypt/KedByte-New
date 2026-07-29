@@ -190,7 +190,7 @@ export default function Services() {
             <SectionKicker index="[ 02 ]">Services</SectionKicker>
           </Reveal>
           <Reveal delay={0.1} variant="mask">
-            <h1 className="mt-6 font-heading font-black uppercase tracking-tighter text-5xl md:text-7xl lg:text-8xl text-white leading-[0.9] max-w-5xl">
+            <h1 className="mt-6 font-heading font-black uppercase tracking-tight text-5xl md:text-7xl lg:text-8xl text-white leading-[0.9] max-w-5xl">
               <WaveText text="End-to-end engineering, one partner." />
             </h1>
           </Reveal>

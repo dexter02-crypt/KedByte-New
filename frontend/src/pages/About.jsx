@@ -36,7 +36,7 @@ export default function About() {
             <SectionKicker index="[ 03 ]">About Kedbyte</SectionKicker>
           </Reveal>
           <Reveal delay={0.1} variant="mask">
-            <h1 className="mt-6 font-heading font-black uppercase tracking-tighter text-5xl md:text-7xl lg:text-[7rem] text-white leading-[0.88] max-w-5xl">
+            <h1 className="mt-6 font-heading font-black uppercase tracking-tight text-5xl md:text-7xl lg:text-[7rem] text-white leading-[0.88] max-w-5xl">
               A studio for the <GlitchText className="text-cyan-accent text-glow" glitchOnHover>curious</GlitchText> & the bold.
             </h1>
           </Reveal>

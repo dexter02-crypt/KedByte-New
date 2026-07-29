@@ -128,7 +128,7 @@ export default function Contact() {
               <SectionKicker index="[ 05 ]">Contact</SectionKicker>
             </Reveal>
             <Reveal delay={0.1} variant="mask">
-              <h1 className="mt-6 font-heading font-black uppercase tracking-tighter text-6xl md:text-8xl text-white leading-[0.85]">
+              <h1 className="mt-6 font-heading font-black uppercase tracking-tight text-6xl md:text-8xl text-white leading-[0.85]">
                 Let's
                 <br />
                 <span className="text-cyan-accent text-glow">talk.</span>

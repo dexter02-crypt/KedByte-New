@@ -275,7 +275,7 @@ export default function Home() {
           </motion.p>
 
           {/* Headline lines mask-reveal sequentially from t=0.5s */}
-          <h1 className="font-heading font-black uppercase tracking-tighter text-white leading-[0.85] text-6xl sm:text-7xl md:text-8xl lg:text-[8.5rem]">
+          <h1 className="font-heading font-black uppercase tracking-tight text-white leading-[0.85] text-6xl sm:text-7xl md:text-8xl lg:text-[8.5rem]">
             {heroWords.map((w, i) => (
               <span key={w} className="block overflow-hidden">
                 <motion.span
@@ -293,7 +293,7 @@ export default function Home() {
                   size the halo sums across near-touching capitals and reads
                   as a band; the pure fill carries the brand */}
               <motion.span
-                className="inline-block tracking-tight text-cyan-accent"
+                className="inline-block text-cyan-accent"
                 initial={{ y: "110%", rotateX: -90 }}
                 animate={{ y: 0, rotateX: 0 }}
                 transition={{

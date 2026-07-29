@@ -103,7 +103,7 @@ export default function Preloader({ onReveal, onComplete }) {
         animate={{ opacity: exiting ? 0 : 1 }}
         transition={{ duration: 0.25 }}
       >
-        <h1 className="font-heading font-black uppercase tracking-tighter text-5xl md:text-7xl leading-none">
+        <h1 className="font-heading font-black uppercase tracking-tight text-5xl md:text-7xl leading-none">
           <SplitText text="KED" className="text-white" delay={0.15} charDelay={0.06} />
           <SplitText text="BYTE" className="text-cyan-accent text-glow" delay={0.33} charDelay={0.06} />
         </h1>
