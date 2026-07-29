@@ -42,7 +42,7 @@ module.exports = defineConfig({
     {
       name: "pixel-7",
       use: { ...devices["Pixel 7"] },
-      testMatch: /smoke|mobile-audit|perf/,
+      testMatch: /smoke|mobile-audit|perf|work-images/,
     },
   ],
 });

@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import { motion, useReducedMotion } from "framer-motion";
+import useMediaQuery from "@/hooks/use-media-query";
 
 const EASE = [0.22, 1, 0.36, 1];
 // -40px: content greets you as you scroll — -80px made reveals feel late
@@ -27,6 +28,7 @@ export const Reveal = ({
   ...rest
 }) => {
   const reduced = useReducedMotion();
+  const touch = useMediaQuery("(hover: none)");
   const innerRef = useRef(null);
   const clearWillChange = () => {
     if (innerRef.current) innerRef.current.style.willChange = "auto";
@@ -78,6 +80,24 @@ export const Reveal = ({
   }
 
   if (variant === "clip") {
+    // Real mobile compositors (iOS Safari, Android Chrome) unreliably paint
+    // animated clip-path over composited children — images can load yet stay
+    // invisible. On touch devices use a transform/opacity reveal instead:
+    // same entrance feel, bulletproof rendering path.
+    if (touch) {
+      return (
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={VIEWPORT}
+          transition={{ duration: duration ?? 0.6, delay, ease: EASE }}
+          className={className}
+          {...rest}
+        >
+          {children}
+        </motion.div>
+      );
+    }
     return (
       <motion.div
         ref={innerRef}
