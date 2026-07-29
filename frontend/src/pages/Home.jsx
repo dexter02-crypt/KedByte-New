@@ -289,8 +289,11 @@ export default function Home() {
               </span>
             ))}
             <span className="block overflow-hidden">
+              {/* Flat #00F0FF fill, tracking-tight: no glow class — at this
+                  size the halo sums across near-touching capitals and reads
+                  as a band; the pure fill carries the brand */}
               <motion.span
-                className="inline-block text-glow text-cyan-accent"
+                className="inline-block tracking-tight text-cyan-accent"
                 initial={{ y: "110%", rotateX: -90 }}
                 animate={{ y: 0, rotateX: 0 }}
                 transition={{
