@@ -1,9 +1,9 @@
 # Kedbyte — Company Website & API
 
 The marketing site and contact/lead API for **Kedbyte Private Limited**, an
-ultra-minimal software studio (custom software, applied AI/ML, cloud
-infrastructure & automation) in Vadodara, India — plus the product page for
-**Kedbyte Payroll** (in development).
+ultra-minimal software studio (custom software, applied AI/ML, blockchain &
+Web3, cloud infrastructure & automation) in Vadodara, India — plus the
+product page for **Kedbyte Payroll** (in development).
 
 **Live domain:** https://kedbyte.com
 

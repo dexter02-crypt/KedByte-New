@@ -102,8 +102,9 @@ export default function About() {
                 Founded in 2026 and headquartered in Vadodara, Gujarat, we're a
                 full-spectrum technology studio operating at the intersection of
                 advanced engineering and ultra-minimal design. From web and mobile
-                apps to backend systems, AI models and automated pipelines, we turn
-                complex requirements into fast, reliable and visually striking software.
+                apps to backend systems, AI models, smart contracts and automated
+                pipelines, we turn complex requirements into fast, reliable and
+                visually striking software.
               </p>
             </Reveal>
             <Reveal delay={0.2}>

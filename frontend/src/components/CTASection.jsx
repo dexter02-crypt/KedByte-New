@@ -1,14 +1,18 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Reveal from "@/components/Reveal";
 import MagneticButton from "@/components/MagneticButton";
 import { useCtaPanel } from "@/components/StartProjectPanel";
 import { motion } from "framer-motion";
+
+const sublineLink =
+  "text-zinc-300 underline decoration-white/20 underline-offset-4 hover:text-cyan-accent transition-colors";
 
 export default function CTASection({
   eyebrow = "Ready when you are",
   title = "Let's build something that lasts.",
 }) {
   const ctaPanel = useCtaPanel();
+  const { pathname } = useLocation();
   return (
     <section className="relative py-16 md:py-40 border-t border-white/10 overflow-hidden" data-testid="cta-section">
       <div className="tech-grid grid-fade absolute inset-0 opacity-30" />
@@ -42,19 +46,21 @@ export default function CTASection({
           </div>
         </Reveal>
         <Reveal delay={0.3}>
+          {/* No link may point at the page it sits on: on /services the
+              services link becomes the payroll product instead. */}
           <p className="mt-8 text-sm text-zinc-400">
-            Explore our{" "}
-            <Link
-              to="/services"
-              className="text-zinc-300 underline decoration-white/20 underline-offset-4 hover:text-cyan-accent transition-colors"
-            >
-              software development services
-            </Link>{" "}
+            Explore{" "}
+            {pathname === "/services" ? (
+              <Link to="/payroll" className={sublineLink}>
+                Kedbyte Payroll
+              </Link>
+            ) : (
+              <Link to="/services" className={sublineLink}>
+                our software development services
+              </Link>
+            )}{" "}
             or{" "}
-            <Link
-              to="/contact"
-              className="text-zinc-300 underline decoration-white/20 underline-offset-4 hover:text-cyan-accent transition-colors"
-            >
+            <Link to="/contact" className={sublineLink}>
               contact Kedbyte
             </Link>
             .

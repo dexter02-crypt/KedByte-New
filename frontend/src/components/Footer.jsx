@@ -27,6 +27,7 @@ const cols = [
       { to: "/services", label: "Custom Software & Apps" },
       { to: "/services", label: "Frontend & Backend" },
       { to: "/services", label: "AI & Machine Learning" },
+      { to: "/services", label: "Blockchain & Web3" },
       { to: "/services", label: "DevOps & Automation" },
       { to: "/services", label: "UI/UX Design" },
     ],
