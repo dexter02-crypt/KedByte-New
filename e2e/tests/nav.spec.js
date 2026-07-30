@@ -2,12 +2,12 @@ const { test, expect } = require("@playwright/test");
 const { collectConsoleErrors, gotoAndSettle } = require("../helpers");
 
 const ROUTES = [
-  ["/", /WE/i, "Kedbyte — Software · AI · Automation"],
-  ["/services", /END-TO-END/i, "Kedbyte — Services"],
-  ["/payroll", /Kedbyte/i, "Kedbyte Payroll — UK payroll software for bureaux & accountants"],
-  ["/about", /A STUDIO/i, "Kedbyte — About"],
-  ["/careers", /BUILD THE FUTURE/i, "Kedbyte — Careers"],
-  ["/contact", /LET'S/i, "Kedbyte — Contact"],
+  ["/", /WE/i, "Custom Software Development Company in India — Kedbyte"],
+  ["/services", /END-TO-END/i, "Custom Software, AI & DevOps Automation Services — Kedbyte"],
+  ["/payroll", /Kedbyte/i, "UK Payroll Software for Bureaux & Accountants — Kedbyte"],
+  ["/about", /A STUDIO/i, "About Kedbyte — Software Studio in Vadodara, Gujarat"],
+  ["/careers", /BUILD THE FUTURE/i, "Careers at Kedbyte — Engineering, Design & AI Roles"],
+  ["/contact", /LET'S/i, "Contact Kedbyte — Start a Software Project"],
   ["/definitely-missing", /404/, "Kedbyte — Page not found"],
 ];
 

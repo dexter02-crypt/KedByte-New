@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Reveal from "@/components/Reveal";
 import MagneticButton from "@/components/MagneticButton";
 import { useCtaPanel } from "@/components/StartProjectPanel";
@@ -39,6 +40,25 @@ export default function CTASection({
               Start a project
             </MagneticButton>
           </div>
+        </Reveal>
+        <Reveal delay={0.3}>
+          <p className="mt-8 text-sm text-zinc-400">
+            Explore our{" "}
+            <Link
+              to="/services"
+              className="text-zinc-300 underline decoration-white/20 underline-offset-4 hover:text-cyan-accent transition-colors"
+            >
+              software development services
+            </Link>{" "}
+            or{" "}
+            <Link
+              to="/contact"
+              className="text-zinc-300 underline decoration-white/20 underline-offset-4 hover:text-cyan-accent transition-colors"
+            >
+              contact Kedbyte
+            </Link>
+            .
+          </p>
         </Reveal>
       </div>
     </section>

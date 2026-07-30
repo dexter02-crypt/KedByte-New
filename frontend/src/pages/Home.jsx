@@ -123,7 +123,7 @@ export default function Home() {
               height={1067}
               loading="eager"
               fetchPriority="high"
-              alt="Abstract technology"
+              alt="Abstract cyan light trails — Kedbyte's software and AI design language"
               className="h-[130%] w-full object-cover"
             />
           </motion.div>
@@ -279,6 +279,9 @@ export default function Home() {
 
           {/* Headline lines mask-reveal sequentially from t=0.5s */}
           <h1 className="font-heading font-black uppercase tracking-tight text-white leading-[0.85] text-6xl sm:text-7xl md:text-8xl lg:text-[8.5rem]">
+            <span className="sr-only">
+              Kedbyte — custom software development company in India:{" "}
+            </span>
             {heroWords.map((w, i) => (
               <span key={w} className="block overflow-hidden">
                 <motion.span
@@ -333,8 +336,9 @@ export default function Home() {
               animate={{ opacity: 1 }}
               transition={{ delay: 1.1 }}
             >
-              An ultra-minimal software studio engineering intelligent, high-performance
-              products — from interface to AI to infrastructure.
+              An ultra-minimal custom software development company in India —
+              engineering intelligent, high-performance products from interface
+              to AI to infrastructure.
             </motion.p>
             <motion.div
               initial={{ opacity: 0, y: 14 }}

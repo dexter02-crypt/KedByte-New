@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { Link } from "react-router-dom";
 import { motion, useInView } from "framer-motion";
 import Reveal from "@/components/Reveal";
 import SectionKicker from "@/components/SectionKicker";
@@ -109,6 +110,9 @@ export default function Payroll() {
                 Payroll.
               </motion.span>
             </span>
+            <span className="sr-only">
+              {" "}— UK payroll software for bureaux and accountants (in development)
+            </span>
           </h1>
 
           {/* Status badge — claims policy: in-development state visible near the top */}
@@ -128,7 +132,14 @@ export default function Payroll() {
             <p className="mt-8 max-w-2xl text-zinc-400 text-lg leading-relaxed">
               UK payroll software for bureaux and accountants, built for tax year
               2026/27 — a penny-exact engine that already passes every row of
-              HMRC's published test data.
+              HMRC's published test data. Built by Kedbyte, the studio behind our{" "}
+              <Link
+                to="/services"
+                className="text-zinc-300 underline decoration-white/20 underline-offset-4 hover:text-cyan-accent transition-colors"
+              >
+                custom software development services
+              </Link>
+              .
             </p>
           </Reveal>
 

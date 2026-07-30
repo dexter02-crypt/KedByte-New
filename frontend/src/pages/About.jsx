@@ -37,6 +37,9 @@ export default function About() {
           </Reveal>
           <Reveal delay={0.1} variant="mask">
             <h1 className="mt-6 font-heading font-black uppercase tracking-tight text-5xl md:text-7xl lg:text-[7rem] text-white leading-[0.88] max-w-5xl">
+              <span className="sr-only">
+                About Kedbyte, a software studio in Vadodara, Gujarat —{" "}
+              </span>
               A studio for the <GlitchText className="text-cyan-accent text-glow" glitchOnHover>curious</GlitchText> & the bold.
             </h1>
           </Reveal>
@@ -64,7 +67,7 @@ export default function About() {
                 width={1600}
                 height={1067}
                 loading="lazy"
-                alt="Kedbyte studio"
+                alt="Ultra-minimal studio workspace — the design ethos behind Kedbyte's software"
                 className="h-full w-full object-cover"
                 initial={{ scale: 1.15 }}
                 whileInView={{ scale: 1 }}

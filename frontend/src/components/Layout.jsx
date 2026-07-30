@@ -3,35 +3,130 @@ import { Outlet, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { faq } from "@/data/faq";
+import { payrollFaq } from "@/data/payrollFaq";
 
 // CONFIRM: production domain (used for canonical + og:url + sitemap)
 const SITE = "https://kedbyte.com";
 
+// Titles ≤60 chars (primary keyword front, brand at end);
+// descriptions ≤155 chars, keywords natural — no stuffing.
 const META = {
   "/": {
-    title: "Kedbyte — Software · AI · Automation",
-    desc: "Kedbyte is an ultra-minimal software studio in Vadodara, India — engineering custom software, applied AI and automated infrastructure from interface to production.",
+    title: "Custom Software Development Company in India — Kedbyte",
+    desc: "Kedbyte is a software studio in Vadodara, India building custom software, applied AI and automated cloud infrastructure — from interface to production.",
   },
   "/services": {
-    title: "Kedbyte — Services",
-    desc: "Custom software, frontend & backend engineering, applied AI & machine learning, infrastructure automation and UI/UX design — one connected pipeline, one partner.",
+    title: "Custom Software, AI & DevOps Automation Services — Kedbyte",
+    desc: "Custom software development, AI & machine learning, backend engineering, DevOps automation and UI/UX design — one connected pipeline, one partner.",
   },
   "/payroll": {
-    title: "Kedbyte Payroll — UK payroll software for bureaux & accountants",
-    desc: "In development for tax year 2026/27: a penny-exact UK payroll engine that passes every row of HMRC's published test data. HMRC PAYE recognition in progress — join the early-access list.",
+    title: "UK Payroll Software for Bureaux & Accountants — Kedbyte",
+    desc: "In development for tax year 2026/27 — penny-exact UK payroll software for bureaux and accountants. HMRC PAYE recognition in progress. Join early access.",
   },
   "/about": {
-    title: "Kedbyte — About",
-    desc: "A studio for the curious and the bold. Founded 2026 in Vadodara, Gujarat — full-spectrum engineering at the intersection of advanced technology and ultra-minimal design.",
+    title: "About Kedbyte — Software Studio in Vadodara, Gujarat",
+    desc: "Founded 2026 in Vadodara, Gujarat, Kedbyte Private Limited is a full-spectrum software studio pairing advanced engineering with ultra-minimal design.",
   },
   "/careers": {
-    title: "Kedbyte — Careers",
-    desc: "Build the future with us. Remote-friendly engineering, design and AI roles at Kedbyte — outcome-driven work with real ownership.",
+    title: "Careers at Kedbyte — Engineering, Design & AI Roles",
+    desc: "Remote-friendly engineering, design and AI roles at Kedbyte, Vadodara. Outcome-driven work with real ownership — build the future with us.",
   },
   "/contact": {
-    title: "Kedbyte — Contact",
-    desc: "Tell us about your project. Kedbyte replies within one business day — custom software, AI and automation from Vadodara, India.",
+    title: "Contact Kedbyte — Start a Software Project",
+    desc: "Tell us about your project — custom software, AI or automation. Kedbyte replies within one business day from Vadodara, India.",
   },
+};
+
+// ---- JSON-LD -------------------------------------------------------------
+const ORG_REF = {
+  "@type": "Organization",
+  name: "Kedbyte Private Limited",
+  url: SITE,
+};
+
+const breadcrumb = (name, path) => ({
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: `${SITE}/` },
+    { "@type": "ListItem", position: 2, name, item: SITE + path },
+  ],
+});
+
+const faqPage = (items) => ({
+  "@type": "FAQPage",
+  mainEntity: items.map((i) => ({
+    "@type": "Question",
+    name: i.q,
+    acceptedAnswer: { "@type": "Answer", text: i.a },
+  })),
+});
+
+const SERVICES = [
+  "Custom Software & Application Development",
+  "Frontend & Backend Engineering",
+  "Artificial Intelligence & Machine Learning",
+  "Infrastructure, Pipelines & Automation",
+  "UI/UX Design",
+];
+
+// Per-route structured data. Answers/copy come verbatim from the data
+// files, so the payroll claims policy holds by construction.
+const JSONLD = {
+  "/": [
+    {
+      "@type": "LocalBusiness",
+      "@id": `${SITE}/#business`,
+      name: "Kedbyte Private Limited",
+      url: SITE,
+      email: "techteam@kedbyte.com",
+      description: META["/"].desc,
+      image: `${SITE}/og-image.png`,
+      logo: `${SITE}/icon-512.png`,
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Vadodara",
+        addressRegion: "Gujarat",
+        addressCountry: "IN",
+      },
+      geo: { "@type": "GeoCoordinates", latitude: 22.3072, longitude: 73.1812 },
+    },
+  ],
+  "/services": [
+    ...SERVICES.map((s) => ({
+      "@type": "Service",
+      serviceType: s,
+      provider: ORG_REF,
+      areaServed: "Worldwide",
+      url: `${SITE}/services`,
+    })),
+    breadcrumb("Services", "/services"),
+  ],
+  "/payroll": [
+    {
+      "@type": "SoftwareApplication",
+      name: "Kedbyte Payroll",
+      url: `${SITE}/payroll`,
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Web",
+      // Claims policy: in development; recognition only ever "in progress".
+      description:
+        "UK payroll software for bureaux and accountants, in development for tax year 2026/27. HMRC PAYE recognition in progress.",
+      author: ORG_REF,
+      offers: {
+        "@type": "Offer",
+        url: `${SITE}/payroll`,
+        availability: "https://schema.org/PreOrder",
+        description:
+          "Free to join the early-access list; product pricing to be announced.",
+      },
+    },
+    faqPage(payrollFaq),
+    breadcrumb("Kedbyte Payroll", "/payroll"),
+  ],
+  "/about": [breadcrumb("About", "/about")],
+  "/careers": [breadcrumb("Careers", "/careers")],
+  "/contact": [faqPage(faq), breadcrumb("Contact", "/contact")],
 };
 
 function applyMeta(pathname) {
@@ -68,6 +163,20 @@ function applyMeta(pathname) {
     l.rel = "canonical";
     return l;
   }).href = SITE + pathname;
+
+  // Route-scoped JSON-LD (the static Organization block in index.html is
+  // site-wide and stays untouched).
+  const blocks = JSONLD[pathname];
+  const existing = document.getElementById("route-jsonld");
+  if (blocks) {
+    const script = existing || document.createElement("script");
+    script.type = "application/ld+json";
+    script.id = "route-jsonld";
+    script.textContent = JSON.stringify({ "@context": "https://schema.org", "@graph": blocks });
+    if (!existing) document.head.appendChild(script);
+  } else if (existing) {
+    existing.remove();
+  }
 }
 
 export default function Layout() {

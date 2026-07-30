@@ -63,13 +63,15 @@ export default function Careers() {
           </Reveal>
           <Reveal delay={0.1} variant="mask">
             <h1 className="mt-6 font-heading font-black uppercase tracking-tight text-5xl md:text-7xl lg:text-8xl text-white leading-[0.9] max-w-5xl">
+              <span className="sr-only">Careers at Kedbyte — </span>
               Build the future, with us.
             </h1>
           </Reveal>
           <Reveal delay={0.2}>
             <p className="mt-8 max-w-2xl text-zinc-400 text-lg leading-relaxed">
-              We hire curious people who care about craft. Remote-friendly, outcome-driven,
-              and obsessed with shipping things that matter.
+              Engineering, design and AI careers at Kedbyte. We hire curious people
+              who care about craft — remote-friendly, outcome-driven, and obsessed
+              with shipping things that matter.
             </p>
           </Reveal>
 

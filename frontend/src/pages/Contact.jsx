@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { toast } from "sonner";
@@ -139,6 +140,7 @@ export default function Contact() {
             </Reveal>
             <Reveal delay={0.1} variant="mask">
               <h1 className="mt-6 font-heading font-black uppercase tracking-tight text-6xl md:text-8xl text-white leading-[0.85]">
+                <span className="sr-only">Contact Kedbyte — </span>
                 Let's
                 <br />
                 <span className="text-cyan-accent text-glow">talk.</span>
@@ -146,8 +148,15 @@ export default function Contact() {
             </Reveal>
             <Reveal delay={0.2}>
               <p className="mt-8 max-w-md text-zinc-400 text-lg leading-relaxed">
-                Tell us about your project, your team or just say hello. We read every
-                message and reply within one business day.
+                Tell us about your project, your team or just say hello. We read
+                every message and reply within one business day — see our{" "}
+                <Link
+                  to="/services"
+                  className="text-zinc-300 underline decoration-white/20 underline-offset-4 hover:text-cyan-accent transition-colors"
+                >
+                  custom software development services
+                </Link>{" "}
+                for what we build.
               </p>
             </Reveal>
             <Reveal delay={0.3}>

@@ -193,14 +193,16 @@ export default function Services() {
             {/* text-4xl below sm: the nowrap WaveText word "ENGINEERING," cannot
                 wrap internally and overflows 375px screens at text-5xl */}
             <h1 className="mt-6 font-heading font-black uppercase tracking-tight text-4xl sm:text-5xl md:text-7xl lg:text-8xl text-white leading-[0.9] max-w-5xl">
+              <span className="sr-only">Custom software development services — </span>
               <WaveText text="End-to-end engineering, one partner." />
             </h1>
           </Reveal>
           <Reveal delay={0.2}>
             <p className="mt-8 max-w-2xl text-zinc-400 text-lg leading-relaxed">
-              We cover the full lifecycle of building modern software — from custom
-              apps and AI to backend engineering, automation and ultra-minimal
-              design — so you ship faster with a single partner.
+              Custom software development, AI development and DevOps automation
+              services covering the full lifecycle — from custom apps and machine
+              learning to backend engineering and ultra-minimal design — so you
+              ship faster with a single partner.
             </p>
           </Reveal>
           
