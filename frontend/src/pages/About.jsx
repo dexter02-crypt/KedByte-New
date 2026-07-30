@@ -125,7 +125,7 @@ export default function About() {
         <div className="max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-2 md:grid-cols-4 gap-12">
           {[
             { to: 2026, suffix: "", label: "Founded" },
-            { to: 5, suffix: "+", label: "Core capabilities" },
+            { to: 6, suffix: "", label: "Core capabilities" },
             { to: 100, suffix: "%", label: "In-house delivery" },
             { to: 1, suffix: "", label: "Single partner" },
           ].map((s, i) => (

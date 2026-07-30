@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import { motion, useInView, useReducedMotion } from "framer-motion";
-import { Code2, Cloud, BrainCircuit, Palette, Layers, Workflow, Check } from "lucide-react";
+import { Code2, Cloud, BrainCircuit, Palette, Layers, Workflow, Check, Blocks } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import SectionKicker from "@/components/SectionKicker";
 import CTASection from "@/components/CTASection";
@@ -38,8 +38,16 @@ const services = [
     img: "/images/svc-aiml-800.webp", imgSet: "/images/svc-aiml-800.webp 800w, /images/svc-aiml-1600.webp 1600w", imgW: 1600, imgH: 1067,
   },
   {
+    icon: Blocks,
+    tag: "04 — Blockchain",
+    title: "Blockchain & Web3 Engineering",
+    desc: "We engineer smart contracts, decentralised applications and Web3 integrations with a security-first approach — from token standards and DeFi mechanics to wallet integrations and on-chain/off-chain architecture.",
+    points: ["Smart contract development & audit readiness", "dApp & DeFi engineering", "Token standards & NFT infrastructure", "Wallet & Web3 API integrations"],
+    img: "/images/hero-abstract-800.webp", imgSet: "/images/hero-abstract-800.webp 800w, /images/hero-abstract-1600.webp 1600w", imgW: 1600, imgH: 1067,
+  },
+  {
     icon: Workflow,
-    tag: "04 — Scale",
+    tag: "05 — Scale",
     title: "Infrastructure, Pipelines & Automation",
     desc: "Robust CI/CD pipelines for rapid, error-free releases, workflow automation that removes repetitive toil, and scalable, monitored, highly available cloud architectures.",
     points: ["Automated CI/CD pipelines", "Workflow automation", "DevOps & cloud infrastructure", "Monitoring & high availability"],
@@ -47,7 +55,7 @@ const services = [
   },
   {
     icon: Palette,
-    tag: "05 — Craft",
+    tag: "06 — Craft",
     title: "UI/UX Design",
     desc: "End-to-end user journey mapping, wireframing and prototyping paired with dark-themed, futuristic, ultra-minimal interfaces that prioritise focus and aesthetic precision.",
     points: ["Product design & journeys", "Wireframing & prototyping", "Ultra-minimal UI systems", "Dark, futuristic aesthetics"],
@@ -199,10 +207,11 @@ export default function Services() {
           </Reveal>
           <Reveal delay={0.2}>
             <p className="mt-8 max-w-2xl text-zinc-400 text-lg leading-relaxed">
-              Custom software development, AI development and DevOps automation
-              services covering the full lifecycle — from custom apps and machine
-              learning to backend engineering and ultra-minimal design — so you
-              ship faster with a single partner.
+              Custom software development, AI development, blockchain engineering
+              and DevOps automation services covering the full lifecycle — from
+              custom apps and machine learning to smart contracts, backend
+              engineering and ultra-minimal design — so you ship faster with a
+              single partner.
             </p>
           </Reveal>
           

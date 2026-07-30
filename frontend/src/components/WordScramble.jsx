@@ -14,6 +14,7 @@ const WORDS_TO_FIND = [
   { word: "DEVOPS", row: 8, col: 8, direction: "horizontal", label: "DevOps" },
   { word: "MACHINE", row: 3, col: 3, direction: "diagonal", label: "Machine Learning" },
   { word: "WEBAPP", row: 5, col: 1, direction: "vertical", label: "Web Applications" },
+  { word: "BLOCKCHAIN", row: 11, col: 3, direction: "horizontal", label: "Blockchain & Web3" },
 ];
 
 const GRID_ROWS = 12;

@@ -26,6 +26,8 @@ import {
   SiNodedotjs,
   SiGo,
   SiTerraform,
+  SiSolidity,
+  SiEthereum,
 } from "react-icons/si";
 
 const icons = [
@@ -42,6 +44,8 @@ const icons = [
   { Icon: SiPython, name: "Python" },
   { Icon: SiGo, name: "Go" },
   { Icon: SiTensorflow, name: "TensorFlow" },
+  { Icon: SiSolidity, name: "Solidity" },
+  { Icon: SiEthereum, name: "Ethereum" },
   { Icon: SiPostgresql, name: "PostgreSQL" },
 ];
 

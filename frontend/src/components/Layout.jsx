@@ -18,7 +18,7 @@ const META = {
   },
   "/services": {
     title: "Custom Software, AI & DevOps Automation Services — Kedbyte",
-    desc: "Custom software development, AI & machine learning, backend engineering, DevOps automation and UI/UX design — one connected pipeline, one partner.",
+    desc: "Custom software development, AI & machine learning, blockchain & Web3 engineering, DevOps automation and UI/UX design — one pipeline, one partner.",
   },
   "/payroll": {
     title: "UK Payroll Software for Bureaux & Accountants — Kedbyte",
@@ -66,6 +66,7 @@ const SERVICES = [
   "Custom Software & Application Development",
   "Frontend & Backend Engineering",
   "Artificial Intelligence & Machine Learning",
+  "Blockchain & Web3 Engineering",
   "Infrastructure, Pipelines & Automation",
   "UI/UX Design",
 ];

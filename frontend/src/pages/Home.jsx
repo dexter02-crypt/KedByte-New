@@ -6,7 +6,7 @@ import {
   useInView,
   useReducedMotion,
 } from "framer-motion";
-import { Cloud, Code2, BrainCircuit, ArrowUpRight } from "lucide-react";
+import { Cloud, Code2, BrainCircuit, ArrowUpRight, Blocks } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import { StaggerGroup, StaggerItem } from "@/components/Stagger";
 import MagneticButton from "@/components/MagneticButton";
@@ -67,11 +67,21 @@ const services = [
     icon: Cloud,
     title: "Infrastructure, Pipelines & Automation",
     desc: "CI/CD pipelines, DevOps and workflow automation — secure, monitored and highly available by default.",
-    span: "md:col-span-12",
+    span: "md:col-span-7",
     img: "/images/infra-800.webp",
     imgSet: "/images/infra-800.webp 800w, /images/infra-1600.webp 1600w",
     imgW: 1600,
     imgH: 1068,
+  },
+  {
+    icon: Blocks,
+    title: "Blockchain & Web3",
+    desc: "Smart contracts, dApps and DeFi mechanics — engineered with a security-first mindset.",
+    span: "md:col-span-5",
+    img: "/images/svc-backend-800.webp",
+    imgSet: "/images/svc-backend-800.webp 800w, /images/svc-backend-1600.webp 1600w",
+    imgW: 1600,
+    imgH: 1067,
   },
 ];
 
