@@ -19,7 +19,7 @@ const services = [
     title: "Custom Software & Application Development",
     desc: "We design and engineer products end-to-end — high-performance web apps, polished native and cross-platform mobile apps, and bespoke enterprise software that automates operations and removes manual bottlenecks.",
     points: ["Responsive web applications", "Native & cross-platform mobile", "Bespoke enterprise software", "Workflow-driven platforms"],
-    img: "/images/bento-software-800.webp", imgSet: "/images/bento-software-800.webp 800w, /images/bento-software-1600.webp 1600w", imgW: 1600, imgH: 900,
+    img: "/images/svc-software-800.webp", imgSet: "/images/svc-software-800.webp 800w, /images/svc-software-1600.webp 1600w", imgW: 1600, imgH: 900,
   },
   {
     icon: Layers,
@@ -27,7 +27,7 @@ const services = [
     title: "Frontend & Backend Engineering",
     desc: "Production-ready interfaces built to an ultra-minimal, futuristic design system, backed by secure, high-performance APIs and scalable server-side infrastructure capable of heavy, real-time workloads.",
     points: ["Pixel-perfect frontend", "Secure high-performance APIs", "Scalable backend architecture", "Real-time systems"],
-    img: "/images/svc-backend-800.webp", imgSet: "/images/svc-backend-800.webp 800w, /images/svc-backend-1600.webp 1600w", imgW: 1600, imgH: 1067,
+    img: "/images/svc-engineering-800.webp", imgSet: "/images/svc-engineering-800.webp 800w, /images/svc-engineering-1600.webp 1600w", imgW: 1600, imgH: 1067,
   },
   {
     icon: BrainCircuit,
@@ -35,7 +35,7 @@ const services = [
     title: "Artificial Intelligence & Machine Learning",
     desc: "From custom AI architectures to rigorous training and fine-tuning for accuracy and low latency, we embed intelligent systems seamlessly into your software and workflows.",
     points: ["Custom AI models", "Training & fine-tuning", "Low-latency inference", "Seamless AI integration"],
-    img: "/images/svc-aiml-800.webp", imgSet: "/images/svc-aiml-800.webp 800w, /images/svc-aiml-1600.webp 1600w", imgW: 1600, imgH: 1067,
+    img: "/images/svc-ai-800.webp", imgSet: "/images/svc-ai-800.webp 800w, /images/svc-ai-1600.webp 1600w", imgW: 1600, imgH: 1067,
   },
   {
     icon: Blocks,
@@ -43,7 +43,7 @@ const services = [
     title: "Blockchain & Web3 Engineering",
     desc: "We engineer smart contracts, decentralised applications and Web3 integrations with a security-first approach — from token standards and DeFi mechanics to wallet integrations and on-chain/off-chain architecture.",
     points: ["Smart contract development & audit readiness", "dApp & DeFi engineering", "Token standards & NFT infrastructure", "Wallet & Web3 API integrations"],
-    img: "/images/hero-abstract-800.webp", imgSet: "/images/hero-abstract-800.webp 800w, /images/hero-abstract-1600.webp 1600w", imgW: 1600, imgH: 1067,
+    img: "/images/svc-blockchain-800.webp", imgSet: "/images/svc-blockchain-800.webp 800w, /images/svc-blockchain-1600.webp 1600w", imgW: 1600, imgH: 1067,
   },
   {
     icon: Workflow,
@@ -51,7 +51,7 @@ const services = [
     title: "Infrastructure, Pipelines & Automation",
     desc: "Robust CI/CD pipelines for rapid, error-free releases, workflow automation that removes repetitive toil, and scalable, monitored, highly available cloud architectures.",
     points: ["Automated CI/CD pipelines", "Workflow automation", "DevOps & cloud infrastructure", "Monitoring & high availability"],
-    img: "/images/infra-800.webp", imgSet: "/images/infra-800.webp 800w, /images/infra-1600.webp 1600w", imgW: 1600, imgH: 1068,
+    img: "/images/svc-infra-800.webp", imgSet: "/images/svc-infra-800.webp 800w, /images/svc-infra-1600.webp 1600w", imgW: 1600, imgH: 1067,
   },
   {
     icon: Palette,
@@ -59,7 +59,7 @@ const services = [
     title: "UI/UX Design",
     desc: "End-to-end user journey mapping, wireframing and prototyping paired with dark-themed, futuristic, ultra-minimal interfaces that prioritise focus and aesthetic precision.",
     points: ["Product design & journeys", "Wireframing & prototyping", "Ultra-minimal UI systems", "Dark, futuristic aesthetics"],
-    img: "/images/studio-office-800.webp", imgSet: "/images/studio-office-800.webp 800w, /images/studio-office-1600.webp 1600w", imgW: 1600, imgH: 1067,
+    img: "/images/svc-design-800.webp", imgSet: "/images/svc-design-800.webp 800w, /images/svc-design-1600.webp 1600w", imgW: 1600, imgH: 1067,
   },
 ];
 

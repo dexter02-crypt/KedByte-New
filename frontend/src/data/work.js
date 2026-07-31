@@ -20,8 +20,8 @@ export const work = [
       "A React + FastAPI + MongoDB platform template with tenant-scoped data access, live metrics streaming and a component system built on the studio design language.",
     stack: ["React", "FastAPI", "MongoDB", "WebSockets", "Docker"],
     metric: { value: "99.9%", label: "uptime target it is engineered to" }, // EDIT ME: verify
-    img: "/images/bento-software-800.webp",
-    imgSet: "/images/bento-software-800.webp 800w, /images/bento-software-1600.webp 1600w",
+    img: "/images/svc-software-800.webp",
+    imgSet: "/images/svc-software-800.webp 800w, /images/svc-software-1600.webp 1600w",
     imgW: 1600,
     imgH: 900,
     writeup: [
@@ -39,8 +39,8 @@ export const work = [
       "A RAG pipeline with document ingestion, chunking and embedding, hybrid retrieval, and a streaming chat interface with source citations.",
     stack: ["Python", "LLM APIs", "Vector search", "FastAPI", "React"],
     metric: { value: "<2s", label: "first-token latency target" }, // EDIT ME: verify
-    img: "/images/svc-aiml-800.webp",
-    imgSet: "/images/svc-aiml-800.webp 800w, /images/svc-aiml-1600.webp 1600w",
+    img: "/images/svc-ai-800.webp",
+    imgSet: "/images/svc-ai-800.webp 800w, /images/svc-ai-1600.webp 1600w",
     imgW: 1600,
     imgH: 1067,
     writeup: [
@@ -58,10 +58,10 @@ export const work = [
       "A reusable CI/CD template with containerised builds, automated tests as a deploy gate, environment promotion, and uptime monitoring with alerting.",
     stack: ["GitHub Actions", "Docker", "Terraform", "Monitoring"],
     metric: { value: "24/7", label: "pipeline & uptime monitoring" },
-    img: "/images/infra-800.webp",
-    imgSet: "/images/infra-800.webp 800w, /images/infra-1600.webp 1600w",
+    img: "/images/svc-infra-800.webp",
+    imgSet: "/images/svc-infra-800.webp 800w, /images/svc-infra-1600.webp 1600w",
     imgW: 1600,
-    imgH: 1068,
+    imgH: 1067,
     writeup: [
       "Every Kedbyte project inherits this pipeline: commits build in containers, tests gate the deploy, and promotion from staging to production is a reviewed, one-step action rather than a manual ritual.",
       "Monitoring and alerting are part of the template, not an afterthought — which is what lets us stand behind reliability targets on client work.",

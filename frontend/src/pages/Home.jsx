@@ -22,6 +22,7 @@ import FloatingParticles from "@/components/FloatingParticles";
 import WordScramble from "@/components/WordScramble";
 import MorphingText from "@/components/MorphingText";
 import WaveText from "@/components/WaveText";
+import HeroScrub from "@/components/HeroScrub";
 import SelectedWork from "@/components/SelectedWork";
 import ProcessSection from "@/components/ProcessSection";
 import { useCtaPanel } from "@/components/StartProjectPanel";
@@ -33,9 +34,11 @@ const MotionLink = motion(Link);
 const EASE = [0.22, 1, 0.36, 1];
 const hoverSpring = { type: "spring", stiffness: 350, damping: 22 };
 
-const HERO_IMG = "/images/hero-abstract-1600.webp";
+const HERO_IMG = "/images/hero-obsidian-1600.webp";
 const HERO_IMG_SET =
-  "/images/hero-abstract-800.webp 800w, /images/hero-abstract-1600.webp 1600w";
+  "/images/hero-obsidian-800.webp 800w, /images/hero-obsidian-1600.webp 1600w";
+const HERO_ALT =
+  "Vast obsidian monolith rising from dark still water, a cyan light seam tracing its base — Kedbyte's visual identity";
 
 const heroWords = ["WE", "BUILD"];
 const morphingWords = ["DIGITAL", "INTELLIGENT", "SCALABLE", "INNOVATIVE", "POWERFUL"];
@@ -48,8 +51,8 @@ const services = [
     title: "Custom Software & Apps",
     desc: "Web platforms, mobile apps and bespoke enterprise software — engineered to be fast, scalable and effortless to use.",
     span: "md:col-span-7",
-    img: "/images/bento-software-800.webp",
-    imgSet: "/images/bento-software-800.webp 800w, /images/bento-software-1600.webp 1600w",
+    img: "/images/svc-software-800.webp",
+    imgSet: "/images/svc-software-800.webp 800w, /images/svc-software-1600.webp 1600w",
     imgW: 1600,
     imgH: 900,
   },
@@ -58,8 +61,8 @@ const services = [
     title: "AI & Machine Learning",
     desc: "Custom models, fine-tuning and seamless AI integration built into your product.",
     span: "md:col-span-5",
-    img: "/images/hero-abstract-800.webp",
-    imgSet: "/images/hero-abstract-800.webp 800w, /images/hero-abstract-1600.webp 1600w",
+    img: "/images/svc-ai-800.webp",
+    imgSet: "/images/svc-ai-800.webp 800w, /images/svc-ai-1600.webp 1600w",
     imgW: 1600,
     imgH: 1067,
   },
@@ -68,18 +71,18 @@ const services = [
     title: "Infrastructure, Pipelines & Automation",
     desc: "CI/CD pipelines, DevOps and workflow automation — secure, monitored and highly available by default.",
     span: "md:col-span-7",
-    img: "/images/infra-800.webp",
-    imgSet: "/images/infra-800.webp 800w, /images/infra-1600.webp 1600w",
+    img: "/images/svc-infra-800.webp",
+    imgSet: "/images/svc-infra-800.webp 800w, /images/svc-infra-1600.webp 1600w",
     imgW: 1600,
-    imgH: 1068,
+    imgH: 1067,
   },
   {
     icon: Blocks,
     title: "Blockchain & Web3",
     desc: "Smart contracts, dApps and DeFi mechanics — engineered with a security-first mindset.",
     span: "md:col-span-5",
-    img: "/images/svc-backend-800.webp",
-    imgSet: "/images/svc-backend-800.webp 800w, /images/svc-backend-1600.webp 1600w",
+    img: "/images/svc-blockchain-800.webp",
+    imgSet: "/images/svc-blockchain-800.webp 800w, /images/svc-blockchain-1600.webp 1600w",
     imgW: 1600,
     imgH: 1067,
   },
@@ -116,28 +119,50 @@ export default function Home() {
           overflowing: content used to spill under the fixed header at the top
           and into the scroll indicator at the bottom */}
       <section ref={heroRef} className="relative min-h-screen overflow-hidden" data-testid="home-hero">
-        {/* Background layers with enhanced parallax.
-            Outer div = scroll parallax (unchanged); inner div = entrance scale. */}
-        <motion.div className="absolute inset-0" style={{ y: imgY, scale }}>
-          <motion.div
-            className="h-full w-full"
-            initial={{ scale: 1.15 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: 1.2, ease: EASE }}
-          >
-            <img
-              src={HERO_IMG}
-              srcSet={HERO_IMG_SET}
-              sizes="100vw"
-              width={1600}
-              height={1067}
-              loading="eager"
-              fetchPriority="high"
-              alt="Abstract cyan light trails — Kedbyte's software and AI design language"
-              className="h-[130%] w-full object-cover"
-            />
+        {/* Background: desktop with motion allowed gets the scroll-scrubbed
+            film sequence (scroll drives the camera move — HeroScrub); the
+            scrub replaces the y-parallax there, since the shot carries its
+            own motion and compounding both would double-move the scene.
+            Touch and reduced-motion keep the static image + parallax
+            exactly as before. Entrance scale (1.15 → 1) applies to both. */}
+        {!touch && !reduced ? (
+          <div className="absolute inset-0">
+            <motion.div
+              className="h-full w-full"
+              initial={{ scale: 1.15 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 1.2, ease: EASE }}
+            >
+              <HeroScrub
+                progress={scrollYProgress}
+                poster={HERO_IMG}
+                posterSet={HERO_IMG_SET}
+                alt={HERO_ALT}
+              />
+            </motion.div>
+          </div>
+        ) : (
+          <motion.div className="absolute inset-0" style={{ y: imgY, scale }}>
+            <motion.div
+              className="h-full w-full"
+              initial={{ scale: 1.15 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 1.2, ease: EASE }}
+            >
+              <img
+                src={HERO_IMG}
+                srcSet={HERO_IMG_SET}
+                sizes="100vw"
+                width={1600}
+                height={1067}
+                loading="eager"
+                fetchPriority="high"
+                alt={HERO_ALT}
+                className="h-[130%] w-full object-cover"
+              />
+            </motion.div>
           </motion.div>
-        </motion.div>
+        )}
         <motion.div className="absolute inset-0 bg-ink" style={{ opacity: overlayOpacity }} />
         {/* Entrance-only overlay: starts opaque, eases out so the combined
             overlay settles at the scroll-driven resting opacity (t=0 → ~1s) */}

@@ -21,9 +21,9 @@ const values = [
 
 const morphingValues = ["Innovation", "Excellence", "Integrity", "Impact"];
 
-const OFFICE_IMG = "/images/studio-office-1600.webp";
+const OFFICE_IMG = "/images/about-studio-1600.webp";
 const OFFICE_IMG_SET =
-  "/images/studio-office-800.webp 800w, /images/studio-office-1600.webp 1600w";
+  "/images/about-studio-800.webp 800w, /images/about-studio-1600.webp 1600w";
 
 export default function About() {
   return (
@@ -67,7 +67,7 @@ export default function About() {
                 width={1600}
                 height={1067}
                 loading="lazy"
-                alt="Ultra-minimal studio workspace — the design ethos behind Kedbyte's software"
+                alt="Dark minimal room with a single cyan light line above a long table — a mood study of Kedbyte's design ethos"
                 className="h-full w-full object-cover"
                 initial={{ scale: 1.15 }}
                 whileInView={{ scale: 1 }}

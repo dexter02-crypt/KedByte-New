@@ -101,6 +101,15 @@ export default function SelectedWork() {
                   whileHover="hover"
                 >
                   <Reveal variant="clip" className="relative aspect-[16/10] overflow-hidden">
+                    {/* Entry settle: image starts slightly oversized and eases
+                        to rest under the clip wipe — transform-only */}
+                    <motion.div
+                      className="h-full w-full"
+                      initial={reduced ? false : { scale: 1.08 }}
+                      whileInView={reduced ? {} : { scale: 1 }}
+                      viewport={{ once: true, amount: 0.3 }}
+                      transition={{ duration: 1.2, ease: EASE }}
+                    >
                     <motion.div
                       className="h-full w-full transition-[filter] duration-700 group-hover:brightness-110"
                       variants={{ rest: { scale: 1 }, hover: { scale: 1.03 } }}
@@ -120,6 +129,7 @@ export default function SelectedWork() {
                         transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-surface via-surface/40 to-transparent" />
+                    </motion.div>
                     </motion.div>
                   </Reveal>
 
