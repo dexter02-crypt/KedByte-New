@@ -175,24 +175,15 @@ html.lenis, html.lenis body { height: auto; }
   min-height: 0;
 }
 
-/* Scroll-linked pin motion: --jd (px) is set per scroll frame by
-   JourneyChapter. The whole group drifts with it; individual cards add
-   micro-parallax at slightly different rates so the composition breathes
-   — the foreground visibly answers every wheel tick while pinned. */
-.journey-drift {
-  transform: translateY(calc(var(--jd, 0) * 1px));
-  will-change: transform;
-}
-.journey-content-pin .journey-para-0 {
-  transform: translateY(calc(var(--jd, 0) * 0.22px));
-  will-change: transform;
-}
-.journey-content-pin .journey-para-1 {
-  transform: translateY(calc(var(--jd, 0) * -0.15px));
-  will-change: transform;
-}
+/* Scroll-linked pin motion: JourneyChapter writes translate3d directly
+   onto .journey-drift and the .journey-para-* card wrappers each scroll
+   frame (compositor-only; no CSS-variable indirection — a custom
+   property on the chapter root would recalc the whole subtree per frame
+   and starve 120Hz budgets). These rules just pre-promote the layers. */
+.journey-drift,
+.journey-content-pin .journey-para-0,
+.journey-content-pin .journey-para-1,
 .journey-content-pin .journey-para-2 {
-  transform: translateY(calc(var(--jd, 0) * 0.1px));
   will-change: transform;
 }
 .glow-card:hover {

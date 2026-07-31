@@ -210,29 +210,45 @@ export default function JourneyChapter({
   // ±30px across the stuck span with a cos-velocity profile: v(u) ∝
   // 1 + 0.8·cos(2πu) — fastest at the pin boundaries (≈0.18px per scroll
   // px) so the release into 1:1 scrolling has no hard velocity step, and
-  // gentlest mid-dwell. Per-card micro-parallax multiplies the same CSS
-  // variable at different rates (see index.css), so every wheel tick moves
-  // both world and content. Transform-only; CLS-safe.
+  // gentlest mid-dwell. Per-card micro-parallax rides the same value at
+  // different rates. All motion is DIRECT translate3d writes on the few
+  // target elements in the same rAF — no CSS-variable indirection, which
+  // would invalidate computed style for the whole chapter subtree every
+  // scroll frame and starve high-refresh (120Hz) budgets. CLS-safe.
   useEffect(() => {
     if (!active || !pinContent) return undefined;
     const root = rootRef.current;
     const track = root ? root.querySelector(".journey-track") : null;
-    if (!root || !track) return undefined;
+    const driftEl = root ? root.querySelector(".journey-drift") : null;
+    if (!root || !track || !driftEl) return undefined;
+    const PARA_RATES = { "journey-para-0": 0.22, "journey-para-1": -0.15, "journey-para-2": 0.1 };
+    const paras = Array.from(
+      root.querySelectorAll(".journey-para-0, .journey-para-1, .journey-para-2")
+    ).map((el) => {
+      const key = Object.keys(PARA_RATES).find((k) => el.classList.contains(k));
+      return { el, rate: PARA_RATES[key] || 0 };
+    });
     const D = 30;
     let rafId = 0;
+    const apply = (v) => {
+      driftEl.style.transform = `translate3d(0, ${v.toFixed(2)}px, 0)`;
+      for (const { el, rate } of paras) {
+        el.style.transform = `translate3d(0, ${(v * rate).toFixed(2)}px, 0)`;
+      }
+    };
     const update = () => {
       rafId = 0;
       const r = track.getBoundingClientRect();
       const span = r.height - window.innerHeight;
       if (span <= 0) {
         // Pin released (e.g. work panel open) — no drift offset
-        root.style.setProperty("--jd", "0");
+        apply(0);
         return;
       }
       const u = Math.min(1, Math.max(0, -r.top / span));
       const drift =
         D - 2 * D * (u + (0.8 * Math.sin(2 * Math.PI * u)) / (2 * Math.PI));
-      root.style.setProperty("--jd", drift.toFixed(2));
+      apply(drift);
     };
     const onScroll = () => {
       if (!rafId) rafId = requestAnimationFrame(update);
@@ -244,6 +260,7 @@ export default function JourneyChapter({
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
       if (rafId) cancelAnimationFrame(rafId);
+      apply(0);
     };
   }, [active, pinContent]);
 
