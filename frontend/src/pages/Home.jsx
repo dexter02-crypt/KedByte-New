@@ -23,8 +23,10 @@ import WordScramble from "@/components/WordScramble";
 import MorphingText from "@/components/MorphingText";
 import WaveText from "@/components/WaveText";
 import HeroScrub from "@/components/HeroScrub";
+import JourneyChapter from "@/components/JourneyChapter";
 import SelectedWork from "@/components/SelectedWork";
 import ProcessSection from "@/components/ProcessSection";
+import { useLenis } from "@/components/SmoothScroll";
 import { useCtaPanel } from "@/components/StartProjectPanel";
 import { wasIntroHandoff } from "@/lib/introHandoff";
 import { metrics } from "@/data/metrics";
@@ -104,6 +106,29 @@ export default function Home() {
 
   // Touch devices: no Ken Burns / heavy atmosphere
   const touch = useMediaQuery("(hover: none)");
+  // Obsidian Journey chapters: desktop + motion-allowed only. Touch and
+  // reduced-motion render the exact non-pinned page (JourneyChapter
+  // passes children through untouched).
+  const journeyActive = !touch && !reduced;
+  const lenis = useLenis();
+  useEffect(() => {
+    if (!journeyActive || !lenis) return undefined;
+    // Lenis drives real window scroll; ScrollTrigger just needs to be told
+    // when it moves. Single smoothing source — see lib/journeyGsap.js.
+    // Dynamic import keeps GSAP out of the mobile-critical bundle.
+    let dead = false;
+    let cleanup = null;
+    import("@/lib/journeyGsap").then(({ ScrollTrigger }) => {
+      if (dead) return;
+      lenis.on("scroll", ScrollTrigger.update);
+      ScrollTrigger.refresh();
+      cleanup = () => lenis.off("scroll", ScrollTrigger.update);
+    });
+    return () => {
+      dead = true;
+      if (cleanup) cleanup();
+    };
+  }, [journeyActive, lenis]);
   // Pause hero atmosphere (orbs, particles) when the hero is off-screen
   const heroInView = useInView(heroRef, { amount: 0.15 });
   // Atmosphere mounts last in the entrance timeline (t≈1.3s)
@@ -416,7 +441,8 @@ export default function Home() {
         <TechMarquee />
       </section>
 
-      {/* SERVICES BENTO */}
+      {/* CH 02 — THE FIELD: capabilities over the assembling block grid */}
+      <JourneyChapter active={journeyActive} chapter="ch02" testid="journey-ch02">
       <section className="relative py-16 md:py-40 overflow-hidden" data-testid="home-services">
         <div className="tech-grid grid-fade absolute inset-0 opacity-30" />
         
@@ -548,12 +574,19 @@ export default function Home() {
           </StaggerGroup>
         </div>
       </section>
+      </JourneyChapter>
 
-      {/* SELECTED WORK */}
-      <SelectedWork />
+      {/* CH 03 — THE CONDUITS: process rail over the pipeline corridor.
+          (Process now precedes Selected Work per the approved journey order:
+          capabilities → process → work → contact.) */}
+      <JourneyChapter active={journeyActive} chapter="ch03" testid="journey-ch03">
+        <ProcessSection />
+      </JourneyChapter>
 
-      {/* PROCESS */}
-      <ProcessSection />
+      {/* CH 04 — THE CORE: selected work over the sphere descent */}
+      <JourneyChapter active={journeyActive} chapter="ch04" testid="journey-ch04">
+        <SelectedWork />
+      </JourneyChapter>
 
       {/* PROOF STRIP (data: src/data/metrics.js) */}
       <section className="relative py-16 md:py-24 border-y border-white/10 bg-surface/40 overflow-hidden" data-testid="home-stats">
@@ -638,7 +671,18 @@ export default function Home() {
         </Reveal>
       </section>
 
-      <CTASection />
+      {/* CH 05 — THE ROOM: the CTA arrives as the light ignites; the
+          chapter rests on its lit final frame (no dip out) */}
+      <JourneyChapter
+        active={journeyActive}
+        chapter="ch05"
+        nativeW={1172}
+        nativeH={784}
+        restAtEnd
+        testid="journey-ch05"
+      >
+        <CTASection />
+      </JourneyChapter>
     </div>
   );
 }
