@@ -103,6 +103,67 @@ export default function JourneyChapter({
     );
     io.observe(root);
 
+    // PER-CARD glass state: RESTING (Phase 13 still) is the dominant state.
+    // A card frosts ONLY when (a) the chapter is inside its luminous window
+    // AND (b) the actual video pixels behind that card's rect — sampled
+    // through the cover-fit mapping on THIS viewport's geometry — exceed a
+    // luminance floor. Structurally, glass can never trade a visible image
+    // for a black rectangle: no verified light, no frost. Sampling runs at
+    // ~10Hz with hysteresis (on >16/255, off <10/255) to avoid flicker.
+    const cards = Array.from(root.querySelectorAll(".glow-card"));
+    const sampler = document.createElement("canvas");
+    sampler.width = 32;
+    sampler.height = 18;
+    const sctx = sampler.getContext("2d", { willReadFrequently: true });
+    let lastSampleAt = 0;
+    const debug = window.location.search.includes("glassdebug");
+    let badge = null;
+    if (debug) {
+      badge = document.createElement("div");
+      badge.className = "glassdebug-badge";
+      root.querySelector(".sticky")?.appendChild(badge);
+    }
+
+    const unfrostAll = () => {
+      for (const c of cards) c.classList.remove("card-glass");
+    };
+
+    const sampleCards = (now) => {
+      if (now - lastSampleAt < 100 || video.readyState < 2) return;
+      lastSampleAt = now;
+      const vw = video.videoWidth;
+      const vhv = video.videoHeight;
+      if (!vw || !vhv) return;
+      const cw = window.innerWidth;
+      const ch = window.innerHeight;
+      const scale = Math.max(cw / vw, ch / vhv);
+      const dx = (cw - vw * scale) / 2;
+      const dy = (ch - vhv * scale) / 2;
+      for (const c of cards) {
+        const r = c.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > ch) continue;
+        const sx = (Math.max(0, r.left) - dx) / scale;
+        const sy = (Math.max(0, r.top) - dy) / scale;
+        const sw = Math.min(r.width, cw - Math.max(0, r.left)) / scale;
+        const sh = Math.min(r.height, ch - Math.max(0, r.top)) / scale;
+        try {
+          sctx.drawImage(video, sx, sy, sw, sh, 0, 0, 32, 18);
+          const d = sctx.getImageData(0, 0, 32, 18).data;
+          let sum = 0;
+          for (let i = 0; i < d.length; i += 4) {
+            sum += 0.2126 * d[i] + 0.7152 * d[i + 1] + 0.0722 * d[i + 2];
+          }
+          const lum = sum / (d.length / 4);
+          const frosted = c.classList.contains("card-glass");
+          if (!frosted && lum > 16) c.classList.add("card-glass");
+          else if (frosted && lum < 10) c.classList.remove("card-glass");
+        } catch {
+          // Sampling unavailable (tainted/at-fault) → keep the still
+          c.classList.remove("card-glass");
+        }
+      }
+    };
+
     // Progress from the section's viewport traversal — same mapping as
     // ScrollTrigger's "top bottom" → "bottom top", derived directly from
     // the Lenis-smoothed native scroll position. The video engine needs no
@@ -120,17 +181,28 @@ export default function JourneyChapter({
       const edgeIn = Math.min(1, p / 0.04);
       const edgeOut = restAtEnd ? 1 : Math.min(1, (1 - p) / 0.04);
       video.style.opacity = String(Math.min(edgeIn, edgeOut));
-      // Glass cards: only inside the chapter's luminous window
+      // chapter-live scopes the scrim relax to the luminous window
       const live = p > glassFrom && p < glassTo;
       if (live !== wasLive) {
         wasLive = live;
         root.classList.toggle("chapter-live", live);
+        if (!live) unfrostAll();
+      }
+      if (live) sampleCards(performance.now());
+      if (badge) {
+        badge.textContent = `${chapter}  p=${p.toFixed(3)}  window=${live ? "IN" : "out"}  glass=${cards.filter((c) => c.classList.contains("card-glass")).length}/${cards.length}`;
       }
       applySeek();
     };
     const onScroll = () => {
       if (!rafId) rafId = requestAnimationFrame(update);
     };
+    // Re-sample after each landed seek too: at rest mid-window the frame
+    // under a card is only final once the seek completes.
+    const onSeekedSample = () => {
+      if (wasLive) sampleCards(performance.now());
+    };
+    video.addEventListener("seeked", onSeekedSample);
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
     update();
@@ -141,8 +213,11 @@ export default function JourneyChapter({
       if (rafId) cancelAnimationFrame(rafId);
       io.disconnect();
       video.removeEventListener("seeked", onSeeked);
+      video.removeEventListener("seeked", onSeekedSample);
       video.removeEventListener("loadedmetadata", onMeta);
       video.removeEventListener("emptied", onEmptied);
+      if (badge) badge.remove();
+      unfrostAll();
     };
   }, [active, useVideo, chapter, restAtEnd, glassFrom, glassTo]);
 
@@ -183,7 +258,6 @@ export default function JourneyChapter({
     );
     io.observe(root);
 
-    let wasLive = false;
     import("@/lib/journeyGsap").then(({ ScrollTrigger }) => {
       if (dead) return;
       st = ScrollTrigger.create({
@@ -200,11 +274,9 @@ export default function JourneyChapter({
           const edgeIn = Math.min(1, p / 0.04);
           const edgeOut = restAtEnd ? 1 : Math.min(1, (1 - p) / 0.04);
           canvas.style.opacity = String(Math.min(edgeIn, edgeOut));
-          const live = p > glassFrom && p < glassTo;
-          if (live !== wasLive) {
-            wasLive = live;
-            root.classList.toggle("chapter-live", live);
-          }
+          // Frames fallback keeps the Phase 13 stills always: without the
+          // video element there is no per-card luminance sampling, and the
+          // structural rule is "no verified light behind, no frost".
         },
       });
     });

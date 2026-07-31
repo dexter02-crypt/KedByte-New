@@ -110,6 +110,14 @@ export default function Home() {
   // reduced-motion render the exact non-pinned page (JourneyChapter
   // passes children through untouched).
   const journeyActive = !touch && !reduced;
+  // ?glassdebug=1: outlines card states + shows per-chapter progress badges
+  useEffect(() => {
+    if (window.location.search.includes("glassdebug")) {
+      document.body.classList.add("glassdebug");
+      return () => document.body.classList.remove("glassdebug");
+    }
+    return undefined;
+  }, []);
   const lenis = useLenis();
   useEffect(() => {
     // GSAP/ScrollTrigger is only the FRAMES-fallback choreographer; the

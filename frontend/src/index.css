@@ -141,16 +141,17 @@ html.lenis, html.lenis body { height: auto; }
     background-color 0.6s ease;
 }
 
-/* Obsidian-glass cards while a journey chapter is live (Phase 14.1).
-   JourneyChapter toggles .chapter-live on its root during the chapter's
-   traversal; cards then read as translucent glass — the live footage
-   shows THROUGH via backdrop-filter (compositor-only, no per-frame JS).
-   The card's media layer (.journey-card-media) yields to the world
-   behind. Border/Corners/cursor language untouched. Resting state,
-   mobile and reduced-motion never get .chapter-live, so their card
-   style is exactly as before. */
-.chapter-live .glow-card {
-  background-color: rgba(6, 9, 12, 0.38);
+/* Obsidian-glass cards (Phase 14.1, per-card state machine).
+   RESTING (the Phase 13 still) is the dominant state. JourneyChapter
+   adds .card-glass to an individual card ONLY when the chapter is in
+   its luminous window AND the video pixels sampled behind that card's
+   rect exceed a luminance floor — glass never trades a visible image
+   for a black rectangle. The frosted card is deliberately transparent
+   (0.28 ink + 10px blur over a relaxed scrim) so the moving footage is
+   unmistakable through it. Border/Corners/cursor language untouched;
+   mobile, reduced-motion and the frames-fallback engine never frost. */
+.glow-card.card-glass {
+  background-color: rgba(6, 9, 12, 0.28);
   /* blur radius is the compositor cost lever: 14px + saturate produced
      1-2 long frames under 4x throttle; 10px alone traces at zero while
      the glass read is preserved on dark footage */
@@ -163,7 +164,7 @@ html.lenis, html.lenis body { height: auto; }
 .journey-scope .journey-card-media {
   transition: opacity 0.6s ease;
 }
-.chapter-live .journey-card-media {
+.card-glass .journey-card-media {
   opacity: 0 !important;
 }
 /* While glass is live, the flat scrim relaxes (0.45 ink → ~0.25
@@ -176,10 +177,38 @@ html.lenis, html.lenis body { height: auto; }
   opacity: 0.55;
 }
 @supports not (backdrop-filter: blur(1px)) {
-  /* No backdrop support: stay near-opaque so text contrast holds */
-  .chapter-live .glow-card {
+  /* No backdrop support: no frost at all — the still stays */
+  .glow-card.card-glass {
     background-color: rgba(6, 9, 12, 0.85);
   }
+  .card-glass .journey-card-media {
+    opacity: 1 !important;
+  }
+}
+
+/* ?glassdebug=1 — state-machine instrumentation (dev only):
+   green outline = RESTING still · cyan outline = GLASS (frosted) */
+.glassdebug .journey-scope .glow-card {
+  outline: 2px solid #22c55e;
+  outline-offset: -2px;
+}
+.glassdebug .journey-scope .glow-card.card-glass {
+  outline-color: #00f0ff;
+}
+.glassdebug-badge {
+  position: absolute;
+  top: 96px;
+  left: 24px;
+  z-index: 60;
+  padding: 6px 10px;
+  border: 1px solid rgba(0, 240, 255, 0.4);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #00f0ff;
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 11px;
+  white-space: pre;
+  pointer-events: none;
 }
 .glow-card:hover {
   border-color: rgba(0, 240, 255, 0.4);
