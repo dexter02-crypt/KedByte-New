@@ -39,6 +39,10 @@ export default function JourneyChapter({
   nativeH = 720,
   lead = true,
   restAtEnd = false, // ch05: hold the lit final frame instead of dipping out
+  // Glass window: the progress span where cards go glass. Aligned per
+  // chapter to the shot's LUMINOUS segment so the through-view is always
+  // visibly alive — outside it, cards rest as their Phase 13 stills.
+  glassWindow = [0.02, 0.98],
   children,
   testid,
 }) {
@@ -46,6 +50,7 @@ export default function JourneyChapter({
   const canvasRef = useRef(null);
   const videoRef = useRef(null);
   const useVideo = ENGINE === "video";
+  const [glassFrom, glassTo] = glassWindow;
 
   // Video engine path
   useEffect(() => {
@@ -115,8 +120,8 @@ export default function JourneyChapter({
       const edgeIn = Math.min(1, p / 0.04);
       const edgeOut = restAtEnd ? 1 : Math.min(1, (1 - p) / 0.04);
       video.style.opacity = String(Math.min(edgeIn, edgeOut));
-      // Glass cards: live while the chapter is genuinely traversing
-      const live = p > 0.02 && p < 0.98;
+      // Glass cards: only inside the chapter's luminous window
+      const live = p > glassFrom && p < glassTo;
       if (live !== wasLive) {
         wasLive = live;
         root.classList.toggle("chapter-live", live);
@@ -139,7 +144,7 @@ export default function JourneyChapter({
       video.removeEventListener("loadedmetadata", onMeta);
       video.removeEventListener("emptied", onEmptied);
     };
-  }, [active, useVideo, chapter, restAtEnd]);
+  }, [active, useVideo, chapter, restAtEnd, glassFrom, glassTo]);
 
   useEffect(() => {
     if (!active || useVideo) return undefined;
@@ -195,7 +200,7 @@ export default function JourneyChapter({
           const edgeIn = Math.min(1, p / 0.04);
           const edgeOut = restAtEnd ? 1 : Math.min(1, (1 - p) / 0.04);
           canvas.style.opacity = String(Math.min(edgeIn, edgeOut));
-          const live = p > 0.02 && p < 0.98;
+          const live = p > glassFrom && p < glassTo;
           if (live !== wasLive) {
             wasLive = live;
             root.classList.toggle("chapter-live", live);
@@ -211,7 +216,7 @@ export default function JourneyChapter({
       window.removeEventListener("resize", onResize);
       scrubber.dispose();
     };
-  }, [active, useVideo, chapter, frames, nativeW, nativeH, restAtEnd]);
+  }, [active, useVideo, chapter, frames, nativeW, nativeH, restAtEnd, glassFrom, glassTo]);
 
   if (!active) return children;
 
@@ -236,8 +241,10 @@ export default function JourneyChapter({
             style={{ visibility: "hidden", opacity: 0 }}
           />
         )}
-        {/* Footage dimmed, content never: flat scrim + vertical gradient */}
-        <div className="absolute inset-0 bg-ink/45" />
+        {/* Footage dimmed, content never: flat scrim + vertical gradient.
+            The flat scrim relaxes during the glass window (CSS below) so
+            the world visibly breathes through the cards. */}
+        <div className="journey-scrim absolute inset-0 bg-ink/45" />
         <div className="absolute inset-0 bg-gradient-to-b from-ink/60 via-transparent to-ink/60" />
       </div>
       {/* Existing section content flows OVER the film in normal document

@@ -166,6 +166,15 @@ html.lenis, html.lenis body { height: auto; }
 .chapter-live .journey-card-media {
   opacity: 0 !important;
 }
+/* While glass is live, the flat scrim relaxes (0.45 ink → ~0.25
+   effective) so the footage is visibly alive through the cards; the
+   vertical gradient stays for edge/heading protection. */
+.journey-scope .journey-scrim {
+  transition: opacity 0.6s ease;
+}
+.chapter-live .journey-scrim {
+  opacity: 0.55;
+}
 @supports not (backdrop-filter: blur(1px)) {
   /* No backdrop support: stay near-opaque so text contrast holds */
   .chapter-live .glow-card {

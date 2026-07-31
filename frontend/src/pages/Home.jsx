@@ -446,8 +446,14 @@ export default function Home() {
         <TechMarquee />
       </section>
 
-      {/* CH 02 — THE FIELD: capabilities over the assembling block grid */}
-      <JourneyChapter active={journeyActive} chapter="ch02" testid="journey-ch02">
+      {/* CH 02 — THE FIELD: capabilities over the assembling block grid.
+          Glass window ≈ the glow cell's traversal (luminous segment). */}
+      <JourneyChapter
+        active={journeyActive}
+        chapter="ch02"
+        glassWindow={[0.18, 0.62]}
+        testid="journey-ch02"
+      >
       <section className="relative py-16 md:py-40 overflow-hidden" data-testid="home-services">
         <div className="tech-grid grid-fade absolute inset-0 opacity-30" />
         
@@ -588,8 +594,14 @@ export default function Home() {
         <ProcessSection />
       </JourneyChapter>
 
-      {/* CH 04 — THE CORE: selected work over the sphere descent */}
-      <JourneyChapter active={journeyActive} chapter="ch04" testid="journey-ch04">
+      {/* CH 04 — THE CORE: selected work over the sphere descent.
+          Glass window ≈ the seam's brightening (luminous segment). */}
+      <JourneyChapter
+        active={journeyActive}
+        chapter="ch04"
+        glassWindow={[0.42, 0.85]}
+        testid="journey-ch04"
+      >
         <SelectedWork />
       </JourneyChapter>
 
