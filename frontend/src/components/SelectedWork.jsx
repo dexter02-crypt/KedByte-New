@@ -82,10 +82,12 @@ export default function SelectedWork() {
 
         <div ref={gridRef}>
         <StaggerGroup stagger={0.08} className="mt-14 grid md:grid-cols-3 gap-5">
-          {work.map((w) => {
+          {work.map((w, wi) => {
             const active = openId === w.id;
             return (
             <StaggerItem key={w.id}>
+              {/* Plain wrapper (framer-free) carries the pin micro-parallax */}
+              <div className={`journey-para-${(wi + 1) % 3} h-full`}>
               <button
                 onClick={() => toggleCase(w.id)}
                 data-testid={`work-card-${w.id}`}
@@ -192,6 +194,7 @@ export default function SelectedWork() {
                   />
                 </motion.div>
               </button>
+              </div>
             </StaggerItem>
             );
           })}

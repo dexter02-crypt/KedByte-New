@@ -510,6 +510,8 @@ export default function Home() {
                 key={s.title}
                 className={s.span}
               >
+                {/* Plain wrapper (framer-free) carries the pin micro-parallax */}
+                <div className={`journey-para-${i % 3} h-full`}>
                 <MouseTilt3D strength={0.3} className="h-full">
                   <MotionLink
                     to="/services"
@@ -580,6 +582,7 @@ export default function Home() {
                     </div>
                   </MotionLink>
                 </MouseTilt3D>
+                </div>
               </StaggerItem>
             ))}
           </StaggerGroup>

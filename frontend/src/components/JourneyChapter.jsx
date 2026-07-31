@@ -31,12 +31,6 @@ import { chooseScrubEngine } from "@/lib/scrubEngine";
 const ENGINE = typeof window !== "undefined" ? chooseScrubEngine() : "frames";
 const VIDEO_DURATION_FALLBACK = 10.04;
 
-// Pinned chapters map the shot across the middle 76% of the traversal:
-// the composed-dwell track lengthens the scroll range, and mapping 1:1
-// would push scroll-per-source-frame past the ~13px stutter threshold.
-// The shots' black bookends hold naturally in the margins.
-const MEDIA_MARGIN = 0.12;
-
 export default function JourneyChapter({
   active,
   chapter, // "ch02" .. "ch05"
@@ -46,8 +40,10 @@ export default function JourneyChapter({
   lead = true,
   restAtEnd = false, // ch05: hold the lit final frame instead of dipping out
   // pinContent: the chapter's content group (heading + cards) rides a
-  // sticky pin through a 300vh track — it arrives, sits FULLY COMPOSED
-  // through the chapter's heart (p≈0.25-0.75), then exits.
+  // sticky pin through a 160vh track. The pin is short and NEVER static:
+  // a scroll-linked drift (±30px, cos-velocity profile — fastest at the
+  // pin edges so it blends into the unpin) plus per-card micro-parallax
+  // keeps the foreground visibly responding to every wheel tick.
   pinContent = false,
   children,
   testid,
@@ -112,16 +108,14 @@ export default function JourneyChapter({
     // ScrollTrigger's "top bottom" → "bottom top", derived directly from
     // the Lenis-smoothed native scroll position. The video engine needs no
     // GSAP at all (video-engine visitors never fetch the GSAP chunk).
-    const margin = pinContent ? MEDIA_MARGIN : 0;
     let rafId = 0;
     const update = () => {
       rafId = 0;
       const rect = root.getBoundingClientRect();
       const vh = window.innerHeight;
       const p = Math.min(1, Math.max(0, (vh - rect.top) / (rect.height + vh)));
-      const pm = Math.min(1, Math.max(0, (p - margin) / (1 - 2 * margin)));
       const dur = video.duration || VIDEO_DURATION_FALLBACK;
-      desired = Math.min(dur - 1 / 30, pm * dur);
+      desired = Math.min(dur - 1 / 30, p * dur);
       // Black-dip edge ramp (ch05 rests lit at its final frame)
       const edgeIn = Math.min(1, p / 0.04);
       const edgeOut = restAtEnd ? 1 : Math.min(1, (1 - p) / 0.04);
@@ -192,10 +186,7 @@ export default function JourneyChapter({
         scrub: true,
         onUpdate: (self) => {
           const p = self.progress;
-          const margin = pinContent ? MEDIA_MARGIN : 0;
-          scrubber.setProgress(
-            Math.min(1, Math.max(0, (p - margin) / (1 - 2 * margin)))
-          );
+          scrubber.setProgress(p);
           // Black-dip edge ramp: guarantees an invisible junction even where
           // an endpoint frame isn't perfectly black. ch05 rests lit at its
           // final frame (the CTA background), so it only ramps in.
@@ -214,6 +205,47 @@ export default function JourneyChapter({
       scrubber.dispose();
     };
   }, [active, useVideo, chapter, frames, nativeW, nativeH, restAtEnd, pinContent]);
+
+  // Scroll-linked drift for pinned content (engine-agnostic). Total travel
+  // ±30px across the stuck span with a cos-velocity profile: v(u) ∝
+  // 1 + 0.8·cos(2πu) — fastest at the pin boundaries (≈0.18px per scroll
+  // px) so the release into 1:1 scrolling has no hard velocity step, and
+  // gentlest mid-dwell. Per-card micro-parallax multiplies the same CSS
+  // variable at different rates (see index.css), so every wheel tick moves
+  // both world and content. Transform-only; CLS-safe.
+  useEffect(() => {
+    if (!active || !pinContent) return undefined;
+    const root = rootRef.current;
+    const track = root ? root.querySelector(".journey-track") : null;
+    if (!root || !track) return undefined;
+    const D = 30;
+    let rafId = 0;
+    const update = () => {
+      rafId = 0;
+      const r = track.getBoundingClientRect();
+      const span = r.height - window.innerHeight;
+      if (span <= 0) {
+        // Pin released (e.g. work panel open) — no drift offset
+        root.style.setProperty("--jd", "0");
+        return;
+      }
+      const u = Math.min(1, Math.max(0, -r.top / span));
+      const drift =
+        D - 2 * D * (u + (0.8 * Math.sin(2 * Math.PI * u)) / (2 * Math.PI));
+      root.style.setProperty("--jd", drift.toFixed(2));
+    };
+    const onScroll = () => {
+      if (!rafId) rafId = requestAnimationFrame(update);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    update();
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (rafId) cancelAnimationFrame(rafId);
+    };
+  }, [active, pinContent]);
 
   if (!active) return children;
 
@@ -251,9 +283,9 @@ export default function JourneyChapter({
           stays native. */}
       <div className="relative z-10 -mt-[100vh]">
         {pinContent ? (
-          <div className="journey-track min-h-[300vh]">
+          <div className="journey-track min-h-[160vh]">
             <div className="journey-content-pin sticky top-0 flex min-h-screen flex-col justify-center">
-              {children}
+              <div className="journey-drift">{children}</div>
             </div>
           </div>
         ) : (
