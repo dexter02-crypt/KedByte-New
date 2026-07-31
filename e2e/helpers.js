@@ -41,6 +41,14 @@ async function installApiBypass(page) {
  */
 async function gotoAndSettle(page, path = "/") {
   await installApiBypass(page);
+  // Suppress the first-visit cinematic intro for all specs except the intro
+  // suite itself (which navigates directly): the intro marks itself seen via
+  // this sessionStorage key, so pre-setting it routes to the Preloader path.
+  await page.addInitScript(() => {
+    try {
+      window.sessionStorage.setItem("kb_intro_seen", "1");
+    } catch {}
+  });
   await page.goto(path, { waitUntil: "domcontentloaded" });
   await page.waitForSelector("#main-content", { state: "visible", timeout: 20_000 });
   await page

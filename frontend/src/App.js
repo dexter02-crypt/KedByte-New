@@ -10,6 +10,8 @@ import RouteCurtain from "@/components/RouteCurtain";
 import { CtaPanelProvider } from "@/components/StartProjectPanel";
 import SmoothScroll, { useLenis } from "@/components/SmoothScroll";
 import Preloader from "@/components/Preloader";
+import IntroSequence, { introEligible } from "@/components/IntroSequence";
+import { markIntroHandoff } from "@/lib/introHandoff";
 import Layout from "@/components/Layout";
 import Home from "@/pages/Home";
 import Services from "@/pages/Services";
@@ -68,19 +70,34 @@ function AnimatedRoutes() {
 }
 
 function App() {
-  // First-load-only preloader: App mounts once per full page load, so route
-  // changes never bring it back. The app content mounts as the preloader
-  // panels begin their exit wipe, so the hero entrance chains after it.
+  // First-load-only entrance: App mounts once per full page load, so route
+  // changes never bring it back. Desktop first visits to Home get the
+  // cinematic intro (IntroSequence decides nothing itself — eligibility is
+  // resolved here, once, before first paint); everyone else keeps the
+  // Preloader. The app content mounts as the entrance begins its exit, so
+  // the hero chains after it.
+  const [entrance, setEntrance] = useState(() =>
+    introEligible() ? "intro" : "preloader"
+  );
   const [revealed, setRevealed] = useState(false);
-  const [preloaderDone, setPreloaderDone] = useState(false);
 
   return (
     <MotionConfig reducedMotion="user">
       <div className="App font-body">
-        {!preloaderDone && (
+        {entrance === "intro" && (
+          <IntroSequence
+            onReveal={() => {
+              markIntroHandoff();
+              setRevealed(true);
+            }}
+            onComplete={() => setEntrance("done")}
+            onFallback={() => setEntrance("preloader")}
+          />
+        )}
+        {entrance === "preloader" && (
           <Preloader
             onReveal={() => setRevealed(true)}
-            onComplete={() => setPreloaderDone(true)}
+            onComplete={() => setEntrance("done")}
           />
         )}
         {revealed && (

@@ -26,6 +26,7 @@ import HeroScrub from "@/components/HeroScrub";
 import SelectedWork from "@/components/SelectedWork";
 import ProcessSection from "@/components/ProcessSection";
 import { useCtaPanel } from "@/components/StartProjectPanel";
+import { wasIntroHandoff } from "@/lib/introHandoff";
 import { metrics } from "@/data/metrics";
 import useMediaQuery from "@/hooks/use-media-query";
 import { Link } from "react-router-dom";
@@ -127,9 +128,11 @@ export default function Home() {
             exactly as before. Entrance scale (1.15 → 1) applies to both. */}
         {!touch && !reduced ? (
           <div className="absolute inset-0">
+            {/* After the cinematic intro the camera has already landed on
+                this exact frame — replaying the entrance zoom would jolt */}
             <motion.div
               className="h-full w-full"
-              initial={{ scale: 1.15 }}
+              initial={{ scale: wasIntroHandoff() ? 1 : 1.15 }}
               animate={{ scale: 1 }}
               transition={{ duration: 1.2, ease: EASE }}
             >
@@ -165,10 +168,11 @@ export default function Home() {
         )}
         <motion.div className="absolute inset-0 bg-ink" style={{ opacity: overlayOpacity }} />
         {/* Entrance-only overlay: starts opaque, eases out so the combined
-            overlay settles at the scroll-driven resting opacity (t=0 → ~1s) */}
+            overlay settles at the scroll-driven resting opacity (t=0 → ~1s).
+            Skipped after the intro handoff — the scene is already revealed. */}
         <motion.div
           className="absolute inset-0 bg-ink"
-          initial={{ opacity: 1 }}
+          initial={{ opacity: wasIntroHandoff() ? 0 : 1 }}
           animate={{ opacity: 0 }}
           transition={{ duration: 1.0, ease: "easeOut" }}
         />
