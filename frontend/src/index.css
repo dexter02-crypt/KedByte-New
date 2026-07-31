@@ -141,74 +141,38 @@ html.lenis, html.lenis body { height: auto; }
     background-color 0.6s ease;
 }
 
-/* Obsidian-glass cards (Phase 14.1, per-card state machine).
-   RESTING (the Phase 13 still) is the dominant state. JourneyChapter
-   adds .card-glass to an individual card ONLY when the chapter is in
-   its luminous window AND the video pixels sampled behind that card's
-   rect exceed a luminance floor — glass never trades a visible image
-   for a black rectangle. The frosted card is deliberately transparent
-   (0.28 ink + 10px blur over a relaxed scrim) so the moving footage is
-   unmistakable through it. Border/Corners/cursor language untouched;
-   mobile, reduced-motion and the frames-fallback engine never frost. */
-.glow-card.card-glass {
-  background-color: rgba(6, 9, 12, 0.28);
-  /* blur radius is the compositor cost lever: 14px + saturate produced
-     1-2 long frames under 4x throttle; 10px alone traces at zero while
-     the glass read is preserved on dark footage */
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
+/* Obsidian Journey — solid cards over a living world (final form).
+   Cards always show their imagery at full resting strength; the moving
+   footage behind them is the premium layer. Scoped to .journey-scope
+   (desktop chapters only) so mobile/reduced-motion keep the exact
+   Phase 13 presentation. */
+
+/* Bento imagery: raised from the 15% wash so it clearly reads against
+   the moving background (hover lifts it further, as before). */
+.journey-scope .journey-bento-media {
+  opacity: 0.42 !important;
 }
-/* Scoped to journey-active DOM (.journey-scope only exists on desktop
-   chapters) so the transition never fights framer's reveal animations on
-   the passthrough mobile/reduced-motion tree. */
-.journey-scope .journey-card-media {
-  transition: opacity 0.6s ease;
-}
-.card-glass .journey-card-media {
-  opacity: 0 !important;
-}
-/* While glass is live, the flat scrim relaxes (0.45 ink → ~0.25
-   effective) so the footage is visibly alive through the cards; the
-   vertical gradient stays for edge/heading protection. */
-.journey-scope .journey-scrim {
-  transition: opacity 0.6s ease;
-}
-.chapter-live .journey-scrim {
-  opacity: 0.55;
-}
-@supports not (backdrop-filter: blur(1px)) {
-  /* No backdrop support: no frost at all — the still stays */
-  .glow-card.card-glass {
-    background-color: rgba(6, 9, 12, 0.85);
-  }
-  .card-glass .journey-card-media {
-    opacity: 1 !important;
-  }
+.journey-scope .group:hover .journey-bento-media {
+  opacity: 0.58 !important;
 }
 
-/* ?glassdebug=1 — state-machine instrumentation (dev only):
-   green outline = RESTING still · cyan outline = GLASS (frosted) */
-.glassdebug .journey-scope .glow-card {
-  outline: 2px solid #22c55e;
-  outline-offset: -2px;
+/* Composed-dwell compaction: inside a pinned chapter the section's
+   vertical rhythm tightens so heading + cards fit the viewport as one
+   composed group. Mobile keeps the spacious flow. */
+.journey-content-pin section {
+  padding-block: 2.5rem !important;
 }
-.glassdebug .journey-scope .glow-card.card-glass {
-  outline-color: #00f0ff;
+.journey-content-pin .bento-spacer {
+  margin-bottom: 2rem !important;
 }
-.glassdebug-badge {
-  position: absolute;
-  top: 96px;
-  left: 24px;
-  z-index: 60;
-  padding: 6px 10px;
-  border: 1px solid rgba(0, 240, 255, 0.4);
-  border-radius: 8px;
-  background: rgba(0, 0, 0, 0.8);
-  color: #00f0ff;
-  font-family: ui-monospace, Menlo, monospace;
-  font-size: 11px;
-  white-space: pre;
-  pointer-events: none;
+
+/* The pin releases while the Selected Work case panel is open, so the
+   panel's expand + scroll-into-view behavior stays native. */
+.journey-scope:has([data-work-open="true"]) .journey-content-pin {
+  position: static;
+}
+.journey-scope:has([data-work-open="true"]) .journey-track {
+  min-height: 0;
 }
 .glow-card:hover {
   border-color: rgba(0, 240, 255, 0.4);

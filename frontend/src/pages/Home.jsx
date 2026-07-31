@@ -110,14 +110,6 @@ export default function Home() {
   // reduced-motion render the exact non-pinned page (JourneyChapter
   // passes children through untouched).
   const journeyActive = !touch && !reduced;
-  // ?glassdebug=1: outlines card states + shows per-chapter progress badges
-  useEffect(() => {
-    if (window.location.search.includes("glassdebug")) {
-      document.body.classList.add("glassdebug");
-      return () => document.body.classList.remove("glassdebug");
-    }
-    return undefined;
-  }, []);
   const lenis = useLenis();
   useEffect(() => {
     // GSAP/ScrollTrigger is only the FRAMES-fallback choreographer; the
@@ -454,12 +446,12 @@ export default function Home() {
         <TechMarquee />
       </section>
 
-      {/* CH 02 — THE FIELD: capabilities over the assembling block grid.
-          Glass window ≈ the glow cell's traversal (luminous segment). */}
+      {/* CH 02 — THE FIELD: capabilities pinned composed over the
+          assembling block grid */}
       <JourneyChapter
         active={journeyActive}
         chapter="ch02"
-        glassWindow={[0.18, 0.62]}
+        pinContent
         testid="journey-ch02"
       >
       <section className="relative py-16 md:py-40 overflow-hidden" data-testid="home-services">
@@ -533,7 +525,7 @@ export default function Home() {
                          propagation from the card stops at any motion element
                          with its own object-form initial (like Reveal's). */
                       <motion.div
-                        className="journey-card-media absolute inset-0 opacity-15 transition-[opacity,filter] duration-700 group-hover:opacity-30 group-hover:brightness-110"
+                        className="journey-bento-media absolute inset-0 opacity-15 transition-[opacity,filter] duration-700 group-hover:opacity-30 group-hover:brightness-110"
                         variants={{ rest: { scale: 1 }, hover: { scale: 1.03 } }}
                         transition={hoverSpring}
                       >
@@ -571,7 +563,7 @@ export default function Home() {
                           0{i + 1}
                         </span>
                       </div>
-                      <div className="mb-20 md:mb-28" />
+                      <div className="bento-spacer mb-20 md:mb-28" />
                       <h3 className="font-heading text-2xl md:text-3xl tracking-tight text-white">
                         {s.title}
                       </h3>
@@ -602,12 +594,12 @@ export default function Home() {
         <ProcessSection />
       </JourneyChapter>
 
-      {/* CH 04 — THE CORE: selected work over the sphere descent.
-          Glass window ≈ the seam's brightening (luminous segment). */}
+      {/* CH 04 — THE CORE: selected work pinned composed over the
+          sphere descent */}
       <JourneyChapter
         active={journeyActive}
         chapter="ch04"
-        glassWindow={[0.42, 0.85]}
+        pinContent
         testid="journey-ch04"
       >
         <SelectedWork />
@@ -704,6 +696,7 @@ export default function Home() {
         nativeW={1172}
         nativeH={784}
         restAtEnd
+        pinContent
         testid="journey-ch05"
       >
         <CTASection />

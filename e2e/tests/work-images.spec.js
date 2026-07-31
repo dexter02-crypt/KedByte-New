@@ -43,19 +43,10 @@ test("selected work card images load and are visible", async ({ page }) => {
     expect(s.width, label).toBeGreaterThan(50);
     expect(s.height, label).toBeGreaterThan(50);
     expect(s.wrapVisibility, label).toBe("visible");
-    // Phase 14.1: a desktop card INTENTIONALLY hides its media only while
-    // it is individually frosted (.card-glass — luminous window AND
-    // sampled light behind it). RESTING is the dominant state; the
-    // still-image assertions apply whenever the card is not frosted.
-    const glassLive = await img.evaluate(
-      (el) => !!el.closest(".card-glass")
-    );
-    if (glassLive) {
-      expect(s.wrapOpacity, `${label} — glass state should hide media`).toBeLessThan(0.1);
-    } else {
-      expect(s.wrapOpacity, label).toBeGreaterThan(0.9);
-      // A stuck reveal leaves inset(...100%...) — any large inset means hidden
-      expect(s.wrapClip, label).not.toMatch(/100%|9\d(\.\d+)?%/);
-    }
+    // Card imagery is always visible — the glass mechanic was removed in
+    // Phase 14.1's final form (solid cards over the living world).
+    expect(s.wrapOpacity, label).toBeGreaterThan(0.9);
+    // A stuck reveal leaves inset(...100%...) — any large inset means hidden
+    expect(s.wrapClip, label).not.toMatch(/100%|9\d(\.\d+)?%/);
   }
 });
