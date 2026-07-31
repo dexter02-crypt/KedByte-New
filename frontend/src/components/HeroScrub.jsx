@@ -40,8 +40,8 @@ export default function HeroScrub({ progress, poster, posterSet, alt }) {
     const images = new Array(FRAME_COUNT).fill(null);
     let disposed = false;
     let shown = false;
-    let drawnIndex = -1;
-    let targetIndex = 0;
+    let drawnKey = -1;
+    let targetFloat = 0; // continuous frame position for sub-frame blending
     let rafId = 0;
 
     const nearestLoaded = (i) => {
@@ -53,18 +53,36 @@ export default function HeroScrub({ progress, poster, posterSet, alt }) {
       return -1;
     };
 
+    // Adaptive sub-frame interpolation (see lib/frameScrub.js): cross-blend
+    // at slow scrub speeds where discrete frame steps would read as stutter;
+    // single-frame draws during fast movement where they can't.
     const draw = () => {
       rafId = 0;
-      const idx = nearestLoaded(targetIndex);
-      if (idx === -1 || idx === drawnIndex) return;
       const { width: cw, height: ch } = canvas;
       if (!cw || !ch) return;
+      const speed = drawnKey === -1 ? FRAME_COUNT : Math.abs(targetFloat - drawnKey);
+      const i0 = Math.floor(targetFloat);
+      const i1 = Math.min(FRAME_COUNT - 1, i0 + 1);
+      const frac = targetFloat - i0;
+      const a = nearestLoaded(i0);
+      if (a === -1) return;
+      const canBlend = speed < 0.9 && images[i0] && images[i1] && i1 !== i0;
+      const blend = canBlend ? frac : 0;
+      const key = canBlend ? i0 + blend : images[Math.round(targetFloat)] ? Math.round(targetFloat) : a;
+      if (Math.abs(key - drawnKey) < 0.02) return;
       // object-fit: cover
       const scale = Math.max(cw / NATIVE_W, ch / NATIVE_H);
       const dw = NATIVE_W * scale;
       const dh = NATIVE_H * scale;
-      ctx.drawImage(images[idx], (cw - dw) / 2, (ch - dh) / 2, dw, dh);
-      drawnIndex = idx;
+      const dx = (cw - dw) / 2;
+      const dy = (ch - dh) / 2;
+      ctx.drawImage(images[canBlend ? i0 : Math.floor(key)] || images[a], dx, dy, dw, dh);
+      if (blend > 0.01) {
+        ctx.globalAlpha = blend;
+        ctx.drawImage(images[i1], dx, dy, dw, dh);
+        ctx.globalAlpha = 1;
+      }
+      drawnKey = key;
       if (!shown) {
         shown = true;
         canvas.style.opacity = "1";
@@ -79,7 +97,7 @@ export default function HeroScrub({ progress, poster, posterSet, alt }) {
       const dpr = Math.min(window.devicePixelRatio || 1, MAX_DPR);
       canvas.width = Math.round(canvas.clientWidth * dpr);
       canvas.height = Math.round(canvas.clientHeight * dpr);
-      drawnIndex = -1; // canvas reset cleared the bitmap
+      drawnKey = -1; // canvas reset cleared the bitmap
       schedule();
     };
 
@@ -87,11 +105,19 @@ export default function HeroScrub({ progress, poster, posterSet, alt }) {
       new Promise((resolve) => {
         if (images[i]) return resolve();
         const img = new Image();
-        img.onload = () => {
+        img.onload = async () => {
+          // Pre-decode so the first drawImage of a frame never pays the
+          // decode cost mid-scrub
+          try {
+            await img.decode();
+          } catch {
+            /* still renders via drawImage's sync path */
+          }
           if (!disposed) {
             images[i] = img;
-            // Repaint if this frame is at or near the current scroll position
-            if (nearestLoaded(targetIndex) !== drawnIndex) schedule();
+            // Repaint only when this frame is near the scrub position or
+            // nothing has painted yet (see lib/frameScrub.js)
+            if (drawnKey === -1 || Math.abs(i - targetFloat) <= 8) schedule();
           }
           resolve();
         };
@@ -116,10 +142,7 @@ export default function HeroScrub({ progress, poster, posterSet, alt }) {
     resize();
     window.addEventListener("resize", resize);
     const unsubscribe = progress.on("change", (v) => {
-      targetIndex = Math.max(
-        0,
-        Math.min(FRAME_COUNT - 1, Math.round(v * (FRAME_COUNT - 1)))
-      );
+      targetFloat = Math.max(0, Math.min(FRAME_COUNT - 1, v * (FRAME_COUNT - 1)));
       schedule();
     });
 
