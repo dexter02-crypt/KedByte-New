@@ -228,7 +228,29 @@ export default function JourneyChapter({
       const key = Object.keys(PARA_RATES).find((k) => el.classList.contains(k));
       return { el, rate: PARA_RATES[key] || 0 };
     });
-    const D = 30;
+    // Drift velocity profile (px of drift per px of scroll): NEAR-LINEAR.
+    // The old cos profile bottomed at ~0.02 px/px mid-dwell — beneath the
+    // eye's visibility threshold, which read as a frozen foreground. Now:
+    // constant R across the dwell (R = 0.14 ≥ the 0.125 visibility floor,
+    // i.e. ≥3.4px per 24px scroll step) with 10% eased shoulders at BOTH
+    // ends rising to V_EDGE, so the catch into the pin and the release
+    // out of it blend toward 1:1 scrolling with no hard velocity step.
+    const R = 0.14;
+    const V_EDGE = 0.35;
+    const E = 0.1; // shoulder width in dwell fraction
+    const K = V_EDGE - R;
+    // Closed-form integral of the velocity profile from 0..u (per unit u)
+    const integ = (u) => {
+      const shoulderArea = (K * E) / 3;
+      if (u <= E) {
+        return R * u + shoulderArea * (1 - Math.pow((E - u) / E, 3));
+      }
+      if (u <= 1 - E) {
+        return R * u + shoulderArea;
+      }
+      return R * u + shoulderArea + shoulderArea * Math.pow((u - (1 - E)) / E, 3);
+    };
+    const TOTAL = integ(1); // fraction of span travelled by the drift
     let rafId = 0;
     const apply = (v) => {
       driftEl.style.transform = `translate3d(0, ${v.toFixed(2)}px, 0)`;
@@ -246,8 +268,8 @@ export default function JourneyChapter({
         return;
       }
       const u = Math.min(1, Math.max(0, -r.top / span));
-      const drift =
-        D - 2 * D * (u + (0.8 * Math.sin(2 * Math.PI * u)) / (2 * Math.PI));
+      // Centered: starts at +span·TOTAL/2, ends at −span·TOTAL/2
+      const drift = span * (TOTAL / 2 - integ(u));
       apply(drift);
     };
     const onScroll = () => {
