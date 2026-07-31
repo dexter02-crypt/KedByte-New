@@ -31,6 +31,18 @@ export default function Header() {
   const logoRef = useRef(null);
   const reducedMotion = useReducedMotion();
   const ctaPanel = useCtaPanel();
+  // Living K-mark: one subtle draw per session on first paint (~550ms);
+  // route changes remount the header, so the gate lives in sessionStorage.
+  // Reduced-motion renders the static mark.
+  const [drawK] = useState(() => {
+    try {
+      if (window.sessionStorage.getItem("kb_kdrawn")) return false;
+      window.sessionStorage.setItem("kb_kdrawn", "1");
+      return true;
+    } catch {
+      return false;
+    }
+  });
 
   // Mouse position for 3D logo tilt
   const mouseX = useMotionValue(0);
@@ -143,7 +155,13 @@ export default function Header() {
                 ease: "easeInOut"
               }}
             >
-              <KLogo className="h-8 w-8" animate />
+              <KLogo
+                className="h-8 w-8"
+                animate={drawK && !reducedMotion}
+                duration={0.3}
+                stagger={0.12}
+                delay={1.0}
+              />
             </motion.div>
           </motion.div>
           <motion.span

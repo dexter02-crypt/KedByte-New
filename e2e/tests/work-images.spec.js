@@ -43,8 +43,20 @@ test("selected work card images load and are visible", async ({ page }) => {
     expect(s.width, label).toBeGreaterThan(50);
     expect(s.height, label).toBeGreaterThan(50);
     expect(s.wrapVisibility, label).toBe("visible");
-    expect(s.wrapOpacity, label).toBeGreaterThan(0.9);
-    // A stuck reveal leaves inset(...100%...) — any large inset means hidden
-    expect(s.wrapClip, label).not.toMatch(/100%|9\d(\.\d+)?%/);
+    // Phase 14.1: on desktop the journey's glass-card state INTENTIONALLY
+    // fades the media layer to 0 while the chapter is live behind the card
+    // (.chapter-live on the journey root). The still-image assertions apply
+    // wherever the glass state is not active: touch (journey passthrough),
+    // reduced motion, and desktop resting states.
+    const glassLive = await img.evaluate(
+      (el) => !!el.closest(".chapter-live")
+    );
+    if (glassLive) {
+      expect(s.wrapOpacity, `${label} — glass state should hide media`).toBeLessThan(0.1);
+    } else {
+      expect(s.wrapOpacity, label).toBeGreaterThan(0.9);
+      // A stuck reveal leaves inset(...100%...) — any large inset means hidden
+      expect(s.wrapClip, label).not.toMatch(/100%|9\d(\.\d+)?%/);
+    }
   }
 });

@@ -100,7 +100,7 @@ export default function SelectedWork() {
                   animate="rest"
                   whileHover="hover"
                 >
-                  <Reveal variant="clip" className="relative aspect-[16/10] overflow-hidden">
+                  <Reveal variant="clip" className="journey-card-media relative aspect-[16/10] overflow-hidden">
                     {/* Entry settle: image starts slightly oversized and eases
                         to rest under the clip wipe — transform-only */}
                     <motion.div

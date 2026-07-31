@@ -519,7 +519,7 @@ export default function Home() {
                          propagation from the card stops at any motion element
                          with its own object-form initial (like Reveal's). */
                       <motion.div
-                        className="absolute inset-0 opacity-15 transition-[opacity,filter] duration-700 group-hover:opacity-30 group-hover:brightness-110"
+                        className="journey-card-media absolute inset-0 opacity-15 transition-[opacity,filter] duration-700 group-hover:opacity-30 group-hover:brightness-110"
                         variants={{ rest: { scale: 1 }, hover: { scale: 1.03 } }}
                         transition={hoverSpring}
                       >

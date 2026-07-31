@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import KLogo from "@/components/KLogo";
 import SplitText from "@/components/SplitText";
 
 /**
@@ -128,16 +129,18 @@ export default function IntroSequence({ onReveal, onComplete, onFallback }) {
         aria-hidden="true"
       />
 
-      {/* Wordmark — crisp HTML, arrives with the seam's ignition */}
+      {/* Living K-mark + wordmark — crisp SVG/HTML, arriving with the
+          seam's ignition: the K draws first, then KEDBYTE resolves */}
       {wordmark !== "out" && (
         <motion.div
-          className="absolute inset-0 flex items-center justify-center pointer-events-none"
+          className="absolute inset-0 flex flex-col items-center justify-center gap-6 pointer-events-none"
           animate={{ opacity: wordmark === "exit" ? 0 : 1, y: wordmark === "exit" ? -24 : 0 }}
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         >
+          <KLogo className="h-16 w-16 md:h-20 md:w-20" animate duration={0.45} stagger={0.14} />
           <div className="font-heading font-black uppercase tracking-tight text-5xl md:text-7xl leading-none">
-            <SplitText text="KED" className="text-white" delay={0} charDelay={0.09} />
-            <SplitText text="BYTE" className="text-cyan-accent text-glow" delay={0.27} charDelay={0.09} />
+            <SplitText text="KED" className="text-white" delay={0.55} charDelay={0.09} />
+            <SplitText text="BYTE" className="text-cyan-accent text-glow" delay={0.82} charDelay={0.09} />
           </div>
         </motion.div>
       )}

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
+import KLogo from "@/components/KLogo";
 import SplitText from "@/components/SplitText";
 import useMediaQuery from "@/hooks/use-media-query";
 
@@ -69,9 +70,12 @@ export default function Preloader({ onReveal, onComplete }) {
         onAnimationComplete={() => exiting && onComplete?.()}
         aria-hidden="true"
       >
-        <span className="font-heading font-black tracking-tighter text-4xl md:text-6xl text-white">
-          KED<span className="text-cyan-accent">BYTE</span>
-        </span>
+        <div className="flex flex-col items-center gap-5">
+          <KLogo className="h-12 w-12 md:h-16 md:w-16" />
+          <span className="font-heading font-black tracking-tighter text-4xl md:text-6xl text-white">
+            KED<span className="text-cyan-accent">BYTE</span>
+          </span>
+        </div>
       </motion.div>
     );
   }
@@ -104,9 +108,13 @@ export default function Preloader({ onReveal, onComplete }) {
         animate={{ opacity: exiting ? 0 : 1 }}
         transition={{ duration: 0.25 }}
       >
-        <div className="font-heading font-black uppercase tracking-tight text-5xl md:text-7xl leading-none">
-          <SplitText text="KED" className="text-white" delay={0.15} charDelay={0.06} />
-          <SplitText text="BYTE" className="text-cyan-accent text-glow" delay={0.33} charDelay={0.06} />
+        <div className="flex flex-col items-center gap-6">
+          {/* Living K-mark draws as the counter runs */}
+          <KLogo className="h-14 w-14 md:h-[4.5rem] md:w-[4.5rem]" animate duration={0.45} stagger={0.14} delay={0.1} />
+          <div className="font-heading font-black uppercase tracking-tight text-5xl md:text-7xl leading-none">
+            <SplitText text="KED" className="text-white" delay={0.55} charDelay={0.06} />
+            <SplitText text="BYTE" className="text-cyan-accent text-glow" delay={0.73} charDelay={0.06} />
+          </div>
         </div>
       </motion.div>
 

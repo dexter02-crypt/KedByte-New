@@ -103,6 +103,7 @@ export default function JourneyChapter({
     // the Lenis-smoothed native scroll position. The video engine needs no
     // GSAP at all (video-engine visitors never fetch the GSAP chunk).
     let rafId = 0;
+    let wasLive = false;
     const update = () => {
       rafId = 0;
       const rect = root.getBoundingClientRect();
@@ -114,6 +115,12 @@ export default function JourneyChapter({
       const edgeIn = Math.min(1, p / 0.04);
       const edgeOut = restAtEnd ? 1 : Math.min(1, (1 - p) / 0.04);
       video.style.opacity = String(Math.min(edgeIn, edgeOut));
+      // Glass cards: live while the chapter is genuinely traversing
+      const live = p > 0.02 && p < 0.98;
+      if (live !== wasLive) {
+        wasLive = live;
+        root.classList.toggle("chapter-live", live);
+      }
       applySeek();
     };
     const onScroll = () => {
@@ -171,6 +178,7 @@ export default function JourneyChapter({
     );
     io.observe(root);
 
+    let wasLive = false;
     import("@/lib/journeyGsap").then(({ ScrollTrigger }) => {
       if (dead) return;
       st = ScrollTrigger.create({
@@ -187,6 +195,11 @@ export default function JourneyChapter({
           const edgeIn = Math.min(1, p / 0.04);
           const edgeOut = restAtEnd ? 1 : Math.min(1, (1 - p) / 0.04);
           canvas.style.opacity = String(Math.min(edgeIn, edgeOut));
+          const live = p > 0.02 && p < 0.98;
+          if (live !== wasLive) {
+            wasLive = live;
+            root.classList.toggle("chapter-live", live);
+          }
         },
       });
     });
@@ -203,7 +216,7 @@ export default function JourneyChapter({
   if (!active) return children;
 
   return (
-    <div ref={rootRef} className="relative" data-testid={testid}>
+    <div ref={rootRef} className="journey-scope relative" data-testid={testid}>
       {/* Sticky film layer — behind everything in this chapter */}
       <div className="sticky top-0 h-screen w-full overflow-hidden" aria-hidden="true">
         {useVideo ? (
