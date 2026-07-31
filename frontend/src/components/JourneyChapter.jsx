@@ -40,7 +40,9 @@ export default function JourneyChapter({
   lead = true,
   restAtEnd = false, // ch05: hold the lit final frame instead of dipping out
   // pinContent: the chapter's content group (heading + cards) rides a
-  // sticky pin through a 160vh track. The pin is short and NEVER static:
+  // sticky pin through a 125vh track (trimmed from 160vh: at flick
+  // velocity the pin distance reads as resistance — the visitor now pays
+  // only ~25vh of held scroll per chapter). The pin is NEVER static:
   // a scroll-linked drift (±30px, cos-velocity profile — fastest at the
   // pin edges so it blends into the unpin) plus per-card micro-parallax
   // keeps the foreground visibly responding to every wheel tick.
@@ -322,7 +324,7 @@ export default function JourneyChapter({
           stays native. */}
       <div className="relative z-10 -mt-[100vh]">
         {pinContent ? (
-          <div className="journey-track min-h-[160vh]">
+          <div className="journey-track min-h-[125vh]">
             <div className="journey-content-pin sticky top-0 flex min-h-screen flex-col justify-center">
               <div className="journey-drift">{children}</div>
             </div>
