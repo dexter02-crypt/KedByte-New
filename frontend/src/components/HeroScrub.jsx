@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { chooseScrubEngine } from "@/lib/scrubEngine";
 
 /**
  * HeroScrub — desktop-only scroll-scrubbed hero background.
@@ -28,11 +29,69 @@ const MAX_DPR = 1.5;
 
 const frameSrc = (i) => `/hero-seq/f_${String(i + 1).padStart(3, "0")}.webp`;
 
+// Same engine decision as the journey chapters (lib/scrubEngine.js):
+// all-keyframe MP4 via currentTime on Chromium/Safari, frame canvas
+// elsewhere. The hero video's frame 0 is the same still the poster shows
+// and the intro lands on, so every handoff stays pixel-consistent.
+const ENGINE = typeof window !== "undefined" ? chooseScrubEngine() : "frames";
+const VIDEO_DURATION_FALLBACK = 10.04;
+
 export default function HeroScrub({ progress, poster, posterSet, alt }) {
   const canvasRef = useRef(null);
+  const videoRef = useRef(null);
   const imgRef = useRef(null);
+  const useVideo = ENGINE === "video";
+
+  // Video engine: seek pacing identical to JourneyChapter — one seek in
+  // flight, newest target applied on 'seeked'; no torn frames possible.
+  useEffect(() => {
+    if (!useVideo) return undefined;
+    const video = videoRef.current;
+    if (!video) return undefined;
+
+    let desired = 0;
+    let seeking = false;
+    let shown = false;
+
+    const applySeek = () => {
+      if (seeking || video.readyState < 1) return;
+      if (Math.abs(video.currentTime - desired) < 1 / 60) return;
+      seeking = true;
+      video.currentTime = desired;
+    };
+    const onSeeked = () => {
+      seeking = false;
+      if (!shown) {
+        shown = true;
+        video.style.opacity = "1";
+      }
+      applySeek();
+    };
+    const onMeta = () => applySeek();
+    const onEmptied = () => {
+      seeking = false; // a load() reset aborts seeks without 'seeked'
+    };
+    video.addEventListener("seeked", onSeeked);
+    video.addEventListener("loadedmetadata", onMeta);
+    video.addEventListener("emptied", onEmptied);
+    if (video.readyState === 0) video.load();
+
+    const unsubscribe = progress.on("change", (v) => {
+      const dur = video.duration || VIDEO_DURATION_FALLBACK;
+      desired = Math.min(dur - 1 / 30, Math.max(0, v) * dur);
+      applySeek();
+    });
+
+    return () => {
+      unsubscribe();
+      video.removeEventListener("seeked", onSeeked);
+      video.removeEventListener("loadedmetadata", onMeta);
+      video.removeEventListener("emptied", onEmptied);
+    };
+  }, [useVideo, progress]);
 
   useEffect(() => {
+    if (useVideo) return undefined;
     const canvas = canvasRef.current;
     if (!canvas) return undefined;
     const ctx = canvas.getContext("2d");
@@ -66,8 +125,9 @@ export default function HeroScrub({ progress, poster, posterSet, alt }) {
       const frac = targetFloat - i0;
       const a = nearestLoaded(i0);
       if (a === -1) return;
-      const canBlend = speed < 0.9 && images[i0] && images[i1] && i1 !== i0;
-      const blend = canBlend ? frac : 0;
+      // Gate 1.5 + smoothstep alpha (see lib/frameScrub.js, tuning round 2)
+      const canBlend = speed < 1.5 && images[i0] && images[i1] && i1 !== i0;
+      const blend = canBlend ? frac * frac * (3 - 2 * frac) : 0;
       const key = canBlend ? i0 + blend : images[Math.round(targetFloat)] ? Math.round(targetFloat) : a;
       if (Math.abs(key - drawnKey) < 0.02) return;
       // object-fit: cover
@@ -152,7 +212,7 @@ export default function HeroScrub({ progress, poster, posterSet, alt }) {
       unsubscribe();
       if (rafId) cancelAnimationFrame(rafId);
     };
-  }, [progress]);
+  }, [useVideo, progress]);
 
   return (
     <div className="relative h-full w-full" data-testid="hero-scrub">
@@ -170,11 +230,23 @@ export default function HeroScrub({ progress, poster, posterSet, alt }) {
         alt={alt}
         className="absolute inset-0 h-full w-full object-cover"
       />
-      <canvas
-        ref={canvasRef}
-        aria-hidden="true"
-        className="absolute inset-0 h-full w-full opacity-0 transition-opacity duration-300"
-      />
+      {useVideo ? (
+        <video
+          ref={videoRef}
+          src="/hero-seq/hero-scrub.mp4"
+          muted
+          playsInline
+          preload="auto"
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-300"
+        />
+      ) : (
+        <canvas
+          ref={canvasRef}
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full opacity-0 transition-opacity duration-300"
+        />
+      )}
     </div>
   );
 }

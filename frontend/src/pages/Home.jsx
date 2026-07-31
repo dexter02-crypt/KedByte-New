@@ -112,17 +112,22 @@ export default function Home() {
   const journeyActive = !touch && !reduced;
   const lenis = useLenis();
   useEffect(() => {
+    // GSAP/ScrollTrigger is only the FRAMES-fallback choreographer; the
+    // video engine derives progress from the scroll position directly, so
+    // video-engine visitors never fetch the GSAP chunk at all.
     if (!journeyActive || !lenis) return undefined;
-    // Lenis drives real window scroll; ScrollTrigger just needs to be told
-    // when it moves. Single smoothing source — see lib/journeyGsap.js.
-    // Dynamic import keeps GSAP out of the mobile-critical bundle.
     let dead = false;
     let cleanup = null;
-    import("@/lib/journeyGsap").then(({ ScrollTrigger }) => {
-      if (dead) return;
-      lenis.on("scroll", ScrollTrigger.update);
-      ScrollTrigger.refresh();
-      cleanup = () => lenis.off("scroll", ScrollTrigger.update);
+    import("@/lib/scrubEngine").then(({ chooseScrubEngine }) => {
+      if (dead || chooseScrubEngine() !== "frames") return;
+      import("@/lib/journeyGsap").then(({ ScrollTrigger }) => {
+        if (dead) return;
+        // Lenis drives real window scroll; ScrollTrigger just needs to be
+        // told when it moves. Single smoothing source.
+        lenis.on("scroll", ScrollTrigger.update);
+        ScrollTrigger.refresh();
+        cleanup = () => lenis.off("scroll", ScrollTrigger.update);
+      });
     });
     return () => {
       dead = true;

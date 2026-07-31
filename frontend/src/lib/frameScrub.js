@@ -49,8 +49,12 @@ export function createFrameScrubber(canvas, { basePath, count, nativeW, nativeH 
     const frac = targetFloat - i0;
     const a = nearestLoaded(i0);
     if (a === -1) return;
-    const canBlend = speed < 0.9 && images[i0] && images[i1] && i1 !== i0;
-    const blend = canBlend ? frac : 0;
+    // Feel-tuning round 2: gate raised 0.9 → 1.5 (blend persists through
+    // medium speeds) and the alpha is smoothstepped — linear alpha spends
+    // equal time "half-ghosted" between frames; smoothstep snaps residency
+    // toward the nearer frame, which reads as less micro-judder at creep.
+    const canBlend = speed < 1.5 && images[i0] && images[i1] && i1 !== i0;
+    const blend = canBlend ? frac * frac * (3 - 2 * frac) : 0;
     const key = canBlend ? i0 + blend : images[Math.round(targetFloat)] ? Math.round(targetFloat) : a;
     // 0.02 frame units ≈ 0.5px of scroll — below perception; skips the
     // near-idle repaints at the end of Lenis's settle tail
