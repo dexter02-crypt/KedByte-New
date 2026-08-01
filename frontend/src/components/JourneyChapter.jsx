@@ -31,6 +31,16 @@ import { chooseScrubEngine } from "@/lib/scrubEngine";
 const ENGINE = typeof window !== "undefined" ? chooseScrubEngine() : "frames";
 const VIDEO_DURATION_FALLBACK = 10.04;
 
+// DECISION SPIKE (?journey=flow): renders the would-be-pinned chapters as
+// free-flowing sections — content scrolls 1:1, the world still scrubs
+// behind (same film layer + black-dip junctions), micro-parallax becomes
+// pure section-transit motion. No sticky content, no scroll-distance tax.
+// The client A/Bs this against the default pinned build by hand; the
+// winner becomes the shipped architecture.
+const FLOW =
+  typeof window !== "undefined" &&
+  new URLSearchParams(window.location.search).get("journey") === "flow";
+
 export default function JourneyChapter({
   active,
   chapter, // "ch02" .. "ch05"
@@ -54,6 +64,7 @@ export default function JourneyChapter({
   const canvasRef = useRef(null);
   const videoRef = useRef(null);
   const useVideo = ENGINE === "video";
+  const pinned = pinContent && !FLOW;
 
   // Video engine path
   useEffect(() => {
@@ -222,14 +233,46 @@ export default function JourneyChapter({
     const root = rootRef.current;
     const track = root ? root.querySelector(".journey-track") : null;
     const driftEl = root ? root.querySelector(".journey-drift") : null;
-    if (!root || !track || !driftEl) return undefined;
     const PARA_RATES = { "journey-para-0": 0.22, "journey-para-1": -0.15, "journey-para-2": 0.1 };
-    const paras = Array.from(
-      root.querySelectorAll(".journey-para-0, .journey-para-1, .journey-para-2")
-    ).map((el) => {
-      const key = Object.keys(PARA_RATES).find((k) => el.classList.contains(k));
-      return { el, rate: PARA_RATES[key] || 0 };
-    });
+    const paras = root
+      ? Array.from(
+          root.querySelectorAll(".journey-para-0, .journey-para-1, .journey-para-2")
+        ).map((el) => {
+          const key = Object.keys(PARA_RATES).find((k) => el.classList.contains(k));
+          return { el, rate: PARA_RATES[key] || 0 };
+        })
+      : [];
+
+    // FLOW variant: no pin, content 1:1 — micro-parallax only, driven by
+    // the section's viewport transit (a few px of relative card motion).
+    if (FLOW) {
+      if (!root || paras.length === 0) return undefined;
+      let rafId = 0;
+      const update = () => {
+        rafId = 0;
+        const r = root.getBoundingClientRect();
+        const vh = window.innerHeight;
+        const p = Math.min(1, Math.max(0, (vh - r.top) / (r.height + vh)));
+        const v = (0.5 - p) * 80;
+        for (const { el, rate } of paras) {
+          el.style.transform = `translate3d(0, ${(v * rate).toFixed(2)}px, 0)`;
+        }
+      };
+      const onScroll = () => {
+        if (!rafId) rafId = requestAnimationFrame(update);
+      };
+      window.addEventListener("scroll", onScroll, { passive: true });
+      window.addEventListener("resize", onScroll);
+      update();
+      return () => {
+        window.removeEventListener("scroll", onScroll);
+        window.removeEventListener("resize", onScroll);
+        if (rafId) cancelAnimationFrame(rafId);
+        for (const { el } of paras) el.style.transform = "";
+      };
+    }
+
+    if (!root || !track || !driftEl) return undefined;
     // Drift velocity profile (px of drift per px of scroll): NEAR-LINEAR.
     // The old cos profile bottomed at ~0.02 px/px mid-dwell — beneath the
     // eye's visibility threshold, which read as a frozen foreground. Now:
@@ -323,7 +366,7 @@ export default function JourneyChapter({
           Work case panel is open (:has CSS) so its expand/scroll behavior
           stays native. */}
       <div className="relative z-10 -mt-[100vh]">
-        {pinContent ? (
+        {pinned ? (
           <div className="journey-track min-h-[125vh]">
             <div className="journey-content-pin sticky top-0 flex min-h-screen flex-col justify-center">
               <div className="journey-drift">{children}</div>
